@@ -1,0 +1,40 @@
+{
+  "name": "offensive",
+  "version": "0.1.0",
+  "description": "Fast and boilerplate-free precondition checks for javascript.",
+  "main": "offensive.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webfront-toolkit/offensive.js"
+  },
+  "keywords": [
+    "contract",
+    "precondition",
+    "postcondition",
+    "invariant",
+    "offensive",
+    "defensive",
+    "programming",
+    "crash early",
+    "fail fast",
+    "readable",
+    "boilerplate",
+    "dsl",
+    "browserify"
+  ],
+  "author": "Maciej Chałapuk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webfront-toolkit/offensive.js/issues"
+  },
+  "homepage": "https://github.com/webfront-toolkit/offensive.js",
+  "devDependencies": {
+    "coffee-script": "~1.10.0",
+    "mocha": "*",
+    "should": "^9.0.2"
+  },
+  "dependencies": {}
+}
