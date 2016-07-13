@@ -57,9 +57,11 @@ log({});
 ## API
 
 Library doesn't have proper documentation yet :( Please check the [source
-code][code] for details about API.
+code][code] for details about API or [integration tests][integration-tests]
+for more advanced examples.
 
 [code]: offensive.js
+[integration-tests]: test/integration.coffee
 
 ## License
 
