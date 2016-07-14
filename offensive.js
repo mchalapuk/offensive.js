@@ -354,13 +354,19 @@ function extractMessagesAndValues(context, assertionsDone, messages, values) {
     }
   }
 
-  assertionsDone.forEach(function(assertion, i) {
+  assertionsDone.forEach(function(assertion) {
     var name = assertion.getter.name(context);
     if (name !== currentName) {
       flush();
 
+      if (messages.length === 0) {
+        assertion.prefix = '';
+      } else {
+        assertion.prefix = ' '+ assertion.pretix;
+      }
+
       currentName = name;
-      currentMessage = (i? ' ': '') + assertion.prefix + name +' must be';
+      currentMessage = assertion.prefix + name +' must be';
       currentValue = assertion.getter.value(context);
       currentResult = true;
       assertion.prefix = '';
