@@ -191,7 +191,7 @@ var builtInAssertions = {
 
     context.is.anArray();
 
-    this.message = [ '<', requiredLength ];
+    this.message = requiredLength;
     this.getter = getters.property('length');
     return context.assert(function(value) { return value.length === requiredLength; });
   }),
@@ -249,7 +249,7 @@ function check(value, name) {
   context.result = true;
   context.modifier = pass;
   context.strategy = beginStrategy;
-  context.active = null;
+  context.active = [];
   context.done = [];
 
   Object.setPrototypeOf(context, assertProto);
@@ -258,7 +258,8 @@ function check(value, name) {
 }
 
 var checkProto = {
-  add: function(assertion, args) {
+  add: function(assertionProto, args) {
+    var assertion = Object.create(assertionProto);
     this.active.push(assertion);
     var retVal = assertion.runInContext.apply(assertion, [ this ].concat(args || []));
     this.active.pop();
@@ -328,28 +329,43 @@ function isNullOrUndefined(value) {
 function buildMessage(context) {
   var messages = [];
   var values = [];
-  var lastName = null;
-  var currentMessage = '';
 
-  context.done.forEach(function(assertion, i) {
-    var name = assertion.getter.name(context);
-    if (name !== lastName) {
-      messages.push(currentMessage);
-      currentMessage = (i? ' ': '') + assertion.prefix + assertion.getter.name(context) +' must be';
-      assertion.prefix = '';
-      values.push(assertion.getter.value(context));
-      lastName = name;
-    }
-    currentMessage += ' '+ assertion.prefix + ensureArray(assertion.message).join(' ');
-  });
-  messages.push(currentMessage);
-  messages.shift();
+  var done = context.done.reduce(removeDuplicates, []);
+  extractMessagesAndValues(context, done, messages, values);
 
   var finalMessage = '';
   messages.forEach(function(message, i) {
     finalMessage += message +'; got '+ values[i];
   });
   return finalMessage;
+}
+
+function extractMessagesAndValues(context, assertionsDone, messages, values) {
+  var lastName = null;
+  var currentMessage = '';
+
+  assertionsDone.forEach(function(assertion, i) {
+    var name = assertion.getter.name(context);
+    if (name !== lastName) {
+      messages.push(currentMessage);
+      currentMessage = (i? ' ': '') + assertion.prefix + name +' must be';
+      assertion.prefix = '';
+      values.push(assertion.getter.value(context));
+      lastName = name;
+    }
+    currentMessage += ' '+ assertion.prefix + ensureArray(assertion.message).join(' ');
+  });
+
+  messages.push(currentMessage);
+  messages.shift();
+}
+
+function removeDuplicates(result, assertion) {
+  if (result.length === 0 ||
+      Object.getPrototypeOf(result[result.length - 1]) !== Object.getPrototypeOf(assertion)) {
+    result.push(assertion);
+  }
+  return result;
 }
 
 function ensureArray(value) {
