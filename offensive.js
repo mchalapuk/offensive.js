@@ -304,6 +304,8 @@ var checkProto = {
   },
   // creates fresh instance of context with the same name and value
   // (to be used inside assertions)
+  // TODO negation operator must handle all calls on context inside a top-level assertion
+  // then this function will not be necessary
   clone: function() {
     return check(this.value, this.name);
   },
@@ -375,6 +377,7 @@ function buildMessage(context) {
 
   var message = context.done
     .reduce(removeDuplicates, [])
+//    .map(tee.bind(null, console.log))
     .reduce(groupByName, [])
     .filter(onlyWithNegativeResult)
     .reduce(groupByName, [])
@@ -384,8 +387,7 @@ function buildMessage(context) {
 }
 
 function removeDuplicates(result, assertion) {
-  if (result.length === 0 ||
-      Object.getPrototypeOf(result[result.length - 1]) !== Object.getPrototypeOf(assertion)) {
+  if (result.length === 0 || result[result.length - 1].message !== assertion.message) {
     result.push(assertion);
   }
   return result;
@@ -431,6 +433,15 @@ function ensureArray(value) {
 
 function onlyWithNegativeResult(group) {
   return !group.result;
+}
+
+// debugging
+
+/* eslint-disable no-unused-vars */
+
+function tee(func, group) {
+  func(group);
+  return group;
 }
 
 /*
