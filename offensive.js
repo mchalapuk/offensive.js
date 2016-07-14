@@ -137,12 +137,25 @@ var builtInAssertions = {
   'is': new Assertion(function(context) {
     return context;
   }),
+  'be': new Alias('is'),
+  'being': new Alias('is'),
+  'it': new Alias('is'),
   'with': new Alias('is'),
   'which': new Alias('is'),
   'that': new Alias('is'),
+  'to': new Alias('is'),
   'of': new Alias('is'),
-  'has': new Alias('is'),
+  'from': new Alias('is'),
   'either': new Alias('is'),
+  'has': new Alias('is'),
+  'have': new Alias('is'),
+  'defines': new Alias('is'),
+  'define': new Alias('is'),
+  'contains': new Alias('is'),
+  'contain': new Alias('is'),
+  'precondition': new Alias('is'),
+  'postcondition': new Alias('is'),
+  'invariant': new Alias('is'),
 
   // boolean operators (and is default)
   'and': new Alias('is'),
@@ -192,8 +205,7 @@ var builtInAssertions = {
   // length assertions
   'length': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
-
-    context.is.anArray();
+    context.clone().precondition.of.being.anArray();
 
     this.message = requiredLength;
     this.getter = getters.property('length');
@@ -201,8 +213,7 @@ var builtInAssertions = {
   }),
   'lengthGreaterThan': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
-
-    context.is.anArray();
+    context.clone().precondition.of.being.anArray();
 
     this.message = [ '>', requiredLength ];
     this.getter = getters.property('length');
@@ -210,8 +221,7 @@ var builtInAssertions = {
   }),
   'lengthLessThan': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
-
-    context.is.anArray();
+    context.clone().precondition.of.being.anArray();
 
     this.message = [ '<', requiredLength ];
     this.getter = getters.property('length');
@@ -224,8 +234,7 @@ var builtInAssertions = {
   'eachElementIs': new AssertionWithArguments(function(context, assertName, assertFunction) {
     this.message = check(assertName, 'assertName').is.aString();
     check(assertFunction, 'assertFunction').is.aFunction();
-
-    context.is.anArray();
+    context.clone().precondition.of.being.anArray();
 
     var that = this;
     context.value.forEach(function(elem, i) {
@@ -250,7 +259,7 @@ function check(value, name) {
   };
 
   context.value = value;
-  Object.defineProperty(context, 'name', { value: name, enumberable: true });
+//  context.name = name;
   context.result = true;
   context.modifier = pass;
   context.strategy = andStrategy;
@@ -259,7 +268,9 @@ function check(value, name) {
 
   Object.setPrototypeOf(context, assertProto);
 
-  // a hack for
+  // hacks for things that magically happen in v8
+  // even though prototype Function.prototype is detached
+  Object.defineProperty(context, 'name', { value: name, enumberable: true });
   Object.defineProperty(context, 'length', { value: assertProto.length, enumberable: true });
 
   return context;
@@ -290,6 +301,11 @@ var checkProto = {
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
     return this.strategy(condition);
+  },
+  // creates fresh instance of context with the same name and value
+  // (to be used inside assertions)
+  clone: function() {
+    return check(this.value, this.name);
   },
 };
 
