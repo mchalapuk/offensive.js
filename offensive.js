@@ -25,6 +25,7 @@ function addAssertion(name, assertion) {
   }
 
   assertions[name] = assertion;
+  assertion.name = name;
 
   if (assertion instanceof AssertionWithArguments) {
     Object.defineProperty(assertProto, name, {
@@ -39,6 +40,8 @@ function addAssertion(name, assertion) {
   }
 }
 
+// this must work when no assertions are added yet,
+// so checks are implemented in vanilla javascript
 function checkAssertionName(name) {
   if (typeof name !== 'string') {
     throw new Error('name must be a string; got '+ name);
@@ -84,6 +87,7 @@ module.exports.getters = getters;
 
 var globalObject = typeof window !== 'undefined'? window: global;
 
+// assertion classes
 function Assertion(assertFunction) {
   if (this === globalObject) {
     return new Assertion(assertFunction);
@@ -167,7 +171,7 @@ var builtInAssertions = {
     this.message = 'null';
     return context.assert(isNull);
   }),
-  'empty': new Assertion(function(context) {
+  'Empty': new Assertion(function(context) {
     this.message = 'empty';
     return context.assert(isNullOrUndefined);
   }),
@@ -239,43 +243,57 @@ Object.keys(builtInAssertions).forEach(function(name) {
   addAssertion(name, builtInAssertions[name]);
 });
 
+// exported check function
 function check(value, name) {
   var context = function() {
     return context.finish();
   };
+
   context.value = value;
   Object.defineProperty(context, 'name', { value: name, enumberable: true });
-  Object.defineProperty(context, 'length', { value: assertProto.length, enumberable: true });
   context.result = true;
   context.modifier = pass;
-  context.strategy = beginStrategy;
+  context.strategy = andStrategy;
   context.active = [];
   context.done = [];
 
   Object.setPrototypeOf(context, assertProto);
 
+  // a hack for
+  Object.defineProperty(context, 'length', { value: assertProto.length, enumberable: true });
+
   return context;
 }
 
 var checkProto = {
+  // all assertion methods call this one
+  // it can also be used to run assertions without adding them globally
+  // `check(arg, 'arg').add(new Assertion(...))()`
   add: function(assertionProto, args) {
     var assertion = Object.create(assertionProto);
+    assertion.args = args || [];
     this.active.push(assertion);
-    var retVal = assertion.runInContext.apply(assertion, [ this ].concat(args || []));
+    var retVal = assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
     this.active.pop();
     return retVal;
   },
-  assert: function(condition) {
-    return this.strategy(condition);
-  },
+  // `check(arg, 'arg').is.not.Empty.finish()`
+  // is just a longer notation of:
+  // `check(arg, 'arg').is.not.Empty()`
   finish: function() {
     if (!this.result) {
       throw new Error(buildMessage(this));
     }
     return this.value;
   },
+  // to be used inside assertions
+  // (I wounder if there is a way to implement this without double IoC)
+  assert: function(condition) {
+    return this.strategy(condition);
+  },
 };
 
+// returns currently running assertions
 Object.defineProperty(checkProto, 'current', {
   get: function() { return this.active[this.active.length - 1]; },
   enumerable: true,
@@ -283,15 +301,10 @@ Object.defineProperty(checkProto, 'current', {
 
 Object.setPrototypeOf(assertProto, checkProto);
 
-function beginStrategy(condition) {
-  this.result = this.current.result = this.modifier(condition(this.value));
-  this.done.push(this.current);
-  this.strategy = andStrategy;
-  return this;
-}
+// strategies for hangling boolean operators
 function andStrategy(condition) {
   this.current.result = this.modifier(condition(this.value));
-  this.result &= this.current.result;
+  this.result = this.result && this.current.result;
   this.current.prefix = 'and ';
   this.done.push(this.current);
   return this;
@@ -303,16 +316,21 @@ function orStrategy(condition) {
     return this;
   }
   this.current.prefix = 'or ';
-  return beginStrategy.call(this, condition);
+  this.result = this.current.result = this.modifier(condition(this.value));
+  this.done.push(this.current);
+  this.strategy = andStrategy;
+  return this;
 }
 function doneStrategy() {
   return this;
 }
 
+// default modifier
 function pass(result) {
   return result;
 }
 
+// check helpers
 function isNumber(value) {
   return typeof value === 'number';
 }
@@ -327,55 +345,26 @@ function isNullOrUndefined(value) {
   return value === null || typeof value === 'undefined';
 }
 
+// code that builds error message is invoked only when assertion fails
+// from this moment, performace is not a concern here
 function buildMessage(context) {
-  var messages = [];
-  var values = [];
+  var groupByName = groupByVariableName.bind(null, context);
 
-  var done = context.done.reduce(removeDuplicates, []);
-  extractMessagesAndValues(context, done, messages, values);
+  // prefix of first group will not be printed
+  var toString = function(group) {
+    toString = groupToString.bind(null, context);
+    group.prefix = '';
+    return toString(group);
+  };
 
-  var finalMessage = '';
-  messages.forEach(function(message, i) {
-    finalMessage += message +'; got '+ values[i];
-  });
-  return finalMessage;
-}
+  var message = context.done
+    .reduce(removeDuplicates, [])
+    .reduce(groupByName, [])
+    .filter(onlyWithNegativeResult)
+    .reduce(groupByName, [])
+    .reduce(function(builder, group) { return builder + toString(group); }, '');
 
-function extractMessagesAndValues(context, assertionsDone, messages, values) {
-  var currentName = null;
-  var currentMessage = '';
-  var currentValue = null;
-  var currentResult = true;
-
-  function flush() {
-    if (!currentResult) {
-      messages.push(currentMessage);
-      values.push(currentValue);
-    }
-  }
-
-  assertionsDone.forEach(function(assertion) {
-    var name = assertion.getter.name(context);
-    if (name !== currentName) {
-      flush();
-
-      if (messages.length === 0) {
-        assertion.prefix = '';
-      } else {
-        assertion.prefix = ' '+ assertion.pretix;
-      }
-
-      currentName = name;
-      currentMessage = assertion.prefix + name +' must be';
-      currentValue = assertion.getter.value(context);
-      currentResult = true;
-      assertion.prefix = '';
-    }
-    currentMessage += ' '+ assertion.prefix + ensureArray(assertion.message).join(' ');
-    currentResult &= assertion.result;
-  });
-
-  flush();
+  return message;
 }
 
 function removeDuplicates(result, assertion) {
@@ -386,8 +375,46 @@ function removeDuplicates(result, assertion) {
   return result;
 }
 
+function groupByVariableName(context, result, assertion) {
+  var name = assertion.getter.name(context);
+  var current = result.length === 0? createGroup(assertion): result.pop();
+  var currentName = current.getter.name(context);
+  if (name !== currentName) {
+    result.push(current);
+    current = createGroup(assertion);
+  }
+  current.message.push(assertion.prefix + ensureArray(assertion.message).join(' '));
+  current.result &= assertion.result;
+  result.push(current);
+  return result;
+}
+
+function createGroup(assertion) {
+  // has the same properties as assertion
+  var group = {
+    prefix: assertion.prefix,
+    getter: assertion.getter,
+    message: [],
+    result: true,
+  };
+  assertion.prefix = '';
+  return group;
+}
+
+function groupToString(context, group) {
+  var name = group.getter.name(context);
+  var conditions = group.message.join(' ');
+  var value = group.getter.value(context);
+  var retVal = group.prefix + name +' must be '+ conditions +'; got '+ value;
+  return retVal;
+}
+
 function ensureArray(value) {
   return isArray(value)? value: [ value ];
+}
+
+function onlyWithNegativeResult(group) {
+  return !group.result;
 }
 
 /*
