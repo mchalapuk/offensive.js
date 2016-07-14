@@ -284,13 +284,14 @@ Object.defineProperty(checkProto, 'current', {
 Object.setPrototypeOf(assertProto, checkProto);
 
 function beginStrategy(condition) {
-  this.result = this.modifier(condition(this.value));
+  this.result = this.current.result = this.modifier(condition(this.value));
   this.done.push(this.current);
   this.strategy = andStrategy;
   return this;
 }
 function andStrategy(condition) {
-  this.result &= this.modifier(condition(this.value));
+  this.current.result = this.modifier(condition(this.value));
+  this.result &= this.current.result;
   this.current.prefix = 'and ';
   this.done.push(this.current);
   return this;
@@ -341,23 +342,34 @@ function buildMessage(context) {
 }
 
 function extractMessagesAndValues(context, assertionsDone, messages, values) {
-  var lastName = null;
+  var currentName = null;
   var currentMessage = '';
+  var currentValue = null;
+  var currentResult = true;
+
+  function flush() {
+    if (!currentResult) {
+      messages.push(currentMessage);
+      values.push(currentValue);
+    }
+  }
 
   assertionsDone.forEach(function(assertion, i) {
     var name = assertion.getter.name(context);
-    if (name !== lastName) {
-      messages.push(currentMessage);
+    if (name !== currentName) {
+      flush();
+
+      currentName = name;
       currentMessage = (i? ' ': '') + assertion.prefix + name +' must be';
+      currentValue = assertion.getter.value(context);
+      currentResult = true;
       assertion.prefix = '';
-      values.push(assertion.getter.value(context));
-      lastName = name;
     }
     currentMessage += ' '+ assertion.prefix + ensureArray(assertion.message).join(' ');
+    currentResult &= assertion.result;
   });
 
-  messages.push(currentMessage);
-  messages.shift();
+  flush();
 }
 
 function removeDuplicates(result, assertion) {
