@@ -16,34 +16,48 @@ var assertProto = {};
 
 // registers a new assertion
 function addAssertion(name, assertion) {
-  if (typeof name !== 'string') {
-    throw new Error('name must be a string; got '+ name);
-  }
-  if (name in assertions) {
-    throw new Error('assertion of name '+ name +' already registered');
-  }
-  if (!(assertion instanceof Assertion)) {
-    throw new Error('assertion of name '+ name +' must be an instance of Assertion');
-  }
+  checkAssertionName(name);
+  checkAssertion(assertion);
+
   if (assertion instanceof Alias) {
-    assertion = assertions[assertion.aliasFor];
-    if (!assertion) {
-      throw new Error('assertion of name '+ assertion.aliasFor +' not registered');
-    }
+    addAssertion(name, getAliasedAssertion(assertion));
+    return;
   }
+
   assertions[name] = assertion;
 
   if (assertion instanceof AssertionWithArguments) {
     Object.defineProperty(assertProto, name, {
       value: function() { return this.add(assertion, [].slice.call(arguments)); },
       enumerable: true,
-    })
+    });
   } else {
     Object.defineProperty(assertProto, name, {
       get: function() { return this.add(assertion); },
       enumerable: true,
     });
   }
+}
+
+function checkAssertionName(name) {
+  if (typeof name !== 'string') {
+    throw new Error('name must be a string; got '+ name);
+  }
+  if (name in assertions) {
+    throw new Error('assertion of name '+ name +' already registered');
+  }
+}
+function checkAssertion(assertion) {
+  if (!(assertion instanceof Assertion)) {
+    throw new Error('assertion must be an instance of Assertion');
+  }
+}
+function getAliasedAssertion(assertion) {
+  var aliased = assertions[assertion.aliasFor];
+  if (!aliased) {
+    throw new Error('assertion of name '+ assertion.aliasFor +' not registered');
+  }
+  return aliased;
 }
 
 // built in getters
@@ -103,14 +117,14 @@ Alias.prototype = new Assertion();
 
 function TypeofAssertion(requiredType) {
   if (this === globalObject) {
-    return new TypeofAssertion(assertFunction);
+    return new TypeofAssertion(requiredType);
   }
   Assertion.call(this, function(context) {
     this.message = (requiredType === 'object'? 'an ':
       requiredType === 'undefined'? '': 'a ') + requiredType;
     return context.assert(function(value) { return typeof value === requiredType; });
   });
-};
+}
 
 TypeofAssertion.prototype = new Assertion();
 
@@ -126,8 +140,8 @@ var builtInAssertions = {
   'has': new Alias('is'),
   'either': new Alias('is'),
 
-  // boolean operators
-  'and': new Alias('is'), // and is default
+  // boolean operators (and is default)
+  'and': new Alias('is'),
   'or': new Assertion(function(context) {
     context.strategy = orStrategy;
     return context;
@@ -188,7 +202,7 @@ var builtInAssertions = {
 
     this.message = [ '>', requiredLength ];
     this.getter = getters.property('length');
-    return contest.assert(function(value) { return value.length <= requiredLength; });
+    return context.assert(function(value) { return value.length <= requiredLength; });
   }),
   'lengthLessThan': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
@@ -197,7 +211,7 @@ var builtInAssertions = {
 
     this.message = [ '<', requiredLength ];
     this.getter = getters.property('length');
-    return contest.assert(function(value) { return value.length >= requiredLength; });
+    return context.assert(function(value) { return value.length >= requiredLength; });
   }),
   'lengthGT': new Alias('lengthGreaterThan'),
   'lengthLT': new Alias('lengthLessThan'),
@@ -235,7 +249,7 @@ function check(value, name) {
   context.result = true;
   context.modifier = pass;
   context.strategy = beginStrategy;
-  context.active = [];
+  context.active = null;
   context.done = [];
 
   Object.setPrototypeOf(context, assertProto);
@@ -250,9 +264,6 @@ var checkProto = {
     this.active.pop();
     return retVal;
   },
-  current: function() {
-    return this.active[this.active.length - 1];
-  },
   assert: function(condition) {
     return this.strategy(condition);
   },
@@ -264,18 +275,23 @@ var checkProto = {
   },
 };
 
+Object.defineProperty(checkProto, 'current', {
+  get: function() { return this.active[this.active.length - 1]; },
+  enumerable: true,
+});
+
 Object.setPrototypeOf(assertProto, checkProto);
 
 function beginStrategy(condition) {
   this.result = this.modifier(condition(this.value));
-  this.done.push(this.current());
+  this.done.push(this.current);
   this.strategy = andStrategy;
   return this;
 }
 function andStrategy(condition) {
   this.result &= this.modifier(condition(this.value));
-  this.current().prefix = 'and ';
-  this.done.push(this.current());
+  this.current.prefix = 'and ';
+  this.done.push(this.current);
   return this;
 }
 function orStrategy(condition) {
@@ -284,7 +300,7 @@ function orStrategy(condition) {
     this.strategy = doneStrategy;
     return this;
   }
-  this.current().prefix = 'or ';
+  this.current.prefix = 'or ';
   return beginStrategy.call(this, condition);
 }
 function doneStrategy() {
@@ -329,7 +345,7 @@ function buildMessage(context) {
   messages.push(currentMessage);
   messages.shift();
 
-  var finalMessage = "";
+  var finalMessage = '';
   messages.forEach(function(message, i) {
     finalMessage += message +'; got '+ values[i];
   });
@@ -342,5 +358,9 @@ function ensureArray(value) {
 
 /*
   eslint-env node
+ */
+
+/*
+  global window
  */
 
