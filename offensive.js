@@ -166,15 +166,14 @@ var builtInAssertions = {
   'not': new Assertion(function(context) {
     var originalModifier = context.modifier;
     context.modifier = function(result) {
-      context.modifier = originalModifier;
-      return !originalModifier.call(this, result);
+      this.modifier = originalModifier;
+      return !this.modifier(result);
     };
     var originalStrategy = context.strategy;
     context.strategy = function(condition) {
-      context.strategy = originalStrategy;
-      originalStrategy.call(this, condition);
-      context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
-      return context;
+      this.current.message = [ 'not' ].concat(ensureArray(this.current.message));
+      this.strategy = originalStrategy;
+      return this.strategy(condition);
     };
     return context;
   }),
