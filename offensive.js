@@ -167,13 +167,13 @@ var builtInAssertions = {
     var originalModifier = context.modifier;
     context.modifier = function(result) {
       context.modifier = originalModifier;
-      return !originalModifier(result);
+      return !originalModifier.call(this, result);
     };
     var originalStrategy = context.strategy;
     context.strategy = function(condition) {
       context.strategy = originalStrategy;
-      originalStrategy(condition);
-      context.current.prefix += 'not ';
+      originalStrategy.call(this, condition);
+      context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
       return context;
     };
     return context;
@@ -184,7 +184,7 @@ var builtInAssertions = {
     this.message = 'null';
     return context.assert(isNull);
   }),
-  'Empty': new Assertion(function(context) {
+  'empty': new Assertion(function(context) {
     this.message = 'empty';
     return context.assert(isNullOrUndefined);
   }),
@@ -200,6 +200,20 @@ var builtInAssertions = {
   'anArray': new Assertion(function(context) {
     this.message = 'an array';
     return context.assert(isArray);
+  }),
+
+  // property assertions
+  'property': new AssertionWithArguments(function(context, propertyName, propertyValue) {
+    check(propertyName, 'propertyName').is.aString();
+    context.clone().precondition.of.being.not.empty();
+
+    this.getter = getters.property(propertyName);
+    if (typeof propertyValue !== 'undefined') {
+      this.message = propertyValue;
+      return context.assert(function(value) { return value[propertyName] === propertyValue; });
+    }
+    this.message = 'not undefined';
+    return context.assert(function(value) { return !isUndefined(value[propertyName]); });
   }),
 
   // length assertions
@@ -359,8 +373,11 @@ function isArray(value) {
 function isNull(value) {
   return value === null;
 }
+function isUndefined(value) {
+  return typeof value === 'undefined';
+}
 function isNullOrUndefined(value) {
-  return value === null || typeof value === 'undefined';
+  return isNull(value) || isUndefined(value);
 }
 
 // code that builds error message is invoked only when assertion fails
