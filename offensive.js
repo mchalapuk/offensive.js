@@ -380,13 +380,7 @@ function isNullOrUndefined(value) {
 // from this moment, performace is not a concern here
 function buildMessage(context) {
   var groupByName = groupByVariableName.bind(null, context);
-
-  // prefix of first group will not be printed
-  var toString = function(group) {
-    toString = groupToString.bind(null, context);
-    group.prefix = '';
-    return toString(group);
-  };
+  var toString = groupToString(context);
 
   var message = context.done
     .reduce(removeDuplicates, [])
@@ -432,12 +426,28 @@ function createGroup(assertion) {
   return group;
 }
 
-function groupToString(context, group) {
-  var name = group.getter.name(context);
-  var conditions = group.message.join(' ');
-  var value = group.getter.value(context);
-  var retVal = group.prefix + name +' must be '+ conditions +'; got '+ value;
-  return retVal;
+function groupToString(context) {
+  var toString = first;
+
+  function impl(group) {
+    var name = group.getter.name(context);
+    var conditions = group.message.join(' ');
+    var value = group.getter.value(context);
+    var retVal = group.prefix + name +' must be '+ conditions +'; got '+ value;
+    return retVal;
+  }
+  function first(group) {
+    toString = next;
+    group.prefix = '';
+    return impl(group);
+  }
+  function next(group) {
+    return ' '+ impl(group);
+  }
+
+  return function(group) {
+    return toString(group);
+  };
 }
 
 function ensureArray(value) {
