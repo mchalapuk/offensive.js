@@ -161,7 +161,6 @@ var builtInAssertions = {
   'and': new Alias('is'),
   'or': new Assertion(function(context) {
     context.strategy = orStrategy;
-    return context;
   }),
   'not': new Assertion(function(context) {
     var originalModifier = context.modifier;
@@ -175,17 +174,16 @@ var builtInAssertions = {
       this.strategy = originalStrategy;
       return this.strategy(condition);
     };
-    return context;
   }),
 
   // null assertions
   'Null': new Assertion(function(context) {
     this.message = 'null';
-    return context.assert(isNull);
+    context.assert(isNull);
   }),
   'empty': new Assertion(function(context) {
     this.message = 'empty';
-    return context.assert(isNullOrUndefined);
+    context.assert(isNullOrUndefined);
   }),
 
   // typeof assertions
@@ -198,7 +196,7 @@ var builtInAssertions = {
   // duck typing assertions
   'anArray': new Assertion(function(context) {
     this.message = 'an array';
-    return context.assert(isArray);
+    context.assert(isArray);
   }),
 
   // property assertions
@@ -209,10 +207,10 @@ var builtInAssertions = {
     this.getter = getters.property(propertyName);
     if (typeof propertyValue !== 'undefined') {
       this.message = propertyValue;
-      return context.assert(function(value) { return value[propertyName] === propertyValue; });
+      context.assert(function(value) { return value[propertyName] === propertyValue; });
     }
     this.message = 'not undefined';
-    return context.assert(function(value) { return !isUndefined(value[propertyName]); });
+    context.assert(function(value) { return !isUndefined(value[propertyName]); });
   }),
 
   // length assertions
@@ -222,7 +220,7 @@ var builtInAssertions = {
 
     this.message = requiredLength;
     this.getter = getters.property('length');
-    return context.assert(function(value) { return value.length === requiredLength; });
+    context.assert(function(value) { return value.length === requiredLength; });
   }),
   'lengthGreaterThan': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
@@ -230,7 +228,7 @@ var builtInAssertions = {
 
     this.message = [ '>', requiredLength ];
     this.getter = getters.property('length');
-    return context.assert(function(value) { return value.length <= requiredLength; });
+    context.assert(function(value) { return value.length <= requiredLength; });
   }),
   'lengthLessThan': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
@@ -238,7 +236,7 @@ var builtInAssertions = {
 
     this.message = [ '<', requiredLength ];
     this.getter = getters.property('length');
-    return context.assert(function(value) { return value.length >= requiredLength; });
+    context.assert(function(value) { return value.length >= requiredLength; });
   }),
   'lengthGT': new Alias('lengthGreaterThan'),
   'lengthLT': new Alias('lengthLessThan'),
@@ -254,10 +252,9 @@ var builtInAssertions = {
       that.getter = getters.element(i);
       context.assert(assertFunction.bind(context, elem));
     });
-    return context;
   }),
   'numberElements': new AssertionWithArguments(function(context) {
-    return context.eachElementIs('a number', isNumber);
+    context.eachElementIs('a number', isNumber);
   }),
 };
 
@@ -297,9 +294,9 @@ var checkProto = {
     var assertion = Object.create(assertionProto);
     assertion.args = args || [];
     this.active.push(assertion);
-    var retVal = assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
+    assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
     this.active.pop();
-    return retVal;
+    return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`
   // is just a longer notation of:
