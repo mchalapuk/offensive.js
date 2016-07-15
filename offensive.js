@@ -124,8 +124,7 @@ function TypeofAssertion(requiredType) {
     return new TypeofAssertion(requiredType);
   }
   Assertion.call(this, function(context) {
-    this.message = (requiredType === 'object'? 'an ':
-      requiredType === 'undefined'? '': 'a ') + requiredType;
+    this.message = getTypePrefix(requiredType) + requiredType;
     return context.assert(function(value) { return typeof value === requiredType; });
   });
 }
@@ -374,6 +373,9 @@ function isUndefined(value) {
 }
 function isNullOrUndefined(value) {
   return isNull(value) || isUndefined(value);
+}
+function getTypePrefix(type) {
+  return type === 'object'? 'an ': type === 'undefined'? '': 'a ';
 }
 
 // code that builds error message is invoked only when assertion fails
