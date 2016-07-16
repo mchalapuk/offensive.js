@@ -283,9 +283,9 @@ var checkProto = {
   add: function(assertionProto, args) {
     var assertion = Object.create(assertionProto);
     assertion.args = args || [];
-    this.state.active.push(assertion);
+    this.state.current = assertion;
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
-    this.state.active.pop();
+    this.state.current = this.state.top;
     this.state.done.push(assertion);
     return this;
   },
@@ -299,10 +299,8 @@ var checkProto = {
     return this.state.strategy(condition, this.value);
   },
   push: function() {
-    var current = this.state.current;
     this.stack.push(this.state);
     this.state = new State();
-    this.state.active.push(current);
     this.finish = justReturnValue;
     return this;
   },
@@ -330,7 +328,8 @@ Object.setPrototypeOf(assertProto, checkProto);
 // this gets pushed around alot
 function State() {
   this.result = true;
-  this.active = [];
+  this.top = {};
+  this.current = this.top;
   this.done = [];
 }
 
@@ -338,10 +337,6 @@ State.prototype = {
   modifier: pass,
   strategy: andStrategy,
 };
-
-Object.defineProperty(State.prototype, 'current', {
-  get: function() { return this.active[this.active.length - 1]; },
-});
 
 // strategies for hangling boolean operators
 function andStrategy(condition, value) {
