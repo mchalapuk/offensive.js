@@ -125,7 +125,9 @@ function TypeofAssertion(requiredType) {
   }
   Assertion.call(this, function(context) {
     this.message = getTypePrefix(requiredType) + requiredType;
-    return context.assert(function(value) { return typeof value === requiredType; });
+    context.assert(function(value) {
+      return typeof value === requiredType;
+    });
   });
 }
 
@@ -159,19 +161,19 @@ var builtInAssertions = {
   // boolean operators (and is default)
   'and': new Alias('is'),
   'or': new Assertion(function(context) {
-    context.strategy = orStrategy;
+    context.state.strategy = orStrategy;
   }),
   'not': new Assertion(function(context) {
-    var originalModifier = context.modifier;
-    context.modifier = function(result) {
+    var originalModifier = context.state.modifier;
+    context.state.modifier = function(result) {
       this.modifier = originalModifier;
       return !this.modifier(result);
     };
-    var originalStrategy = context.strategy;
-    context.strategy = function(condition) {
+    var originalStrategy = context.state.strategy;
+    context.state.strategy = function(condition, value) {
       this.current.message = [ 'not' ].concat(ensureArray(this.current.message));
       this.strategy = originalStrategy;
-      return this.strategy(condition);
+      return this.strategy(condition, value);
     };
   }),
 
@@ -201,56 +203,48 @@ var builtInAssertions = {
   // property assertions
   'property': new AssertionWithArguments(function(context, propertyName, propertyValue) {
     check(propertyName, 'propertyName').is.aString();
-    context.clone().precondition.of.being.not.empty();
+
+    context.push();
+    if (!context.is.not.empty.result) {
+      context.pop();
+      return;
+    }
 
     this.getter = getters.property(propertyName);
     if (typeof propertyValue !== 'undefined') {
       this.message = propertyValue;
       context.assert(function(value) { return value[propertyName] === propertyValue; });
+    } else {
+      this.message = 'not undefined';
+      context.assert(function(value) { return !isUndefined(value[propertyName]); });
     }
-    this.message = 'not undefined';
-    context.assert(function(value) { return !isUndefined(value[propertyName]); });
+    context.pop();
   }),
 
   // length assertions
   'length': new AssertionWithArguments(function(context, requiredLength) {
     check(requiredLength, 'requiredLength').is.aNumber();
-    context.clone().precondition.of.being.anArray();
-
-    this.message = requiredLength;
-    this.getter = getters.property('length');
-    context.assert(function(value) { return value.length === requiredLength; });
+    context.has.property('length', requiredLength);
   }),
-  'lengthGreaterThan': new AssertionWithArguments(function(context, requiredLength) {
-    check(requiredLength, 'requiredLength').is.aNumber();
-    context.clone().precondition.of.being.anArray();
-
-    this.message = [ '>', requiredLength ];
-    this.getter = getters.property('length');
-    context.assert(function(value) { return value.length <= requiredLength; });
-  }),
-  'lengthLessThan': new AssertionWithArguments(function(context, requiredLength) {
-    check(requiredLength, 'requiredLength').is.aNumber();
-    context.clone().precondition.of.being.anArray();
-
-    this.message = [ '<', requiredLength ];
-    this.getter = getters.property('length');
-    context.assert(function(value) { return value.length >= requiredLength; });
-  }),
-  'lengthGT': new Alias('lengthGreaterThan'),
-  'lengthLT': new Alias('lengthLessThan'),
+  // TODO 'lengthGT': new Alias('lengthGreaterThan'),
+  // TODO 'lengthLT': new Alias('lengthLessThan'),
 
   // array element assertions
   'eachElementIs': new AssertionWithArguments(function(context, assertName, assertFunction) {
-    this.message = check(assertName, 'assertName').is.aString();
+    check(assertName, 'assertName').is.aString();
     check(assertFunction, 'assertFunction').is.aFunction();
-    context.clone().precondition.of.being.anArray();
 
-    var that = this;
+    context.push();
+    context.is.anArray();
+
     context.value.forEach(function(elem, i) {
-      that.getter = getters.element(i);
-      context.assert(assertFunction.bind(context, elem));
+      context.add(new Assertion(function(innerContext) {
+        this.getter = getters.element(i);
+        this.message = assertName;
+        innerContext.assert(assertFunction.bind(null, elem));
+      }));
     });
+    context.pop();
   }),
   'numberElements': new AssertionWithArguments(function(context) {
     context.eachElementIs('a number', isNumber);
@@ -269,11 +263,8 @@ function check(value, name) {
 
   context.value = value;
 //  context.name = name;
-  context.result = true;
-  context.modifier = pass;
-  context.strategy = andStrategy;
-  context.active = [];
-  context.done = [];
+  context.state = new State();
+  context.stack = [];
 
   Object.setPrototypeOf(context, assertProto);
 
@@ -292,64 +283,97 @@ var checkProto = {
   add: function(assertionProto, args) {
     var assertion = Object.create(assertionProto);
     assertion.args = args || [];
-    this.active.push(assertion);
+    this.state.active.push(assertion);
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
-    this.active.pop();
+    this.state.active.pop();
+    this.state.done.push(assertion);
     return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`
   // is just a longer notation of:
   // `check(arg, 'arg').is.not.Empty()`
-  finish: function() {
-    if (!this.result) {
-      throw new Error(buildMessage(this));
-    }
-    return this.value;
-  },
+  finish: throwOrReturnValue,
   // to be used inside assertions
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
-    return this.strategy(condition);
+    return this.state.strategy(condition, this.value);
   },
-  // creates fresh instance of context with the same name and value
-  // (to be used inside assertions)
-  // TODO negation operator must handle all calls on context inside a top-level assertion
-  // then this function will not be necessary
-  clone: function() {
-    return check(this.value, this.name);
+  push: function() {
+    var current = this.state.current;
+    this.stack.push(this.state);
+    this.state = new State();
+    this.state.active.push(current);
+    this.finish = justReturnValue;
+    return this;
+  },
+  pop: function() {
+    var deletedState = this.state;
+    this.state = this.stack.pop();
+    this.state.current.done = deletedState.done;
+    this.state.strategy(function() {
+      return deletedState.result;
+    });
+    if (this.stack.length === 0) {
+      this.finish = throwOrReturnValue;
+    }
+    return this;
   },
 };
 
-// returns currently running assertions
-Object.defineProperty(checkProto, 'current', {
-  get: function() { return this.active[this.active.length - 1]; },
+Object.defineProperty(checkProto, 'result', {
+  get: function() { return this.state.result; },
   enumerable: true,
 });
 
 Object.setPrototypeOf(assertProto, checkProto);
 
+// this gets pushed around alot
+function State() {
+  this.result = true;
+  this.active = [];
+  this.done = [];
+}
+
+State.prototype = {
+  modifier: pass,
+  strategy: andStrategy,
+};
+
+Object.defineProperty(State.prototype, 'current', {
+  get: function() { return this.active[this.active.length - 1]; },
+});
+
 // strategies for hangling boolean operators
-function andStrategy(condition) {
-  this.current.result = this.modifier(condition(this.value));
+function andStrategy(condition, value) {
+  this.current.result = this.modifier(condition(value));
   this.result = this.result && this.current.result;
   this.current.prefix = 'and ';
-  this.done.push(this.current);
   return this;
 }
-function orStrategy(condition) {
+function orStrategy(condition, value) {
   if (this.done.length !== 0 && this.result === true) {
     // Condition already satisfied, no need to do subsequent checks.
     this.strategy = doneStrategy;
     return this;
   }
   this.current.prefix = 'or ';
-  this.result = this.current.result = this.modifier(condition(this.value));
-  this.done.push(this.current);
+  this.result = this.current.result = this.modifier(condition(value));
   this.strategy = andStrategy;
   return this;
 }
 function doneStrategy() {
   return this;
+}
+
+// finish functions
+function throwOrReturnValue() {
+  if (!this.state.result) {
+    throw new Error(buildMessage(this));
+  }
+  return this.value;
+}
+function justReturnValue() {
+  return this.value;
 }
 
 // default modifier
@@ -384,15 +408,20 @@ function buildMessage(context) {
   var groupByName = groupByVariableName.bind(null, context);
   var toString = groupToString(context);
 
-  var message = context.done
-    .reduce(removeDuplicates, [])
+  var message = context.state.done
+    .filter(onlyNotEmpty)
 //    .map(tee.bind(null, console.log))
+    .reduce(removeDuplicates, [])
     .reduce(groupByName, [])
     .filter(onlyWithNegativeResult)
     .reduce(groupByName, [])
     .reduce(function(builder, group) { return builder + toString(group); }, '');
 
   return message;
+}
+
+function onlyNotEmpty(assertion) {
+  return typeof assertion.result !== 'undefined';
 }
 
 function removeDuplicates(result, assertion) {
