@@ -99,6 +99,7 @@ function Assertion(assertFunction) {
 Assertion.prototype = {
   getter: getters.value,
   message: [],
+  done: [],
 };
 
 function AssertionWithArguments(assertFunction) {
@@ -286,7 +287,7 @@ var checkProto = {
     this.state.current = assertion;
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
     this.state.current = this.state.top;
-    this.state.done.push(assertion);
+    this.state.top.done.push(assertion);
     return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`
@@ -307,7 +308,7 @@ var checkProto = {
   pop: function() {
     var deletedState = this.state;
     this.state = this.stack.pop();
-    this.state.current.done = deletedState.done;
+    this.state.current.done.push(deletedState.top);
     this.state.strategy(function() {
       return deletedState.result;
     });
@@ -328,9 +329,8 @@ Object.setPrototypeOf(assertProto, checkProto);
 // this gets pushed around alot
 function State() {
   this.result = true;
-  this.top = {};
+  this.top = { done: [] };
   this.current = this.top;
-  this.done = [];
 }
 
 State.prototype = {
@@ -346,7 +346,7 @@ function andStrategy(condition, value) {
   return this;
 }
 function orStrategy(condition, value) {
-  if (this.done.length !== 0 && this.result === true) {
+  if (this.top.done.length !== 0 && this.result === true) {
     // Condition already satisfied, no need to do subsequent checks.
     this.strategy = doneStrategy;
     return this;
@@ -403,7 +403,7 @@ function buildMessage(context) {
   var groupByName = groupByVariableName.bind(null, context);
   var toString = groupToString(context);
 
-  var message = context.state.done
+  var message = context.state.top.done
     .filter(onlyNotEmpty)
 //    .map(tee.bind(null, console.log))
     .reduce(removeDuplicates, [])
