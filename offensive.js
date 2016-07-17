@@ -167,7 +167,7 @@ var builtInAssertions = {
       context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
       context.current.result = !condition(context.value);
       this.result = context.current.result;
-      context.pop()
+      context.pop();
     }
   }),
 
@@ -409,7 +409,7 @@ function buildMessage(context) {
 
   var message = context.state.done
 //    .map(tee.bind(null, pipe(function(arg) { return arg.done; }, console.log)))
-    .reduce(replaceEmptyWithChildren, [])
+    .reduce(tryReplaceEmptyWithChildren, [])
 //    .map(tee.bind(null, console.log))
     .filter(onlyNotEmpty)
     .reduce(removeDuplicates, [])
@@ -432,11 +432,11 @@ function removeDuplicates(retVal, assertion) {
   return retVal;
 }
 
-function replaceEmptyWithChildren(retVal, group) {
+function tryReplaceEmptyWithChildren(retVal, group) {
   if (group.message && group.message.length !== 0) {
     retVal.push(group);
   } else {
-    group.done.reduce(replaceEmptyWithChildren, retVal);
+    group.done.reduce(tryReplaceEmptyWithChildren, retVal);
   }
   return retVal;
 }
