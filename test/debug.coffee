@@ -7,20 +7,22 @@ log = (arg) -> console.log "#{stack}#{indent}#{arg}"
 pass = (arg) -> arg
 
 debug = {
-  call: (instance, key, prefix = '#', suffix = '')->
-    method = instance[key]
-    instance[key] = (args...) ->
-      log "#{prefix}#{key}#{suffix}(#{args.map(JSON.stringify).join(',')})"
+  function: (instance, func, name)->
+    (args...) ->
+      log "#{name}(#{args.map(JSON.stringify).join(',')})"
       indent += "  "
-      retVal = method.call instance, args...
-      indent = indent.substr 0, indent.length - 2
+      retVal = func.apply instance, args
       if retVal is instance
         log "return this"
       else
         log "return #{JSON.stringify(retVal)}"
+      indent = indent.substr 0, indent.length - 2
       retVal
 
-  property: (instance, key, onSet = pass)->
+  method: (instance, key, prefix = '#', suffix = '')->
+    instance[key] = debug.function instance, instance[key], "#{prefix}#{key}#{suffix}"
+
+  property: (instance, key,onSet = pass)->
     value = instance[key]
     Object.defineProperty instance, key,
       get: ->
@@ -34,37 +36,32 @@ debug = {
   decorate: (originalFunction, decorator) ->
     (args...)-> decorator.call null, originalFunction, args...
 
+  state: (checkState) ->
+    debug.method checkState, 'strategy', checkState.strategy.name
+    debug.property checkState, 'strategy', (value)->
+      debug.function checkState, value, "#strategy[#{value.name}]"
+    debug.property checkState, 'result'
+    debug.method checkState.done, 'push', 'done.'
+
   check: (testedCheck) ->
     debug.property testedCheck, 'finish'
+    debug.state testedCheck.state
     debug.property testedCheck, 'state'
-    debug.property testedCheck.state, 'strategy', (value)->
-      debug.call { strategy: value }, 'strategy'
-    debug.property testedCheck.state, 'result'
-    debug.property testedCheck.state, 'current'
-    debug.call testedCheck.state.done, 'push', 'done.'
+    debug.property testedCheck, 'current'
+
     testedCheck.push = debug.decorate testedCheck.push, (originalPush)->
       stack += "|"
       indent = indent.substr 1
       retVal = originalPush.call testedCheck
-      debug.property testedCheck.state, 'strategy', (value)->
-        debug.call { strategy: value }, 'strategy', '#', "[#{value.name}]"
-      debug.property testedCheck.state, 'result'
-      debug.property testedCheck.state, 'current'
-      debug.call testedCheck.state.done, 'push', 'done.'
+      debug.state testedCheck.state
       retVal
     testedCheck.pop = debug.decorate testedCheck.pop, (originalPop)->
       indent += " "
       stack = stack.substr 1
       originalPop.call testedCheck
-    testedCheck.add = debug.decorate testedCheck.add, (originalAdd, args...)->
-      try
-        originalAdd.call testedCheck, args...
-      catch e
-        console.error e.stack
-        throw e
 
-    debug.call testedCheck, 'add'
-    debug.call testedCheck, 'assert'
+    debug.method testedCheck, 'add'
+    debug.method testedCheck, 'assert'
     testedCheck
 }
 

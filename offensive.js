@@ -161,12 +161,14 @@ var builtInAssertions = {
 
   'not': new Assertion(function(context) {
     context.push();
-    context.state.strategy = function notStrategy(condition) {
+    context.state.strategy = notStrategy;
+
+    function notStrategy(condition) {
       context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
       context.current.result = !condition(context.value);
-      this.result = this.result && context.current.result;
-      context.pop();
-    };
+      this.result = context.current.result;
+      context.pop()
+    }
   }),
 
   // either and or must be used in combination
@@ -192,10 +194,12 @@ var builtInAssertions = {
     this.message = 'null';
     context.assert(isNull);
   }),
-  'empty': new Assertion(function(context) {
+  'nil': new Alias('Null'),
+  'Empty': new Assertion(function(context) {
     this.message = 'empty';
     context.assert(isNullOrUndefined);
   }),
+  'empty': new Alias('Empty'),
 
   // typeof assertions
   'aString': new TypeofAssertion('string'),
@@ -215,7 +219,7 @@ var builtInAssertions = {
     check(propertyName, 'propertyName').is.aString();
 
     context.push();
-    if (!context.is.not.empty.result) {
+    if (!context.is.not.Empty.result) {
       context.pop();
       return;
     }
@@ -223,10 +227,14 @@ var builtInAssertions = {
     this.getter = getters.property(propertyName);
     if (typeof propertyValue !== 'undefined') {
       this.message = propertyValue;
-      context.assert(function(value) { return value[propertyName] === propertyValue; });
+      context.assert(function PropertyHasValue(value) {
+        return value[propertyName] === propertyValue;
+      });
     } else {
       this.message = 'not undefined';
-      context.assert(function(value) { return !isUndefined(value[propertyName]); });
+      context.assert(function PropertyIsDefined(value) {
+        return !isUndefined(value[propertyName]);
+      });
     }
     context.pop();
   }),
@@ -245,13 +253,18 @@ var builtInAssertions = {
     check(assertFunction, 'assertFunction').is.aFunction();
 
     context.push();
-    context.is.anArray();
+    if (!context.is.anArray.result) {
+      context.pop();
+      return;
+    }
 
     context.value.forEach(function(elem, i) {
       context.add(new Assertion(function(innerContext) {
         this.getter = getters.element(i);
         this.message = assertName;
-        innerContext.assert(assertFunction.bind(null, elem));
+        innerContext.assert(function elemSatisfiesAssertion() {
+          return assertFunction(elem);
+        });
       }));
     });
     context.pop();
@@ -313,6 +326,7 @@ var checkProto = {
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
     this.state.strategy(condition, this);
+    return this.state.result;
   },
   push: function() {
     this.stack.push(this.state);
@@ -329,6 +343,12 @@ var checkProto = {
     }
   },
 };
+
+// to be used inside assertions (for precondition checking)
+Object.defineProperty(checkProto, 'result', {
+  get: function() { return this.state.result; },
+  set: function() { throw new Error('.result is a read-only shorthand for .state.result'); },
+});
 
 Object.setPrototypeOf(assertProto, checkProto);
 
