@@ -161,10 +161,10 @@ var builtInAssertions = {
 
   'not': new Assertion(function(context) {
     context.push();
-    context.state.strategy = function notStrategy(condition, value) {
-      this.current.message = [ 'not' ].concat(ensureArray(this.current.message));
-      this.current.result = !condition(value);
-      this.result = this.current.result;
+    context.state.strategy = function notStrategy(condition) {
+      context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
+      context.current.result = !condition(context.value);
+      this.result = this.result && context.current.result;
       context.pop();
     };
   }),
@@ -179,11 +179,11 @@ var builtInAssertions = {
     if (!context.state.insideEither) {
       throw new Error('.or used without .either');
     }
-    context.state.strategy = function orStrategy(condition, value) {
-      this.current.result = condition(value);
-      this.result = this.result || this.current.result;
+    context.state.strategy = function orStrategy(condition) {
+      context.current.result = condition(context.value);
+      this.result = this.result || context.current.result;
       context.pop();
-      this.current.prefix = 'or ';
+      context.current.prefix = 'or ';
     };
   }),
 
@@ -275,6 +275,7 @@ function check(value, name) {
 //  context.name = name;
   context.state = new State();
   context.stack = [];
+  context.current = null;
 
   Object.setPrototypeOf(context, assertProto);
 
@@ -297,10 +298,10 @@ var checkProto = {
     assertion.done = [];
     this.state.done.push(assertion);
 
-    var previous = this.state.current;
-    this.state.current = assertion;
+    var previous = this.current;
+    this.current = assertion;
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
-    this.state.current = previous;
+    this.current = previous;
     return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`
@@ -310,25 +311,18 @@ var checkProto = {
   // to be used inside assertions
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
-    this.state.strategy(condition, this.value);
+    this.state.strategy(condition, this);
   },
   push: function() {
-    var current = this.state.current;
-
     this.stack.push(this.state);
     this.state = new State();
-    this.state.done = current.done;
-
-    this.state.current = current;
+    this.state.done = this.current.done;
     this.finish = justReturnValue;
   },
   pop: function() {
-    var deletedState = this.state;
-
+    var result = this.state.result;
     this.state = this.stack.pop();
-    this.state.current = deletedState.current;
-
-    this.state.strategy(function() { return deletedState.result; });
+    this.state.strategy(function() { return result; }, this);
     if (this.stack.length === 0) {
       this.finish = throwOrReturnValue;
     }
@@ -341,7 +335,6 @@ Object.setPrototypeOf(assertProto, checkProto);
 function State() {
   this.done = [];
   this.result = true;
-  this.current = null;
 }
 
 State.prototype = {
@@ -349,10 +342,10 @@ State.prototype = {
 };
 
 // strategies for hangling boolean operators
-function andStrategy(condition, value) {
-  this.current.result = condition(value);
-  this.result = this.result && this.current.result;
-  this.current.prefix = 'and ';
+function andStrategy(condition, context) {
+  context.current.result = condition(context.value);
+  this.result = this.result && context.current.result;
+  context.current.prefix = 'and ';
 }
 
 // finish functions
