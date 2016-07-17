@@ -160,16 +160,12 @@ var builtInAssertions = {
   'and': new Alias('is'),
 
   'not': new Assertion(function(context) {
-    var originalModifier = context.state.modifier;
-    context.state.modifier = function(result) {
-      this.modifier = originalModifier;
-      return !this.modifier(result);
-    };
-    var originalStrategy = context.state.strategy;
-    context.state.strategy = function(condition, value) {
+    context.push();
+    context.state.strategy = function notStrategy(condition, value) {
       this.current.message = [ 'not' ].concat(ensureArray(this.current.message));
-      this.strategy = originalStrategy;
-      return this.strategy(condition, value);
+      this.current.result = !condition(value);
+      this.result = this.current.result;
+      context.pop();
     };
   }),
 
@@ -184,11 +180,11 @@ var builtInAssertions = {
       throw new Error('.or used without .either');
     }
     context.state.strategy = function orStrategy(condition, value) {
-      this.current.result = this.modifier(condition(value));
+      this.current.result = condition(value);
       this.result = this.result || this.current.result;
       context.pop();
       this.current.prefix = 'or ';
-    }
+    };
   }),
 
   // null assertions
@@ -349,13 +345,12 @@ function State() {
 }
 
 State.prototype = {
-  modifier: pass,
   strategy: andStrategy,
 };
 
 // strategies for hangling boolean operators
 function andStrategy(condition, value) {
-  this.current.result = this.modifier(condition(value));
+  this.current.result = condition(value);
   this.result = this.result && this.current.result;
   this.current.prefix = 'and ';
 }
@@ -369,11 +364,6 @@ function throwOrReturnValue() {
 }
 function justReturnValue() {
   return this.value;
-}
-
-// default modifier
-function pass(result) {
-  return result;
 }
 
 // check helpers
@@ -507,9 +497,9 @@ function tee(func, group) {
 function pipe() {
   var pipeline = [].slice.call(arguments);
 
-  return function(arg) {
-    return pipeline.reduce(function(arg, filter) { return filter(arg); }, arg);
-  }
+  return function(initialArg) {
+    return pipeline.reduce(function(arg, filter) { return filter(arg); }, initialArg);
+  };
 }
 
 /*
