@@ -25,16 +25,15 @@ function addAssertion(name, assertion) {
   }
 
   assertions[name] = assertion;
-  assertion.name = name;
 
   if (assertion instanceof AssertionWithArguments) {
     Object.defineProperty(assertProto, name, {
-      value: function() { return this.add(assertion, [].slice.call(arguments)); },
+      value: function() { return this.add(name, assertion, [].slice.call(arguments)); },
       enumerable: true,
     });
   } else {
     Object.defineProperty(assertProto, name, {
-      get: function() { return this.add(assertion); },
+      get: function() { return this.add(name, assertion); },
       enumerable: true,
     });
   }
@@ -94,12 +93,11 @@ function Assertion(assertFunction) {
   }
   this.runInContext = assertFunction;
   this.prefix = '';
+  this.message = [];
 }
 
 Assertion.prototype = {
   getter: getters.value,
-  message: [],
-  done: [],
 };
 
 function AssertionWithArguments(assertFunction) {
@@ -148,7 +146,6 @@ var builtInAssertions = {
   'to': new Alias('is'),
   'of': new Alias('is'),
   'from': new Alias('is'),
-  'either': new Alias('is'),
   'has': new Alias('is'),
   'have': new Alias('is'),
   'defines': new Alias('is'),
@@ -161,9 +158,7 @@ var builtInAssertions = {
 
   // boolean operators (and is default)
   'and': new Alias('is'),
-  'or': new Assertion(function(context) {
-    context.state.strategy = orStrategy;
-  }),
+
   'not': new Assertion(function(context) {
     var originalModifier = context.state.modifier;
     context.state.modifier = function(result) {
@@ -176,6 +171,24 @@ var builtInAssertions = {
       this.strategy = originalStrategy;
       return this.strategy(condition, value);
     };
+  }),
+
+  // either and or must be used in combination
+  'either': new Assertion(function(context) {
+    context.push();
+    context.state.insideEither = true;
+  }),
+  'weather': new Alias('either'),
+  'or': new Assertion(function(context) {
+    if (!context.state.insideEither) {
+      throw new Error('.or used without .either');
+    }
+    context.state.strategy = function orStrategy(condition, value) {
+      this.current.result = this.modifier(condition(value));
+      this.result = this.result || this.current.result;
+      context.pop();
+      this.current.prefix = 'or ';
+    }
   }),
 
   // null assertions
@@ -281,13 +294,17 @@ var checkProto = {
   // all assertion methods call this one
   // it can also be used to run assertions without adding them globally
   // `check(arg, 'arg').add(new Assertion(...))()`
-  add: function(assertionProto, args) {
+  add: function(assertionName, assertionProto, args) {
     var assertion = Object.create(assertionProto);
+    assertion.name = assertionName;
     assertion.args = args || [];
+    assertion.done = [];
+    this.state.done.push(assertion);
+
+    var previous = this.state.current;
     this.state.current = assertion;
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
-    this.state.current = this.state.top;
-    this.state.top.done.push(assertion);
+    this.state.current = previous;
     return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`
@@ -297,40 +314,38 @@ var checkProto = {
   // to be used inside assertions
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
-    return this.state.strategy(condition, this.value);
+    this.state.strategy(condition, this.value);
   },
   push: function() {
+    var current = this.state.current;
+
     this.stack.push(this.state);
     this.state = new State();
+    this.state.done = current.done;
+
+    this.state.current = current;
     this.finish = justReturnValue;
-    return this;
   },
   pop: function() {
     var deletedState = this.state;
+
     this.state = this.stack.pop();
-    this.state.current.done.push(deletedState.top);
-    this.state.strategy(function() {
-      return deletedState.result;
-    });
+    this.state.current = deletedState.current;
+
+    this.state.strategy(function() { return deletedState.result; });
     if (this.stack.length === 0) {
       this.finish = throwOrReturnValue;
     }
-    return this;
   },
 };
-
-Object.defineProperty(checkProto, 'result', {
-  get: function() { return this.state.result; },
-  enumerable: true,
-});
 
 Object.setPrototypeOf(assertProto, checkProto);
 
 // this gets pushed around alot
 function State() {
+  this.done = [];
   this.result = true;
-  this.top = { done: [] };
-  this.current = this.top;
+  this.current = null;
 }
 
 State.prototype = {
@@ -343,21 +358,6 @@ function andStrategy(condition, value) {
   this.current.result = this.modifier(condition(value));
   this.result = this.result && this.current.result;
   this.current.prefix = 'and ';
-  return this;
-}
-function orStrategy(condition, value) {
-  if (this.top.done.length !== 0 && this.result === true) {
-    // Condition already satisfied, no need to do subsequent checks.
-    this.strategy = doneStrategy;
-    return this;
-  }
-  this.current.prefix = 'or ';
-  this.result = this.current.result = this.modifier(condition(value));
-  this.strategy = andStrategy;
-  return this;
-}
-function doneStrategy() {
-  return this;
 }
 
 // finish functions
@@ -403,9 +403,11 @@ function buildMessage(context) {
   var groupByName = groupByVariableName.bind(null, context);
   var toString = groupToString(context);
 
-  var message = context.state.top.done
-    .filter(onlyNotEmpty)
+  var message = context.state.done
+//    .map(tee.bind(null, pipe(function(arg) { return arg.done; }, console.log)))
+    .reduce(replaceEmptyWithChildren, [])
 //    .map(tee.bind(null, console.log))
+    .filter(onlyNotEmpty)
     .reduce(removeDuplicates, [])
     .reduce(groupByName, [])
     .filter(onlyWithNegativeResult)
@@ -419,25 +421,34 @@ function onlyNotEmpty(assertion) {
   return typeof assertion.result !== 'undefined';
 }
 
-function removeDuplicates(result, assertion) {
-  if (result.length === 0 || result[result.length - 1].message !== assertion.message) {
-    result.push(assertion);
+function removeDuplicates(retVal, assertion) {
+  if (retVal.length === 0 || retVal[retVal.length - 1].message !== assertion.message) {
+    retVal.push(assertion);
   }
-  return result;
+  return retVal;
 }
 
-function groupByVariableName(context, result, assertion) {
+function replaceEmptyWithChildren(retVal, group) {
+  if (group.message && group.message.length !== 0) {
+    retVal.push(group);
+  } else {
+    group.done.reduce(replaceEmptyWithChildren, retVal);
+  }
+  return retVal;
+}
+
+function groupByVariableName(context, retVal, assertion) {
   var name = assertion.getter.name(context);
-  var current = result.length === 0? createGroup(assertion): result.pop();
+  var current = retVal.length === 0? createGroup(assertion): retVal.pop();
   var currentName = current.getter.name(context);
   if (name !== currentName) {
-    result.push(current);
+    retVal.push(current);
     current = createGroup(assertion);
   }
   current.message.push(assertion.prefix + ensureArray(assertion.message).join(' '));
   current.result &= assertion.result;
-  result.push(current);
-  return result;
+  retVal.push(current);
+  return retVal;
 }
 
 function createGroup(assertion) {
@@ -491,6 +502,14 @@ function onlyWithNegativeResult(group) {
 function tee(func, group) {
   func(group);
   return group;
+}
+
+function pipe() {
+  var pipeline = [].slice.call(arguments);
+
+  return function(arg) {
+    return pipeline.reduce(function(arg, filter) { return filter(arg); }, arg);
+  }
 }
 
 /*

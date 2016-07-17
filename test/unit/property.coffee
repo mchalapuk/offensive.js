@@ -3,6 +3,7 @@ should = require 'should'
 
 delete require.cache[ require.resolve '../../offensive' ]
 check = require '../../offensive'
+debug = require '../debug.coffee'
 
 shouldThrow = (expectedMessage, test)->
   try
@@ -17,18 +18,20 @@ describe "check(undefined, \"arg\")", ->
 
   beforeEach ->
     testedCheck = check undefined, 'arg'
+#    debug.check testedCheck
 
   describe ".property(\"name\", \"value\")", ->
 
     expectedMessage = "arg must be not empty; got undefined"
     it "should throw new Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, -> testedCheck.property "name", "value"
+      shouldThrow expectedMessage, -> testedCheck.property("name", "value")()
 
 describe "check(\"arg\", \"arg\")", ->
   testedCheck = null
 
   beforeEach ->
     testedCheck = check 'arg', 'arg'
+#    debug.check testedCheck
 
   errorTests = [
     [ null, 'value', 'propertyName must be a string; got null' ]
