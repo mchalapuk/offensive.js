@@ -37,7 +37,7 @@ debug = {
     (args...)-> decorator.call null, originalFunction, args...
 
   state: (checkState) ->
-    debug.method checkState, 'strategy', checkState.strategy.name
+    debug.method checkState, 'strategy', '#', "[#{checkState.strategy.name}]"
     debug.property checkState, 'strategy', (value)->
       debug.function checkState, value, "#strategy[#{value.name}]"
     debug.property checkState, 'result'

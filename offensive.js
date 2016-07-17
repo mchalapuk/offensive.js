@@ -181,12 +181,14 @@ var builtInAssertions = {
     if (!context.state.insideEither) {
       throw new Error('.or used without .either');
     }
-    context.state.strategy = function orStrategy(condition) {
+    context.state.strategy = orStrategy;
+
+    function orStrategy(condition) {
       context.current.result = condition(context.value);
       this.result = this.result || context.current.result;
       context.pop();
       context.current.prefix = 'or ';
-    };
+    }
   }),
 
   // null assertions
@@ -336,11 +338,15 @@ var checkProto = {
   },
   pop: function() {
     var result = this.state.result;
+
     this.state = this.stack.pop();
-    this.state.strategy(function() { return result; }, this);
     if (this.stack.length === 0) {
       this.finish = flushAndReturn;
     }
+    function returnResult() {
+      return result;
+    }
+    this.state.strategy(returnResult, this);
   },
 };
 
