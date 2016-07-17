@@ -41,11 +41,12 @@ describe "check", ->
     throwTest arg, "arg.length must be 2 or 4; got #{arg.length}" for arg in [ [], [1], [3, 3, 3] ]
     noThrowTest arg for arg in [ [2, 2], [4, 4, 4, 4] ]
 
-  describe ".has.either.length(2).and.length(4)()", ->
+  describe ".has.length(2).and.length(4)()", ->
     [throwTest, noThrowTest] = createTests (arg)->
-      check(arg, "arg").has.either.length(2).or.length(4)
+      check(arg, "arg").has.length(2).and.length(4)
 
-    throwTest arg, "arg.length must be 2 and 4; got #{arg.length}" for arg in [ [], [1], [3, 3, 3] ]
+    throwTest arg, "arg.length must be 2; got #{arg.length}" for arg in [ [4, 4, 4, 4] ]
+    throwTest arg, "arg.length must be 4; got #{arg.length}" for arg in [ [2, 2] ]
 
   describe ".has.either.length(2).or.either.property('hi').or.value('there', 'Jane')()", ->
     [throwTest, noThrowTest] = createTests (arg)->

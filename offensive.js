@@ -321,7 +321,7 @@ var checkProto = {
   // `check(arg, 'arg').is.not.Empty.finish()`
   // is just a longer notation of:
   // `check(arg, 'arg').is.not.Empty()`
-  finish: throwOrReturnValue,
+  finish: flushAndReturn,
   // to be used inside assertions
   // (I wounder if there is a way to implement this without double IoC)
   assert: function(condition) {
@@ -332,14 +332,14 @@ var checkProto = {
     this.stack.push(this.state);
     this.state = new State();
     this.state.done = this.current.done;
-    this.finish = justReturnValue;
+    this.finish = justReturn;
   },
   pop: function() {
     var result = this.state.result;
     this.state = this.stack.pop();
     this.state.strategy(function() { return result; }, this);
     if (this.stack.length === 0) {
-      this.finish = throwOrReturnValue;
+      this.finish = flushAndReturn;
     }
   },
 };
@@ -370,13 +370,15 @@ function andStrategy(condition, context) {
 }
 
 // finish functions
-function throwOrReturnValue() {
+function flushAndReturn() {
   if (!this.state.result) {
     throw new Error(buildMessage(this));
   }
+  // everything so far satisfied, so not needed in error message
+  this.state.done = [];
   return this.value;
 }
-function justReturnValue() {
+function justReturn() {
   return this.value;
 }
 
@@ -409,7 +411,7 @@ function buildMessage(context) {
 
   var message = context.state.done
 //    .map(tee.bind(null, pipe(function(arg) { return arg.done; }, console.log)))
-    .reduce(tryReplaceEmptyWithChildren, [])
+    .reduce(replaceEmptyWithChildren, [])
 //    .map(tee.bind(null, console.log))
     .filter(onlyNotEmpty)
     .reduce(removeDuplicates, [])
@@ -432,11 +434,11 @@ function removeDuplicates(retVal, assertion) {
   return retVal;
 }
 
-function tryReplaceEmptyWithChildren(retVal, group) {
+function replaceEmptyWithChildren(retVal, group) {
   if (group.message && group.message.length !== 0) {
     retVal.push(group);
   } else {
-    group.done.reduce(tryReplaceEmptyWithChildren, retVal);
+    group.done.reduce(replaceEmptyWithChildren, retVal);
   }
   return retVal;
 }
