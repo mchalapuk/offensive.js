@@ -302,6 +302,7 @@ var checkProto = {
     this.current = assertion;
     assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
     this.current = previous;
+    this.finish();
     return this;
   },
   // `check(arg, 'arg').is.not.Empty.finish()`

@@ -34,5 +34,5 @@ describe "check(undefined, \"arg\")", ->
 
       expectedMessage = "arg must be an object or an array; got undefined"
       it "should throw new Error('#{expectedMessage}')", ->
-        shouldThrow expectedMessage, -> testedCheck.or.anArray()
+        shouldThrow expectedMessage, -> testedCheck.or.anArray
 
