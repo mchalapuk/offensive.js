@@ -133,6 +133,11 @@ function TypeofAssertion(requiredType) {
 
 TypeofAssertion.prototype = new Assertion();
 
+var OperatorType = {
+  UNARY: 1,
+  BINARY: 2,
+};
+
 var builtInAssertions = {
   // does nothing
   'is': new Assertion(function(context) {
@@ -157,15 +162,20 @@ var builtInAssertions = {
   'postcondition': new Alias('is'),
   'invariant': new Alias('is'),
 
-  // boolean operators (and is default)
-  'and': new Alias('is'),
+  // boolean operators
+  'and': new Assertion(function() {
+    this.message = 'and';
+    this.operator = OperatorType.BINARY;
+  }),
 
   'not': new Assertion(function(context) {
+    this.message = 'not';
+    this.operator = OperatorType.UNARY;
+
     context.push();
     context.state.strategy = notStrategy;
 
     function notStrategy(condition) {
-      context.current.message = [ 'not' ].concat(ensureArray(context.current.message));
       context.current.result = !condition(context.value);
       this.result = context.current.result;
       context.pop();
@@ -182,13 +192,14 @@ var builtInAssertions = {
     if (!context.state.insideEither) {
       throw new Error('.or used without .either');
     }
+    this.message = 'or';
+    this.operator = OperatorType.BINARY;
     context.state.strategy = orStrategy;
 
     function orStrategy(condition) {
       context.current.result = condition(context.value);
       this.result = this.result || context.current.result;
       context.pop();
-      context.current.prefix = 'or ';
     }
   }),
 
@@ -373,7 +384,6 @@ State.prototype = {
 function andStrategy(condition, context) {
   context.current.result = condition(context.value);
   this.result = this.result && context.current.result;
-  context.current.prefix = 'and ';
 }
 
 // finish functions
@@ -414,12 +424,14 @@ function getTypePrefix(type) {
 // from this moment, performace is not a concern here
 function buildMessage(context) {
   var groupByName = groupByVariableName.bind(null, context);
-  var toString = groupToString(context);
+  var toString = groupToString.bind(null, context);
 
   var message = context.state.done
-//    .map(tee.bind(null, console.log))
     .reduce(replaceEmptyWithChildren, [])
+ //   .map(tee.bind(null, console.log))
     .filter(onlyNotEmpty)
+    .reduce(mergeWithOperators(), [])
+    .reduce(addDefaultOperators, [])
     .reduce(removeDuplicates, [])
     .reduce(groupByName, [])
     .filter(onlyWithNegativeResult)
@@ -430,7 +442,7 @@ function buildMessage(context) {
 }
 
 function onlyNotEmpty(assertion) {
-  return typeof assertion.result !== 'undefined';
+  return typeof assertion.result !== 'undefined' || assertion.operator;
 }
 
 function removeDuplicates(retVal, assertion) {
@@ -449,6 +461,42 @@ function replaceEmptyWithChildren(retVal, group) {
   return retVal;
 }
 
+function mergeWithOperators() {
+  var unary = [];
+  var binary = null;
+
+  return function(retVal, assertionOrOperator) {
+    if (!assertionOrOperator.operator) {
+      var assertion = assertionOrOperator;
+      assertion.operators = { unary: unary, binary: binary };
+      unary = [];
+      binary = null;
+      retVal.push(assertion);
+      return retVal;
+    }
+
+    var operator = assertionOrOperator;
+    if (operator.operator === OperatorType.UNARY) {
+      unary.push(operator.message);
+      return retVal;
+    }
+
+    if (binary) {
+      throw new Error('BUG! Two binary operators before one assertion.');
+    }
+    binary = operator.message;
+    return retVal;
+  };
+}
+
+function addDefaultOperators(retVal, assertion) {
+  if (!assertion.operators.binary && retVal.length) {
+    assertion.operators.binary = 'and';
+  }
+  retVal.push(assertion);
+  return retVal;
+}
+
 function groupByVariableName(context, retVal, assertion) {
   var name = assertion.getter.name(context);
   var current = retVal.length === 0? createGroup(assertion): retVal.pop();
@@ -457,7 +505,9 @@ function groupByVariableName(context, retVal, assertion) {
     retVal.push(current);
     current = createGroup(assertion);
   }
-  current.message.push(assertion.prefix + ensureArray(assertion.message).join(' '));
+  var operators = operatorsToString(assertion.operators);
+  var message = ensureArray(assertion.message).join(' ');
+  current.message.push(operators + message);
   current.result &= assertion.result;
   retVal.push(current);
   return retVal;
@@ -466,37 +516,31 @@ function groupByVariableName(context, retVal, assertion) {
 function createGroup(assertion) {
   // has the same properties as assertion
   var group = {
-    prefix: assertion.prefix,
+    operators: assertion.operators,
     getter: assertion.getter,
     message: [],
     result: true,
   };
-  assertion.prefix = '';
+  assertion.operators = { unary: [], binary: '' };
   return group;
 }
 
-function groupToString(context) {
-  var toString = first;
+function groupToString(context, group) {
+  var operators = operatorsToString(group.operators);
+  var whitespace = operators.length? ' ': '';
+  var name = group.getter.name(context);
+  var conditions = group.message.join(' ');
+  var value = group.getter.value(context);
+  var retVal = whitespace + operators + name +' must be '+ conditions +'; got '+ value;
+  return retVal;
+}
 
-  function impl(group) {
-    var name = group.getter.name(context);
-    var conditions = group.message.join(' ');
-    var value = group.getter.value(context);
-    var retVal = group.prefix + name +' must be '+ conditions +'; got '+ value;
-    return retVal;
-  }
-  function first(group) {
-    toString = next;
-    group.prefix = '';
-    return impl(group);
-  }
-  function next(group) {
-    return ' '+ impl(group);
-  }
-
-  return function(group) {
-    return toString(group);
-  };
+function operatorsToString(operators) {
+  var unary = operators.unary.join(' ');
+  var binary = operators.binary || '';
+  var retVal = binary + (binary.length && unary.length? ' ': '') +
+    unary + ((binary + unary).length? ' ': '');
+  return retVal;
 }
 
 function ensureArray(value) {

@@ -55,7 +55,11 @@ debug = {
     testedCheck.add = debug.decorate testedCheck.add, (originalAdd, name, args...)->
       log ".#{name}"
       indent += "  "
-      retVal = originalAdd.call testedCheck, name, args...
+      try
+        retVal = originalAdd.call testedCheck, name, args...
+      catch e
+        log "throw new Error('#{e.message}')"
+        throw e
       if retVal is testedCheck
         log "return this"
       else unless typeof retVal is 'undefined'
