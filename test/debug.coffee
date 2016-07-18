@@ -49,8 +49,7 @@ debug = {
     debug.property testedCheck, 'finish'
     debug.state testedCheck.state
     debug.property testedCheck, 'state'
-    debug.property testedCheck, 'current', (value)->
-      if value then debug.property value, 'prefix' else value
+    debug.property testedCheck, 'current'
 
     testedCheck.add = debug.decorate testedCheck.add, (originalAdd, name, args...)->
       log ".#{name}"

@@ -172,13 +172,16 @@ var builtInAssertions = {
     this.message = 'not';
     this.operator = OperatorType.UNARY;
 
-    context.push();
+    var previousStrategy = context.state.strategy;
     context.state.strategy = notStrategy;
 
     function notStrategy(condition) {
-      context.current.result = !condition(context.value);
-      this.result = context.current.result;
-      context.pop();
+      context.state.strategy = previousStrategy;
+      context.state.strategy(negatedCondition, context);
+
+      function negatedCondition(value) {
+        return !condition(value);
+      }
     }
   }),
 
@@ -427,8 +430,8 @@ function buildMessage(context) {
   var toString = groupToString.bind(null, context);
 
   var message = context.state.done
+//    .map(tee.bind(null, console.log))
     .reduce(replaceEmptyWithChildren, [])
- //   .map(tee.bind(null, console.log))
     .filter(onlyNotEmpty)
     .reduce(mergeWithOperators(), [])
     .reduce(addDefaultOperators, [])
@@ -503,7 +506,7 @@ function groupByVariableName(context, retVal, assertion) {
     retVal.push(current);
     current = createGroup(assertion);
   }
-  var operators = operatorsToString(assertion.operators);
+  var operators = operatorsToString(assertion.operators).full;
   var message = ensureArray(assertion.message).join(' ');
   current.message.push(operators + message);
   current.result &= assertion.result;
@@ -525,20 +528,30 @@ function createGroup(assertion) {
 
 function groupToString(context, group) {
   var operators = operatorsToString(group.operators);
-  var whitespace = operators.length? ' ': '';
+  if (operators.binary) {
+    operators.binary = ' '+ operators.binary;
+  }
   var name = group.getter.name(context);
   var conditions = group.message.join(' ');
   var value = group.getter.value(context);
-  var retVal = whitespace + operators + name +' must be '+ conditions +'; got '+ value;
+  var retVal = operators.binary + name +' must be '+ operators.unary + conditions +'; got '+ value;
   return retVal;
 }
 
 function operatorsToString(operators) {
   var unary = operators.unary.join(' ');
+  if (unary.length) {
+    unary += ' ';
+  }
   var binary = operators.binary || '';
-  var retVal = binary + (binary.length && unary.length? ' ': '') +
-    unary + ((binary + unary).length? ' ': '');
-  return retVal;
+  if (binary.length) {
+    binary += ' ';
+  }
+  return {
+    binary: binary,
+    unary: unary,
+    full: binary + unary,
+  };
 }
 
 function ensureArray(value) {
