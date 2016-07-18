@@ -8,6 +8,13 @@ module.exports.addAssertion = addAssertion;
 module.exports.Assertion = Assertion;
 module.exports.Alias = Alias;
 
+// Object.setPrototypeOf polyfill
+if (!Object.setPrototypeOf) {
+  Object.setPrototypeOf = function(instance, prototype) {
+    instance.__proto__ = prototype;
+  };
+}
+
 // contains all assertion objects
 var assertions = {};
 
