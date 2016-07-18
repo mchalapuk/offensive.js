@@ -1,5 +1,5 @@
 [travis-url]: http://travis-ci.org/webfront-toolkit/offensive.js
-[travis-image]: https://api.travis-ci.org/webfront-toolkit/offensive.js
+[travis-image]: https://travis-ci.org/webfront-toolkit/offensive.js.svg?branch=master
 
 [david-url]: https://david-dm.org/webfront-toolkit/offensive.js
 [david-image]: https://david-dm.org/webfront-toolkit/offensive.js.svg
