@@ -57,7 +57,7 @@ log({});
 ## API
 
 Library doesn't have proper documentation yet :( Please check the [source
-code][code] for details about API or [integration tests][integration-tests]
+code][code] for details about API and [integration tests][integration-tests]
 for more advanced examples.
 
 [code]: offensive.js
