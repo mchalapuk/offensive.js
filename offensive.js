@@ -434,8 +434,6 @@ function buildMessage(context) {
     .reduce(addDefaultOperators, [])
     .reduce(removeDuplicates, [])
     .reduce(groupByName, [])
-    .filter(onlyWithNegativeResult)
-    .reduce(groupByName, [])
     .reduce(function(builder, group) { return builder + toString(group); }, '');
 
   return message;
@@ -545,10 +543,6 @@ function operatorsToString(operators) {
 
 function ensureArray(value) {
   return isArray(value)? value: [ value ];
-}
-
-function onlyWithNegativeResult(group) {
-  return !group.result;
 }
 
 // debugging
