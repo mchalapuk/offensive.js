@@ -84,51 +84,44 @@ var getters = {
 
 module.exports.getters = getters;
 
-var globalObject = typeof window !== 'undefined'? window: global;
-
 // assertion classes
 function Assertion(assertFunction) {
-  if (this === globalObject) {
-    return new Assertion(assertFunction);
-  }
-  this.runInContext = assertFunction;
-  this.prefix = '';
-  this.message = [];
+  var that = Object.create(Assertion.prototype);
+  that.runInContext = assertFunction;
+  return that;
 }
 
 Assertion.prototype = {
   getter: getters.value,
+  message: [],
 };
 
 function AssertionWithArguments(assertFunction) {
-  if (this === globalObject) {
-    return new AssertionWithArguments(assertFunction);
-  }
-  Assertion.call(this, assertFunction);
+  var that = Object.create(AssertionWithArguments.prototype);
+  that.runInContext = assertFunction;
+  return that;
 }
 
 AssertionWithArguments.prototype = new Assertion();
 
 function Alias(originalName) {
-  if (this === globalObject) {
-    return new Alias(originalName);
-  }
-  this.aliasFor = originalName;
+  var that = Object.create(Alias.prototype);
+  that.aliasFor = originalName;
+  return that;
 }
 
 Alias.prototype = new Assertion();
 
 function TypeofAssertion(requiredType) {
-  if (this === globalObject) {
-    return new TypeofAssertion(requiredType);
-  }
   function hasProperType(value) {
     return typeof value === requiredType;
   }
-  Assertion.call(this, function(context) {
+  var that = Object.create(Assertion.prototype);
+  that.runInContext = function(context) {
     this.message = getTypePrefix(requiredType) + requiredType;
     context.assert(hasProperType);
-  });
+  };
+  return that;
 }
 
 TypeofAssertion.prototype = new Assertion();
