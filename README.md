@@ -10,8 +10,6 @@
 [npm-url]: https://npmjs.org/package/offensive.js
 [npm-image]: https://badge.fury.io/js/offensive.js.svg
 
-> **DOESN'T WORK YET**
-
 # offensive.js
 
 [![Build Status][travis-image]][travis-url]
