@@ -122,11 +122,12 @@ function TypeofAssertion(requiredType) {
   if (this === globalObject) {
     return new TypeofAssertion(requiredType);
   }
+  function hasProperType(value) {
+    return typeof value === requiredType;
+  }
   Assertion.call(this, function(context) {
     this.message = getTypePrefix(requiredType) + requiredType;
-    context.assert(function(value) {
-      return typeof value === requiredType;
-    });
+    context.assert(hasProperType);
   });
 }
 
@@ -416,9 +417,8 @@ function buildMessage(context) {
   var toString = groupToString(context);
 
   var message = context.state.done
-//    .map(tee.bind(null, pipe(function(arg) { return arg.done; }, console.log)))
-    .reduce(replaceEmptyWithChildren, [])
 //    .map(tee.bind(null, console.log))
+    .reduce(replaceEmptyWithChildren, [])
     .filter(onlyNotEmpty)
     .reduce(removeDuplicates, [])
     .reduce(groupByName, [])

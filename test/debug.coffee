@@ -14,7 +14,7 @@ debug = {
       retVal = func.apply instance, args
       if retVal is instance
         log "return this"
-      else
+      else unless typeof retVal is 'undefined'
         log "return #{JSON.stringify(retVal)}"
       indent = indent.substr 0, indent.length - 2
       retVal
@@ -22,7 +22,7 @@ debug = {
   method: (instance, key, prefix = '#', suffix = '')->
     instance[key] = debug.function instance, instance[key], "#{prefix}#{key}#{suffix}"
 
-  property: (instance, key,onSet = pass)->
+  property: (instance, key, onSet = pass)->
     value = instance[key]
     Object.defineProperty instance, key,
       get: ->
@@ -44,11 +44,24 @@ debug = {
     debug.method checkState.done, 'push', 'done.'
 
   check: (testedCheck) ->
+    stack = ""
+    indent = "      "
     debug.property testedCheck, 'finish'
     debug.state testedCheck.state
     debug.property testedCheck, 'state'
-    debug.property testedCheck, 'current'
+    debug.property testedCheck, 'current', (value)->
+      if value then debug.property value, 'prefix' else value
 
+    testedCheck.add = debug.decorate testedCheck.add, (originalAdd, name, args...)->
+      log ".#{name}"
+      indent += "  "
+      retVal = originalAdd.call testedCheck, name, args...
+      if retVal is testedCheck
+        log "return this"
+      else unless typeof retVal is 'undefined'
+        log "return #{JSON.stringify(retVal)}"
+      indent = indent.substr 2
+      retVal
     testedCheck.push = debug.decorate testedCheck.push, (originalPush)->
       stack += "|"
       indent = indent.substr 1
@@ -60,7 +73,6 @@ debug = {
       stack = stack.substr 1
       originalPop.call testedCheck
 
-    debug.method testedCheck, 'add'
     debug.method testedCheck, 'assert'
     testedCheck
 }
