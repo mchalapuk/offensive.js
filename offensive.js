@@ -1,6 +1,6 @@
 'use strict';
 
-var Assertion = require('./lib/classes/assertion').default;
+var Assertion = require('./lib/model/assertion').default;
 var ErrorBuilder = require('./lib/error-builder').default;
 
 var nodsl = require('./lib/nodsl');
