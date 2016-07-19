@@ -392,6 +392,7 @@ function check(value, name) {
   var operatorContext = function() {
     return context.value;
   };
+  operatorContext.value = value;
   operatorContext.add = addOperator;
   Object.setPrototypeOf(operatorContext, operatorProto);
 
