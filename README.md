@@ -7,8 +7,8 @@
 [david-url-dev]: https://david-dm.org/webfront-toolkit/offensive.js#info=devDependencies
 [david-image-dev]: https://david-dm.org/webfront-toolkit/offensive.js/dev-status.svg
 
-[npm-url]: https://npmjs.org/package/offensive.js
-[npm-image]: https://badge.fury.io/js/offensive.js.svg
+[npm-url]: https://npmjs.org/package/offensive
+[npm-image]: https://badge.fury.io/js/offensive.svg
 
 # offensive.js
 
