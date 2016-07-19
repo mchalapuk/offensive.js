@@ -2,17 +2,12 @@
 
 var Assertion = require('./lib/classes/assertion').default;
 var AssertionWithArguments = require('./lib/classes/assertion-with-arguments').default;
-var TypeofAssertion = require('./lib/classes/typeof-assertion').default;
 var Operator = require('./lib/classes/operator').default;
 var BinaryOperator = require('./lib/classes/binary-operator').default;
 var Alias = require('./lib/classes/alias').default;
-var getters = require('./lib/getters').default;
-var Types = require('./lib/utils/types');
 var ErrorBuilder = require('./lib/error-builder').default;
 
-module.exports = function(value, name) {
-  return check(value, name);
-};
+module.exports = check;
 
 module.exports.addAssertion = addAssertion;
 module.exports.addOperator = addOperator;
@@ -145,97 +140,18 @@ function getAliased(assertion) {
   throw new Error('no assertion assertion or operator of name '+ assertion.aliasFor +' registered');
 }
 
-// assertion definitions
-var builtInAssertions = {
-  // null assertions
-  'Null': new Assertion(function(context) {
-    this.message = 'null';
-    context.assert(Types.isNull);
-  }),
-  'null': new Alias('Null'),
-  'Nil': new Alias('Null'),
-  'nil': new Alias('Nil'),
-  'Empty': new Assertion(function(context) {
-    this.message = 'empty';
-    context.assert(Types.isNullOrUndefined);
-  }),
-  'empty': new Alias('Empty'),
+var nullAssertions = require('./lib/assertions/null');
+var typeAssertions = require('./lib/assertions/type');
+var propertyAssertions = require('./lib/assertions/property');
+var arrayAssertions = require('./lib/assertions/array');
 
-  // typeof assertions
-  'aString': new TypeofAssertion('string'),
-  'aNumber': new TypeofAssertion('number'),
-  'aFunction': new TypeofAssertion('function'),
-  'anObject': new TypeofAssertion('object'),
-  'Undefined': new TypeofAssertion('undefined'),
-
-  // duck typing assertions
-  'anArray': new Assertion(function(context) {
-    this.message = 'an array';
-    context.assert(Types.isArray);
-  }),
-
-  // property assertions
-  'property': new AssertionWithArguments(function(context, propertyName, propertyValue) {
-    check(propertyName, 'propertyName').is.aString();
-
-    context.push();
-    if (!context.is.not.Empty.result) {
-      context.pop();
-      return;
-    }
-
-    this.getter = getters.property(propertyName);
-    if (typeof propertyValue !== 'undefined') {
-      this.message = propertyValue;
-      context.assert(function PropertyHasValue(value) {
-        return value[propertyName] === propertyValue;
-      });
-    } else {
-      this.message = 'not undefined';
-      context.assert(function PropertyIsDefined(value) {
-        return !Types.isUndefined(value[propertyName]);
-      });
-    }
-    context.pop();
-  }),
-
-  // length assertions
-  'length': new AssertionWithArguments(function(context, requiredLength) {
-    check(requiredLength, 'requiredLength').is.aNumber();
-    context.has.property('length', requiredLength);
-  }),
-  // TODO 'lengthGT': new Alias('lengthGreaterThan'),
-  // TODO 'lengthLT': new Alias('lengthLessThan'),
-
-  // array element assertions
-  'eachElementIs': new AssertionWithArguments(function(context, assertName, assertFunction) {
-    check(assertName, 'assertName').is.aString();
-    check(assertFunction, 'assertFunction').is.aFunction();
-
-    context.push();
-    if (!context.is.anArray.result) {
-      context.pop();
-      return;
-    }
-
-    context.value.forEach(function(elem, i) {
-      context.add(new Assertion(function(innerContext) {
-        this.getter = getters.element(i);
-        this.message = assertName;
-        innerContext.assert(function elemSatisfiesAssertion() {
-          return assertFunction(elem);
-        });
-      }));
-    });
-    context.pop();
-  }),
-  'numberElements': new AssertionWithArguments(function(context) {
-    context.eachElementIs('a number', Types.isNumber);
-  }),
-};
-
-Object.keys(builtInAssertions).forEach(function(name) {
-  addAssertion(name, builtInAssertions[name]);
+[
+  nullAssertions, typeAssertions, propertyAssertions, arrayAssertions,
+]
+.forEach(function(assertions) {
+  Object.keys(assertions).forEach(function(name) {
+    addAssertion(name, assertions[name]);
+  });
 });
 
 var builtInOperators = require('./lib/operators');
@@ -244,18 +160,19 @@ Object.keys(builtInOperators).forEach(function(name) {
   addOperator(name, builtInOperators[name]);
 });
 
-// noop definitions
 var builtInNoops = require('./lib/noops');
 
 builtInNoops.forEach(addNoop);
 
 // exported check function
 function check(value, name) {
+  checkName(name);
 
   var context = Object.create(assertProto);
   context.value = value;
   context.name = name;
   context.add = add;
+  context.check = check;
 
   var operatorContext = function() {
     return context.value;
