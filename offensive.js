@@ -8,6 +8,8 @@ var UnaryOperator = require('./lib/classes/unary-operator').default;
 var BinaryOperator = require('./lib/classes/binary-operator').default;
 var Alias = require('./lib/classes/alias').default;
 var getters = require('./lib/getters').default;
+var Types = require('./lib/utils/types');
+var ErrorBuilder = require('./lib/error-builder').default;
 
 module.exports = function(value, name) {
   return check(value, name);
@@ -149,12 +151,14 @@ var builtInAssertions = {
   // null assertions
   'Null': new Assertion(function(context) {
     this.message = 'null';
-    context.assert(isNull);
+    context.assert(Types.isNull);
   }),
-  'nil': new Alias('Null'),
+  'null': new Alias('Null'),
+  'Nil': new Alias('Null'),
+  'nil': new Alias('Nil'),
   'Empty': new Assertion(function(context) {
     this.message = 'empty';
-    context.assert(isNullOrUndefined);
+    context.assert(Types.isNullOrUndefined);
   }),
   'empty': new Alias('Empty'),
 
@@ -168,7 +172,7 @@ var builtInAssertions = {
   // duck typing assertions
   'anArray': new Assertion(function(context) {
     this.message = 'an array';
-    context.assert(isArray);
+    context.assert(Types.isArray);
   }),
 
   // property assertions
@@ -190,7 +194,7 @@ var builtInAssertions = {
     } else {
       this.message = 'not undefined';
       context.assert(function PropertyIsDefined(value) {
-        return !isUndefined(value[propertyName]);
+        return !Types.isUndefined(value[propertyName]);
       });
     }
     context.pop();
@@ -227,7 +231,7 @@ var builtInAssertions = {
     context.pop();
   }),
   'numberElements': new AssertionWithArguments(function(context) {
-    context.eachElementIs('a number', isNumber);
+    context.eachElementIs('a number', Types.isNumber);
   }),
 };
 
@@ -399,7 +403,10 @@ function check(value, name) {
   // finish functions
   function flushAndReturn() {
     if (!priv.state.result) {
-      throw new Error(buildMessage(context, priv.state));
+      var error = new ErrorBuilder(context)
+        .addMessages(priv.state.done)
+        .build();
+      throw error;
     }
     // everything so far satisfied, so not needed in error message
     priv.state.done = [];
@@ -427,166 +434,7 @@ function andStrategy(condition, context, state) {
   return result;
 }
 
-// check helpers
-function isNumber(value) {
-  return typeof value === 'number';
-}
-function isArray(value) {
-  return typeof value === 'object' && !isNull(value) &&
-    typeof value.splice === 'function' && typeof value.forEach === 'function';
-}
-function isNull(value) {
-  return value === null;
-}
-function isUndefined(value) {
-  return typeof value === 'undefined';
-}
-function isNullOrUndefined(value) {
-  return isNull(value) || isUndefined(value);
-}
-// code that builds error message is invoked only when assertion fails
-// from this moment, performace is not a concern here
-function buildMessage(context, state) {
-  var groupByName = groupByVariableName.bind(null, context);
-  var toString = groupToString.bind(null, context);
-
-  var message = state.done
-    .reduce(replaceEmptyWithChildren, [])
-    .reduce(mergeWithOperators(), [])
-//    .map(tee.bind(null, console.log))
-    .reduce(removeDuplicates, [])
-    .reduce(groupByName, [])
-    .reduce(function(builder, group) { return builder + toString(group); }, '');
-
-  return message;
-}
-
-function removeDuplicates(retVal, assertion) {
-  if (retVal.length === 0 || retVal[retVal.length - 1].message !== assertion.message) {
-    retVal.push(assertion);
-  }
-  return retVal;
-}
-
-function replaceEmptyWithChildren(retVal, group) {
-  if (group.message && group.message.length !== 0) {
-    retVal.push(group);
-  } else {
-    group.done.reduce(replaceEmptyWithChildren, retVal);
-  }
-  return retVal;
-}
-
-function mergeWithOperators() {
-  var unary = [];
-  var binary = null;
-
-  return function(retVal, assertionOrOperator) {
-    if (assertionOrOperator instanceof Assertion) {
-      var assertion = assertionOrOperator;
-      assertion.operators = { unary: unary, binary: binary };
-      unary = [];
-      binary = null;
-      retVal.push(assertion);
-      return retVal;
-    }
-
-    var operator = assertionOrOperator;
-    if (operator instanceof UnaryOperator) {
-      unary.push(operator.message);
-      return retVal;
-    }
-
-    if (binary) {
-      throw new Error('BUG! Two binary operators before one assertion.');
-    }
-    binary = operator.message;
-    return retVal;
-  };
-}
-
-function groupByVariableName(context, retVal, assertion) {
-  var name = assertion.getter.name(context);
-  var current = retVal.length === 0? createGroup(assertion): retVal.pop();
-  var currentName = current.getter.name(context);
-  if (name !== currentName) {
-    retVal.push(current);
-    current = createGroup(assertion);
-  }
-  var operators = operatorsToString(assertion.operators).full;
-  var message = ensureArray(assertion.message).join(' ');
-  current.message.push(operators + message);
-  current.result &= assertion.result;
-  retVal.push(current);
-  return retVal;
-}
-
-function createGroup(assertion) {
-  // has the same properties as assertion
-  var group = {
-    operators: assertion.operators,
-    getter: assertion.getter,
-    message: [],
-    result: true,
-  };
-  assertion.operators = { unary: [], binary: '' };
-  return group;
-}
-
-function groupToString(context, group) {
-  var operators = operatorsToString(group.operators);
-  if (operators.binary) {
-    operators.binary = ' '+ operators.binary;
-  }
-  var name = group.getter.name(context);
-  var conditions = group.message.join(' ');
-  var value = group.getter.value(context);
-  var retVal = operators.binary + name +' must be '+ operators.unary + conditions +'; got '+ value;
-  return retVal;
-}
-
-function operatorsToString(operators) {
-  var unary = operators.unary.join(' ');
-  if (unary.length) {
-    unary += ' ';
-  }
-  var binary = operators.binary || '';
-  if (binary.length) {
-    binary += ' ';
-  }
-  return {
-    binary: binary,
-    unary: unary,
-    full: binary + unary,
-  };
-}
-
-function ensureArray(value) {
-  return isArray(value)? value: [ value ];
-}
-
-// debugging
-
-/* eslint-disable no-unused-vars */
-
-function tee(func, group) {
-  func(group);
-  return group;
-}
-
-function pipe() {
-  var pipeline = [].slice.call(arguments);
-
-  return function(initialArg) {
-    return pipeline.reduce(function(arg, filter) { return filter(arg); }, initialArg);
-  };
-}
-
 /*
   eslint-env node
- */
-
-/*
-  global window
  */
 
