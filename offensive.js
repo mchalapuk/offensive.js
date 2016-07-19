@@ -5,7 +5,13 @@ module.exports = function(value, name) {
 };
 
 module.exports.addAssertion = addAssertion;
+module.exports.addOperator = addOperator;
+module.exports.addNoop = addNoop;
+
 module.exports.Assertion = Assertion;
+module.exports.AssertionWithArguments = AssertionWithArguments;
+module.exports.UnaryOperator = UnaryOperator;
+module.exports.BinaryOperator = BinaryOperator;
 module.exports.Alias = Alias;
 
 // Object.setPrototypeOf polyfill
@@ -15,21 +21,37 @@ if (!Object.setPrototypeOf) {
   };
 }
 
+// contains all noop methods
+var noopProto = {};
+
+// registers a new assertion
+function addNoop(name) {
+  checkName(name);
+  Object.defineProperty(assertProto, name, {
+    get: returnThis,
+    enumerable: true,
+  });
+}
+
+function returnThis() {
+  return this;
+}
+
 // contains all assertion objects
 var assertions = {};
 
-// contains all check methods which call assertions
-var assertProto = {};
+// contains all assertion methods
+var assertProto = Object.create(noopProto);
 
 // registers a new assertion
 function addAssertion(name, assertion) {
-  checkAssertionName(name);
-  checkAssertion(assertion);
-
   if (assertion instanceof Alias) {
-    addAssertion(name, getAliasedAssertion(assertion));
+    addAssertion(name, getAliased(assertion));
     return;
   }
+
+  checkAssertionName(name);
+  checkAssertion(assertion);
 
   assertions[name] = assertion;
 
@@ -46,14 +68,44 @@ function addAssertion(name, assertion) {
   }
 }
 
+// contains all operator objects
+var operators = {};
+
+// contains all operator methods
+var operatorProto = Object.create(noopProto);
+
+// registers a new assertion
+function addOperator(name, operator) {
+  if (operator instanceof Alias) {
+    addOperator(name, getAliased(operator));
+    return;
+  }
+
+  checkOperatorName(name);
+  checkOperator(operator);
+
+  operators[name] = operator;
+
+  // only binary operators in operatorProto
+  var proto = operator instanceof BinaryOperator? operatorProto: assertProto;
+
+  Object.defineProperty(proto, name, {
+    get: function() { return this.add(name, operator); },
+    enumerable: true,
+  });
+}
+
 // this must work when no assertions are added yet,
 // so checks are implemented in vanilla javascript
 function checkAssertionName(name) {
-  if (typeof name !== 'string') {
-    throw new Error('name must be a string; got '+ name);
-  }
+  checkName(name);
   if (name in assertions) {
     throw new Error('assertion of name '+ name +' already registered');
+  }
+}
+function checkName(name) {
+  if (typeof name !== 'string') {
+    throw new Error('name must be a string; got '+ name);
   }
 }
 function checkAssertion(assertion) {
@@ -61,12 +113,28 @@ function checkAssertion(assertion) {
     throw new Error('assertion must be an instance of Assertion');
   }
 }
-function getAliasedAssertion(assertion) {
-  var aliased = assertions[assertion.aliasFor];
-  if (!aliased) {
-    throw new Error('assertion of name '+ assertion.aliasFor +' not registered');
+function checkOperatorName(name) {
+  checkName(name);
+  if (name in operators) {
+    throw new Error('operator of name '+ name +' already registered');
   }
-  return aliased;
+}
+function checkOperator(operator) {
+  if (!(operator instanceof UnaryOperator || operator instanceof BinaryOperator)) {
+    throw new Error('operator must be an instance of UnaryOperator or BinaryOperator');
+  }
+}
+
+function getAliased(assertion) {
+  var aliased = assertions[assertion.aliasFor];
+  if (aliased) {
+    return aliased;
+  }
+  aliased = operators[assertion.aliasFor];
+  if (aliased) {
+    return aliased;
+  }
+  throw new Error('no assertion assertion or operator of name '+ assertion.aliasFor +' registered');
 }
 
 // built in getters
@@ -95,6 +163,7 @@ module.exports.getters = getters;
 function Assertion(assertFunction) {
   var that = Object.create(Assertion.prototype);
   that.runInContext = assertFunction;
+  that.done = [];
   return that;
 }
 
@@ -117,7 +186,7 @@ function Alias(originalName) {
   return that;
 }
 
-Alias.prototype = new Assertion();
+Alias.prototype = new Object();
 
 function TypeofAssertion(requiredType) {
   function hasProperType(value) {
@@ -133,79 +202,33 @@ function TypeofAssertion(requiredType) {
 
 TypeofAssertion.prototype = new Assertion();
 
-var OperatorType = {
-  UNARY: 1,
-  BINARY: 2,
+// operator classes
+
+function Operator() {
+}
+
+Operator.prototype = {
+  message: [],
 };
 
+function UnaryOperator(operatorFunction) {
+  var that = Object.create(UnaryOperator.prototype);
+  that.runInContext = operatorFunction;
+  return that;
+}
+
+UnaryOperator.prototype = new Operator();
+
+function BinaryOperator(operatorFunction) {
+  var that = Object.create(BinaryOperator.prototype);
+  that.runInContext = operatorFunction;
+  return that;
+}
+
+BinaryOperator.prototype = new Operator();
+
+// assertion definitions
 var builtInAssertions = {
-  // does nothing
-  'is': new Assertion(function(context) {
-    return context;
-  }),
-  'be': new Alias('is'),
-  'being': new Alias('is'),
-  'it': new Alias('is'),
-  'with': new Alias('is'),
-  'which': new Alias('is'),
-  'that': new Alias('is'),
-  'to': new Alias('is'),
-  'of': new Alias('is'),
-  'from': new Alias('is'),
-  'has': new Alias('is'),
-  'have': new Alias('is'),
-  'defines': new Alias('is'),
-  'define': new Alias('is'),
-  'contains': new Alias('is'),
-  'contain': new Alias('is'),
-  'precondition': new Alias('is'),
-  'postcondition': new Alias('is'),
-  'invariant': new Alias('is'),
-
-  // boolean operators
-  'and': new Assertion(function() {
-    this.message = 'and';
-    this.operator = OperatorType.BINARY;
-  }),
-
-  'not': new Assertion(function(context) {
-    this.message = 'not';
-    this.operator = OperatorType.UNARY;
-
-    var previousStrategy = context.state.strategy;
-    context.state.strategy = notStrategy;
-
-    function notStrategy(condition) {
-      context.state.strategy = previousStrategy;
-      context.state.strategy(negatedCondition, context);
-
-      function negatedCondition(value) {
-        return !condition(value);
-      }
-    }
-  }),
-
-  // either and or must be used in combination
-  'either': new Assertion(function(context) {
-    context.push();
-    context.state.insideEither = true;
-  }),
-  'weather': new Alias('either'),
-  'or': new Assertion(function(context) {
-    if (!context.state.insideEither) {
-      throw new Error('.or used without .either');
-    }
-    this.message = 'or';
-    this.operator = OperatorType.BINARY;
-    context.state.strategy = orStrategy;
-
-    function orStrategy(condition) {
-      context.current.result = condition(context.value);
-      this.result = this.result || context.current.result;
-      context.pop();
-    }
-  }),
-
   // null assertions
   'Null': new Assertion(function(context) {
     this.message = 'null';
@@ -295,83 +318,179 @@ Object.keys(builtInAssertions).forEach(function(name) {
   addAssertion(name, builtInAssertions[name]);
 });
 
+// operator definitions
+var builtInOperators = {
+  'and': new BinaryOperator(function() {
+    this.message = 'and';
+  }),
+  'of': new Alias('and'),
+  'with': new Alias('and'),
+
+  'not': new UnaryOperator(function(context, state) {
+    this.message = 'not';
+
+    var previousStrategy = state.strategy;
+    state.strategy = notStrategy;
+
+    function notStrategy(condition, _context, _state) {
+      _state.strategy = previousStrategy;
+     return  _state.strategy(negatedCondition, _context, _state);
+
+      function negatedCondition(value) {
+        return !condition(value);
+      }
+    }
+  }),
+
+  // either and or must be used in combination
+  'either': new UnaryOperator(function(context) {
+    context.push().insideEither = true;
+  }),
+  'weather': new Alias('either'),
+
+  'or': new BinaryOperator(function(context, state) {
+    if (!state.insideEither) {
+      throw new Error('.or used without .either');
+    }
+    this.message = 'or';
+    state.strategy = orStrategy;
+
+    function orStrategy(condition, _context, _state) {
+      var result = condition(context.value);
+      _state.result = _state.result || result;
+      _context.pop();
+      return result;
+    }
+  }),
+};
+
+Object.keys(builtInOperators).forEach(function(name) {
+  addOperator(name, builtInOperators[name]);
+});
+
+// noop definitions
+var builtInNoops = [
+  'is', 'be','being',
+  'which','that',
+  'to', 'from', 'under', 'over',
+  'has','have',
+  'defines','define',
+  'contains','contain',
+  'precondition', 'postcondition', 'invariant',
+];
+
+builtInNoops.forEach(addNoop);
+
 // exported check function
 function check(value, name) {
-  var context = function() {
-    return context.finish();
-  };
 
+  var context = Object.create(assertProto);
   context.value = value;
-//  context.name = name;
-  context.state = new State();
-  context.stack = [];
-  context.current = null;
+  context.name = name;
+  context.add = add;
 
-  Object.setPrototypeOf(context, assertProto);
+  var operatorContext = function() {
+    return context.value;
+  };
+  operatorContext.add = addOperator;
+  Object.setPrototypeOf(operatorContext, operatorProto);
 
-  // hacks for things that magically happen in v8
-  // even though prototype Function.prototype is detached
-  Object.defineProperty(context, 'name', { value: name, enumberable: true });
-  Object.defineProperty(context, 'length', { value: assertProto.length, enumberable: true });
+  var priv = {};
+  priv.state = new State();
+  priv.stack = [];
+  priv.current = null;
 
+  // to be used inside assertions (for precondition checking)
+  Object.defineProperty(operatorContext, 'result', {
+    get: function() { return priv.state.result; },
+    set: function() { throw new Error('.result is a read-only property'); },
+  });
+
+  var extendedContext = extendContext(context, [ push, pop, assert ]);
+  var extendedOperatorContext = extendContext(context, [ push, pop ]);
+
+  var finish = flushAndReturn;
   return context;
-}
 
-var checkProto = {
   // all assertion methods call this one
   // it can also be used to run assertions without adding them globally
   // `check(arg, 'arg').add(new Assertion(...))()`
-  add: function(assertionName, assertionProto, args) {
+  function add(operationName, operationProto, args) {
+    var impl = operationProto instanceof Assertion? addAssertion: addOperator;
+    return impl(operationName, operationProto, args);
+  }
+  function addAssertion(assertionName, assertionProto, args) {
     var assertion = Object.create(assertionProto);
     assertion.name = assertionName;
     assertion.args = args || [];
     assertion.done = [];
-    this.state.done.push(assertion);
+    run(assertion, [ extendedContext ].concat(assertion.args));
+    return operatorContext;
+  }
+  function addOperator(operatorName, operatorProto) {
+    var operator = Object.create(operatorProto);
+    operator.name = operatorName;
+    operator.done = [];
+    run(operator, [ extendedOperatorContext, priv.state ]);
+    return context;
+  }
 
-    var previous = this.current;
-    this.current = assertion;
-    assertion.runInContext.apply(assertion, [ this ].concat(assertion.args));
-    this.current = previous;
-    this.finish();
-    return this;
-  },
-  // `check(arg, 'arg').is.not.Empty.finish()`
-  // is just a longer notation of:
-  // `check(arg, 'arg').is.not.Empty()`
-  finish: flushAndReturn,
   // to be used inside assertions
-  // (I wounder if there is a way to implement this without double IoC)
-  assert: function(condition) {
-    this.state.strategy(condition, this);
-    return this.state.result;
-  },
-  push: function() {
-    this.stack.push(this.state);
-    this.state = new State();
-    this.state.done = this.current.done;
-    this.finish = justReturn;
-  },
-  pop: function() {
-    var result = this.state.result;
-
-    this.state = this.stack.pop();
-    if (this.stack.length === 0) {
-      this.finish = flushAndReturn;
-    }
+  function push() {
+    priv.stack.push(priv.state);
+    priv.state = new State();
+    priv.state.done = priv.current.done;
+    finish = justReturn;
+    return priv.state;
+  }
+  function pop() {
+    var result = priv.state.result;
     function returnResult() {
       return result;
     }
-    this.state.strategy(returnResult, this);
-  },
-};
 
-// to be used inside assertions (for precondition checking)
-Object.defineProperty(checkProto, 'result', {
-  get: function() { return this.state.result; },
-  set: function() { throw new Error('.result is a read-only shorthand for .state.result'); },
-});
+    priv.state = priv.stack.pop();
+    if (priv.stack.length === 0) {
+      finish = flushAndReturn;
+    }
+    priv.state.strategy(returnResult, extendedContext, priv.state);
+    return priv.state;
+  }
+  // (I wonder if there is a way to implement this without double IoC)
+  function assert(condition) {
+    priv.current.result = priv.state.strategy(condition, extendedContext, priv.state);
+    return priv.state.result;
+  }
 
-Object.setPrototypeOf(assertProto, checkProto);
+  // private
+  function run(operation, args) {
+    priv.state.done.push(operation);
+
+    var previous = priv.current;
+    priv.current = operation;
+    operation.runInContext.apply(operation, args);
+    priv.current = previous;
+    finish();
+  }
+  function extendContext(proto, methods) {
+    var extended = Object.create(proto);
+    methods.forEach(function(method) { extended[method.name] = method; });
+    return extended;
+  }
+
+  // finish functions
+  function flushAndReturn() {
+    if (!priv.state.result) {
+      throw new Error(buildMessage(context, priv.state));
+    }
+    // everything so far satisfied, so not needed in error message
+    priv.state.done = [];
+    return context.value;
+  }
+  function justReturn() {
+    return context.value;
+  }
+}
 
 // this gets pushed around alot
 function State() {
@@ -384,22 +503,10 @@ State.prototype = {
 };
 
 // strategies for hangling boolean operators
-function andStrategy(condition, context) {
-  context.current.result = condition(context.value);
-  this.result = this.result && context.current.result;
-}
-
-// finish functions
-function flushAndReturn() {
-  if (!this.state.result) {
-    throw new Error(buildMessage(this));
-  }
-  // everything so far satisfied, so not needed in error message
-  this.state.done = [];
-  return this.value;
-}
-function justReturn() {
-  return this.value;
+function andStrategy(condition, context, state) {
+  var result = condition(context.value);
+  state.result = state.result && result;
+  return result;
 }
 
 // check helpers
@@ -425,25 +532,19 @@ function getTypePrefix(type) {
 
 // code that builds error message is invoked only when assertion fails
 // from this moment, performace is not a concern here
-function buildMessage(context) {
+function buildMessage(context, state) {
   var groupByName = groupByVariableName.bind(null, context);
   var toString = groupToString.bind(null, context);
 
-  var message = context.state.done
-//    .map(tee.bind(null, console.log))
+  var message = state.done
     .reduce(replaceEmptyWithChildren, [])
-    .filter(onlyNotEmpty)
     .reduce(mergeWithOperators(), [])
-    .reduce(addDefaultOperators, [])
+//    .map(tee.bind(null, console.log))
     .reduce(removeDuplicates, [])
     .reduce(groupByName, [])
     .reduce(function(builder, group) { return builder + toString(group); }, '');
 
   return message;
-}
-
-function onlyNotEmpty(assertion) {
-  return typeof assertion.result !== 'undefined' || assertion.operator;
 }
 
 function removeDuplicates(retVal, assertion) {
@@ -467,7 +568,7 @@ function mergeWithOperators() {
   var binary = null;
 
   return function(retVal, assertionOrOperator) {
-    if (!assertionOrOperator.operator) {
+    if (assertionOrOperator instanceof Assertion) {
       var assertion = assertionOrOperator;
       assertion.operators = { unary: unary, binary: binary };
       unary = [];
@@ -477,7 +578,7 @@ function mergeWithOperators() {
     }
 
     var operator = assertionOrOperator;
-    if (operator.operator === OperatorType.UNARY) {
+    if (operator instanceof UnaryOperator) {
       unary.push(operator.message);
       return retVal;
     }
@@ -488,14 +589,6 @@ function mergeWithOperators() {
     binary = operator.message;
     return retVal;
   };
-}
-
-function addDefaultOperators(retVal, assertion) {
-  if (!assertion.operators.binary && retVal.length) {
-    assertion.operators.binary = 'and';
-  }
-  retVal.push(assertion);
-  return retVal;
 }
 
 function groupByVariableName(context, retVal, assertion) {

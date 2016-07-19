@@ -24,7 +24,7 @@ describe "check(undefined, \"arg\")", ->
 
     expectedMessage = ".or used without .either"
     it "should throw new Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, -> testedCheck.or
+      shouldThrow expectedMessage, -> testedCheck.is.Undefined.or
 
   describe ".is.either.anObject", ->
     beforeEach ->
