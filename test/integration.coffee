@@ -1,7 +1,6 @@
 should = require 'should'
 mocha = require 'mocha'
 
-delete require.cache[ require.resolve '../offensive' ]
 check = require '../offensive'
 debug = require './debug.coffee'
 
