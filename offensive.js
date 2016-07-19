@@ -8,25 +8,28 @@ Object.setPrototypeOf = require('./lib/polyfill/set-prototype-of');
 
 module.exports = check;
 
-var assertionRegistry = require('./lib/registry/assertion');
-var operatorRegistry = require('./lib/registry/operator');
-var noopRegistry = require('./lib/registry/noop');
+var NoopRegistry = require('./lib/registry/noop');
+var AssertionRegistry = require('./lib/registry/assertion');
+var OperatorRegistry = require('./lib/registry/operator');
 
-// registering built-in assertions
+var noops = require('./lib/built-ins/noops');
 var assertions = require('./lib/built-ins/assertions');
+var operators = require('./lib/built-ins/operators');
+
+var noopRegistry = new NoopRegistry();
+noops.forEach(function(name) {
+  noopRegistry.add(name);
+});
+
+var assertionRegistry = new AssertionRegistry(noopRegistry);
 Object.keys(assertions).forEach(function(name) {
   assertionRegistry.add(name, assertions[name]);
 });
 
-// registering built-in operators
-var operators = require('./lib/built-ins/operators');
+var operatorRegistry = new OperatorRegistry(noopRegistry, assertionRegistry);
 Object.keys(operators).forEach(function(name) {
   operatorRegistry.add(name, operators[name]);
 });
-
-// registering built-in noops
-var noops = require('./lib/built-ins/noops');
-noops.forEach(noopRegistry.add);
 
 // exported check function
 function check(value, name) {
