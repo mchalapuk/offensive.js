@@ -4,7 +4,7 @@
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "offensive.js",
   "scripts": {
-    "lint": "eslint offensive.js",
+    "lint": "eslint offensive.js `find lib`",
     "test": "mocha"
   },
   "repository": {
