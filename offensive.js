@@ -4,7 +4,6 @@ var Assertion = require('./lib/classes/assertion').default;
 var AssertionWithArguments = require('./lib/classes/assertion-with-arguments').default;
 var TypeofAssertion = require('./lib/classes/typeof-assertion').default;
 var Operator = require('./lib/classes/operator').default;
-var UnaryOperator = require('./lib/classes/unary-operator').default;
 var BinaryOperator = require('./lib/classes/binary-operator').default;
 var Alias = require('./lib/classes/alias').default;
 var getters = require('./lib/getters').default;
@@ -239,66 +238,14 @@ Object.keys(builtInAssertions).forEach(function(name) {
   addAssertion(name, builtInAssertions[name]);
 });
 
-// operator definitions
-var builtInOperators = {
-  'and': new BinaryOperator(function() {
-    this.message = 'and';
-  }),
-  'of': new Alias('and'),
-  'with': new Alias('and'),
-
-  'not': new UnaryOperator(function(context, state) {
-    this.message = 'not';
-
-    var previousStrategy = state.strategy;
-    state.strategy = notStrategy;
-
-    function notStrategy(condition, _context, _state) {
-      _state.strategy = previousStrategy;
-      return _state.strategy(negatedCondition, _context, _state);
-
-      function negatedCondition(value) {
-        return !condition(value);
-      }
-    }
-  }),
-
-  // either and or must be used in combination
-  'either': new UnaryOperator(function(context) {
-    context.push().insideEither = true;
-  }),
-  'weather': new Alias('either'),
-
-  'or': new BinaryOperator(function(context, state) {
-    if (!state.insideEither) {
-      throw new Error('.or used without .either');
-    }
-    this.message = 'or';
-    state.strategy = orStrategy;
-
-    function orStrategy(condition, _context, _state) {
-      var result = condition(context.value);
-      _state.result = _state.result || result;
-      _context.pop();
-      return result;
-    }
-  }),
-};
+var builtInOperators = require('./lib/operators');
 
 Object.keys(builtInOperators).forEach(function(name) {
   addOperator(name, builtInOperators[name]);
 });
 
 // noop definitions
-var builtInNoops = [
-  'is', 'be', 'being',
-  'which', 'that',
-  'to', 'from', 'under', 'over',
-  'has', 'have',
-  'defines', 'define',
-  'contains', 'contain',
-  'precondition', 'postcondition', 'invariant',
-];
+var builtInNoops = require('./lib/noops');
 
 builtInNoops.forEach(addNoop);
 
