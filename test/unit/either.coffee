@@ -2,7 +2,6 @@ mocha = require 'mocha'
 should = require 'should'
 
 check = require '../../offensive'
-debug = require '../debug.coffee'
 
 shouldThrow = (expectedMessage, test)->
   try
@@ -17,7 +16,6 @@ describe "check(undefined, \"arg\")", ->
 
   beforeEach ->
     testedCheck = check undefined, 'arg'
-#    debug.check testedCheck
 
   describe ".or", ->
 

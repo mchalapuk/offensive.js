@@ -46,7 +46,6 @@ debug = {
   check: (testedCheck) ->
     stack = ""
     indent = "      "
-    debug.property testedCheck, 'finish'
     debug.state testedCheck.state
     debug.property testedCheck, 'state'
     debug.property testedCheck, 'current'

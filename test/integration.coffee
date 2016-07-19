@@ -2,10 +2,8 @@ should = require 'should'
 mocha = require 'mocha'
 
 check = require '../offensive'
-debug = require './debug.coffee'
 
 originalCheck = check
-#check = (args...) -> debug.check originalCheck args...
 
 createTests = (test)-> [
   (arg, expectedMessage)->
