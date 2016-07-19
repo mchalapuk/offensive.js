@@ -1,10 +1,10 @@
 'use strict';
 
 var Assertion = require('./lib/classes/assertion').default;
-var Operator = require('./lib/classes/operator').default;
 var ErrorBuilder = require('./lib/error-builder').default;
 
 var nodsl = require('./lib/nodsl');
+Object.setPrototypeOf = require('./lib/polyfill/set-prototype-of');
 
 module.exports = check;
 
@@ -22,7 +22,7 @@ var noopRegistry = require('./lib/registry/noop');
 .forEach(function(assertions) {
   for (var name in assertions) {
     assertionRegistry.add(name, assertions[name]);
-  };
+  }
 });
 
 // registering built-in operators
@@ -35,17 +35,6 @@ Object.keys(operators).forEach(function(name) {
 // registering built-in noops
 require('./lib/noops')
   .forEach(noopRegistry.add);
-
-// Object.setPrototypeOf polyfill
-if (!Object.setPrototypeOf) {
-  Object.setPrototypeOf = function(instance, prototype) {
-
-    /* eslint-disable no-proto */
-    instance.__proto__ = prototype;
-
-    /* eslint-enable no-proto */
-  };
-}
 
 // exported check function
 function check(value, name) {
