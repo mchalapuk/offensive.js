@@ -1,5 +1,14 @@
 'use strict';
 
+var Assertion = require('./lib/classes/assertion').default;
+var AssertionWithArguments = require('./lib/classes/assertion-with-arguments').default;
+var TypeofAssertion = require('./lib/classes/typeof-assertion').default;
+var Operator = require('./lib/classes/operator').default;
+var UnaryOperator = require('./lib/classes/unary-operator').default;
+var BinaryOperator = require('./lib/classes/binary-operator').default;
+var Alias = require('./lib/classes/alias').default;
+var getters = require('./lib/getters').default;
+
 module.exports = function(value, name) {
   return check(value, name);
 };
@@ -7,12 +16,6 @@ module.exports = function(value, name) {
 module.exports.addAssertion = addAssertion;
 module.exports.addOperator = addOperator;
 module.exports.addNoop = addNoop;
-
-module.exports.Assertion = Assertion;
-module.exports.AssertionWithArguments = AssertionWithArguments;
-module.exports.UnaryOperator = UnaryOperator;
-module.exports.BinaryOperator = BinaryOperator;
-module.exports.Alias = Alias;
 
 // Object.setPrototypeOf polyfill
 if (!Object.setPrototypeOf) {
@@ -124,8 +127,8 @@ function checkOperatorName(name) {
   }
 }
 function checkOperator(operator) {
-  if (!(operator instanceof UnaryOperator || operator instanceof BinaryOperator)) {
-    throw new Error('operator must be an instance of UnaryOperator or BinaryOperator');
+  if (!(operator instanceof Operator)) {
+    throw new Error('operator must be an instance of Operator');
   }
 }
 
@@ -140,96 +143,6 @@ function getAliased(assertion) {
   }
   throw new Error('no assertion assertion or operator of name '+ assertion.aliasFor +' registered');
 }
-
-// built in getters
-var getters = {
-  value: {
-    name: function(context) { return context.name; },
-    value: function(context) { return context.value; },
-  },
-  property: function(propertyName) {
-    return {
-      name: function(context) { return context.name +'.'+ propertyName; },
-      value: function(context) { return context.value[propertyName]; },
-    };
-  },
-  element: function(index) {
-    return {
-      name: function(context) { return context.name +'['+ index +']'; },
-      value: function(context) { return context.value[index]; },
-    };
-  },
-};
-
-module.exports.getters = getters;
-
-// assertion classes
-function Assertion(assertFunction) {
-  var that = Object.create(Assertion.prototype);
-  that.runInContext = assertFunction;
-  that.done = [];
-  return that;
-}
-
-Assertion.prototype = {
-  getter: getters.value,
-  message: [],
-};
-
-function AssertionWithArguments(assertFunction) {
-  var that = Object.create(AssertionWithArguments.prototype);
-  that.runInContext = assertFunction;
-  return that;
-}
-
-AssertionWithArguments.prototype = new Assertion();
-
-function Alias(originalName) {
-  var that = Object.create(Alias.prototype);
-  that.aliasFor = originalName;
-  return that;
-}
-
-Alias.prototype = {};
-
-function TypeofAssertion(requiredType) {
-  function hasProperType(value) {
-    return typeof value === requiredType;
-  }
-  var that = Object.create(Assertion.prototype);
-  that.runInContext = function(context) {
-    this.message = getTypePrefix(requiredType) + requiredType;
-    context.assert(hasProperType);
-  };
-  return that;
-}
-
-TypeofAssertion.prototype = new Assertion();
-
-// operator classes
-
-function Operator() {
-}
-
-Operator.prototype = {
-  message: [],
-};
-
-function UnaryOperator(operatorFunction) {
-  var that = Object.create(UnaryOperator.prototype);
-  that.runInContext = operatorFunction;
-  return that;
-}
-
-UnaryOperator.prototype = new Operator();
-
-function BinaryOperator(operatorFunction) {
-  var that = Object.create(BinaryOperator.prototype);
-  that.runInContext = operatorFunction;
-  return that;
-}
-
-BinaryOperator.prototype = new Operator();
 
 // assertion definitions
 var builtInAssertions = {
@@ -531,10 +444,6 @@ function isUndefined(value) {
 function isNullOrUndefined(value) {
   return isNull(value) || isUndefined(value);
 }
-function getTypePrefix(type) {
-  return type === 'object'? 'an ': type === 'undefined'? '': 'a ';
-}
-
 // code that builds error message is invoked only when assertion fails
 // from this moment, performace is not a concern here
 function buildMessage(context, state) {
