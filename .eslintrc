@@ -129,7 +129,7 @@
     "lines-around-comment": [1, { "beforeBlockComment": true, "beforeLineComment": false }],
     "linebreak-style": [2, "unix"],
     "max-nested-callbacks": [2, 3],
-    "new-cap": 2,
+    "new-cap": 0,
     "new-parens": 0,
     "newline-after-var": [0, "always"],
     "no-array-constructor": 2,
