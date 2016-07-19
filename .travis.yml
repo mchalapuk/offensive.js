@@ -9,6 +9,8 @@ matrix:
 install:
   - 'npm install'
 script:
+  - 'node -v'
+  - 'npm -v'
   - 'if [ -n "$LINT" ]; then npm run lint; else true; fi'
   - 'npm test'
 
