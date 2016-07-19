@@ -13,28 +13,20 @@ var operatorRegistry = require('./lib/registry/operator');
 var noopRegistry = require('./lib/registry/noop');
 
 // registering built-in assertions
-[
-  require('./lib/built-ins/assertions/null'),
-  require('./lib/built-ins/assertions/type'),
-  require('./lib/built-ins/assertions/property'),
-  require('./lib/built-ins/assertions/array'),
-]
-.forEach(function(assertions) {
-  for (var name in assertions) {
-    assertionRegistry.add(name, assertions[name]);
-  }
+var assertions = require('./lib/built-ins/assertions');
+Object.keys(assertions).forEach(function(name) {
+  assertionRegistry.add(name, assertions[name]);
 });
 
 // registering built-in operators
 var operators = require('./lib/built-ins/operators');
-
 Object.keys(operators).forEach(function(name) {
   operatorRegistry.add(name, operators[name]);
 });
 
 // registering built-in noops
-require('./lib/built-ins/noops')
-  .forEach(noopRegistry.add);
+var noops = require('./lib/built-ins/noops');
+noops.forEach(noopRegistry.add);
 
 // exported check function
 function check(value, name) {
