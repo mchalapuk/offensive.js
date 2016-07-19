@@ -17,7 +17,11 @@ module.exports.Alias = Alias;
 // Object.setPrototypeOf polyfill
 if (!Object.setPrototypeOf) {
   Object.setPrototypeOf = function(instance, prototype) {
+
+    /* eslint-disable no-proto */
     instance.__proto__ = prototype;
+
+    /* eslint-enable no-proto */
   };
 }
 
@@ -27,7 +31,7 @@ var noopProto = {};
 // registers a new assertion
 function addNoop(name) {
   checkName(name);
-  Object.defineProperty(assertProto, name, {
+  Object.defineProperty(noopProto, name, {
     get: returnThis,
     enumerable: true,
   });
@@ -38,7 +42,7 @@ function returnThis() {
 }
 
 // contains all assertion objects
-var assertions = {};
+var assertionDefinitions = {};
 
 // contains all assertion methods
 var assertProto = Object.create(noopProto);
@@ -53,7 +57,7 @@ function addAssertion(name, assertion) {
   checkAssertionName(name);
   checkAssertion(assertion);
 
-  assertions[name] = assertion;
+  assertionDefinitions[name] = assertion;
 
   if (assertion instanceof AssertionWithArguments) {
     Object.defineProperty(assertProto, name, {
@@ -69,7 +73,7 @@ function addAssertion(name, assertion) {
 }
 
 // contains all operator objects
-var operators = {};
+var operatorDefinitions = {};
 
 // contains all operator methods
 var operatorProto = Object.create(noopProto);
@@ -84,7 +88,7 @@ function addOperator(name, operator) {
   checkOperatorName(name);
   checkOperator(operator);
 
-  operators[name] = operator;
+  operatorDefinitions[name] = operator;
 
   // only binary operators in operatorProto
   var proto = operator instanceof BinaryOperator? operatorProto: assertProto;
@@ -99,7 +103,7 @@ function addOperator(name, operator) {
 // so checks are implemented in vanilla javascript
 function checkAssertionName(name) {
   checkName(name);
-  if (name in assertions) {
+  if (name in assertionDefinitions) {
     throw new Error('assertion of name '+ name +' already registered');
   }
 }
@@ -115,7 +119,7 @@ function checkAssertion(assertion) {
 }
 function checkOperatorName(name) {
   checkName(name);
-  if (name in operators) {
+  if (name in operatorDefinitions) {
     throw new Error('operator of name '+ name +' already registered');
   }
 }
@@ -126,11 +130,11 @@ function checkOperator(operator) {
 }
 
 function getAliased(assertion) {
-  var aliased = assertions[assertion.aliasFor];
+  var aliased = assertionDefinitions[assertion.aliasFor];
   if (aliased) {
     return aliased;
   }
-  aliased = operators[assertion.aliasFor];
+  aliased = operatorDefinitions[assertion.aliasFor];
   if (aliased) {
     return aliased;
   }
@@ -186,7 +190,7 @@ function Alias(originalName) {
   return that;
 }
 
-Alias.prototype = new Object();
+Alias.prototype = {};
 
 function TypeofAssertion(requiredType) {
   function hasProperType(value) {
@@ -334,7 +338,7 @@ var builtInOperators = {
 
     function notStrategy(condition, _context, _state) {
       _state.strategy = previousStrategy;
-     return  _state.strategy(negatedCondition, _context, _state);
+      return _state.strategy(negatedCondition, _context, _state);
 
       function negatedCondition(value) {
         return !condition(value);
@@ -370,12 +374,12 @@ Object.keys(builtInOperators).forEach(function(name) {
 
 // noop definitions
 var builtInNoops = [
-  'is', 'be','being',
-  'which','that',
+  'is', 'be', 'being',
+  'which', 'that',
   'to', 'from', 'under', 'over',
-  'has','have',
-  'defines','define',
-  'contains','contain',
+  'has', 'have',
+  'defines', 'define',
+  'contains', 'contain',
   'precondition', 'postcondition', 'invariant',
 ];
 
@@ -393,7 +397,7 @@ function check(value, name) {
     return context.value;
   };
   operatorContext.value = value;
-  operatorContext.add = addOperator;
+  operatorContext.add = runOperator;
   Object.setPrototypeOf(operatorContext, operatorProto);
 
   var priv = {};
@@ -417,19 +421,19 @@ function check(value, name) {
   // it can also be used to run assertions without adding them globally
   // `check(arg, 'arg').add(new Assertion(...))()`
   function add(operationName, operationProto, args) {
-    var impl = operationProto instanceof Assertion? addAssertion: addOperator;
+    var impl = operationProto instanceof Assertion? runAssertion: runOperator;
     return impl(operationName, operationProto, args);
   }
-  function addAssertion(assertionName, assertionProto, args) {
-    var assertion = Object.create(assertionProto);
+  function runAssertion(assertionName, proto, args) {
+    var assertion = Object.create(proto);
     assertion.name = assertionName;
     assertion.args = args || [];
     assertion.done = [];
     run(assertion, [ extendedContext ].concat(assertion.args));
     return operatorContext;
   }
-  function addOperator(operatorName, operatorProto) {
-    var operator = Object.create(operatorProto);
+  function runOperator(operatorName, proto) {
+    var operator = Object.create(proto);
     operator.name = operatorName;
     operator.done = [];
     run(operator, [ extendedOperatorContext, priv.state ]);
