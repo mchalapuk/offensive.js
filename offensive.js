@@ -6,23 +6,23 @@ var NoopRegistry = require('./lib/registry/noop');
 var AssertionRegistry = require('./lib/registry/assertion');
 var OperatorRegistry = require('./lib/registry/operator');
 
-var noops = require('./lib/built-ins/noops');
-var assertions = require('./lib/built-ins/assertions');
-var operators = require('./lib/built-ins/operators');
+var builtInNoops = require('./lib/built-ins/noops');
+var builtInAssertions = require('./lib/built-ins/assertions');
+var builtInOperators = require('./lib/built-ins/operators');
 
 var noopRegistry = new NoopRegistry();
-noops.forEach(function(name) {
+builtInNoops.forEach(function(name) {
   noopRegistry.add(name);
 });
 
 var assertionRegistry = new AssertionRegistry(noopRegistry);
-Object.keys(assertions).forEach(function(name) {
-  assertionRegistry.add(name, assertions[name]);
+Object.keys(builtInAssertions).forEach(function(name) {
+  assertionRegistry.add(name, builtInAssertions[name]);
 });
 
 var operatorRegistry = new OperatorRegistry(noopRegistry, assertionRegistry);
-Object.keys(operators).forEach(function(name) {
-  operatorRegistry.add(name, operators[name]);
+Object.keys(builtInOperators).forEach(function(name) {
+  operatorRegistry.add(name, builtInOperators[name]);
 });
 
 var core = new OffensiveCore(assertionRegistry, operatorRegistry);
