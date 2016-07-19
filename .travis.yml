@@ -1,7 +1,7 @@
 language: node_ js
 matrix:
   include:
-    - node_js: '6'
+    - node_js: '6.3'
       env: LINT=1
     - node_js: '4'
     - node_js: '0.12'
@@ -9,6 +9,6 @@ matrix:
 install:
   - 'npm install'
 script:
-  - '[[ "$LINT" ]] && npm run lint'
+  - 'if [ -n "$LINT" ]; then npm run lint; else true; fi'
   - 'npm test'
 
