@@ -17,12 +17,23 @@
 [![devDependency Status][david-image-dev]][david-url-dev]
 [![NPM version][npm-image]][npm-url]
 
-A human-readable, fast and boilerplate-free constract programming library
-for JavaScript. It enables easy implementation of offensive and defensive
-techniques. offensive.js is compatible with web browsers
-(when used via [browserify][browserify]) and with node.
+A human-readable, fast and boilerplate-free contract programming library
+for JavaScript.
+
+**Why do I want to use it?**
+ 1. Reduces the boilerplate of writing error messsages to zero,
+ 2. Provides very intuitive DSL for writing assertions (zero learning curve),
+ 3. Enables easy implementation of offensive and defensive techniques,
+ 4. Is compatible with web browsers (when used via [browserify][browserify])
+  and with node ([v0.10][node-v0.10], [v0.12][node-v0.12], [v4.x][node-v4], [v6.x][node-v6]).
 
 [browserify]: https://github.com/substack/node-browserify
+
+[node]: https://github.com/nodejs/node
+[node-v0.10]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V010.md
+[node-v0.12]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V012.md
+[node-v4]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V4.md
+[node-v6]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V6.md
 
 **Links**:
 
