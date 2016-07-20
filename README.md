@@ -22,7 +22,7 @@ for JavaScript.
 
 **Why do I want to use it?**
  1. Reduces the boilerplate of writing error messsages to zero,
- 2. Provides very intuitive DSL for writing assertions (zero learning curve),
+ 2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
  4. Is compatible with web browsers (when used via [browserify][browserify])
   and with node ([v0.10][node-v0.10], [v0.12][node-v0.12], [v4.x][node-v4], [v6.x][node-v6]).
