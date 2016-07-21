@@ -36,7 +36,9 @@
     "coffee-script": "~1.10.0",
     "eslint": "^3.0.1",
     "mocha": "*",
-    "should": "^10.0.0"
+    "should": "^10.0.0",
+    "should-sinon": "0.0.5",
+    "sinon": "^1.17.4"
   },
   "dependencies": {}
 }
