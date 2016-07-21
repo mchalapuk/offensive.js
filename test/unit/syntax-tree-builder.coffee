@@ -75,18 +75,18 @@ describe "SyntaxTreeBuilder", ->
     it "returns added operand", ->
       operand = -> true
       testedBuilder.addOperand operand
-      testedBuilder.evaluate().should.be.true
+      testedBuilder.evaluate().should.be.exactly operand
 
     it "returns unary operator applied to operand", ->
       testedBuilder.addUnaryOperator (operand) -> "a"+ operand()
       testedBuilder.addOperand -> "b"
-      testedBuilder.evaluate().should.be.equal "ab"
+      testedBuilder.evaluate()().should.be.equal "ab"
 
     it "returns binary operator applied to operands", ->
       testedBuilder.addOperand -> "a"
       testedBuilder.addBinaryOperator (lhs, rhs) -> "#{lhs()}#{rhs()}"
       testedBuilder.addOperand -> "b"
-      testedBuilder.evaluate().should.be.equal "ab"
+      testedBuilder.evaluate()().should.be.equal "ab"
 
   describe ".flush", ->
     it "throws when calling after adding binary operator", ->
