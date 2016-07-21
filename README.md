@@ -65,13 +65,52 @@ log({});
 // new Error('str must be a string; got [object Object]')
 ```
 
-## API
+## API Reference
 
-Library doesn't have proper documentation yet :( Please check the [source
-code][built-ins] for details about API and [integration tests][integration-tests]
-for more advanced examples.
+### Operators
 
-[built-ins]: lib/built-ins
+Boolean operators are implemented as property getters.
+
+#### AND Operator
+
+```js
+get and: () => { ... } // aliases: of, with
+```
+Logical conjunction of two boolean values which are separated by call to `.and` operator.
+
+```js
+check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
+```
+
+#### OR Operator
+  
+```js
+get either: () => { ... } // aliases: weather
+get or: () => { ... }
+```
+Logical alternative of two values which are separated by call to `.or` operator.
+Result of whole expression between `.either` and `.or` is taken as left-hand-side
+argument. First result after `.or` is taken as right-hand-side argument.
+```js
+check(arg, 'arg').is.either.anObject.or.aFunction();
+```
+
+#### NOT Operator
+
+```js
+get not: () => { ... } // aliases: no, dont, doesnt
+```
+
+Logical negation of a value after `.not` operator.
+
+```js
+check(arg, 'arg').is.not.Undefined();
+```
+
+## Examples
+
+For more usage examples, check out project's [integration tests][integration-tests].
+
 [integration-tests]: test/integration.coffee
 
 ## License
