@@ -11,7 +11,6 @@
 [npm-image]: https://badge.fury.io/js/offensive.svg
 
 # offensive.js
-
 [![Build Status][travis-image]][travis-url]
 [![Dependency Status][david-image]][david-url]
 [![devDependency Status][david-image-dev]][david-url-dev]
@@ -20,8 +19,9 @@
 A human-readable, fast and boilerplate-free contract programming library
 for JavaScript.
 
-**Why would I want to use it?**
- 1. Reduces the boilerplate of writing error messsages to zero,
+**Why would I want it**?
+
+ 1. It reduces the boilerplate of writing error messsages to zero,
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
  4. Is compatible with web browsers (when used via [browserify][browserify])
@@ -68,10 +68,10 @@ log({});
 ## API
 
 Library doesn't have proper documentation yet :( Please check the [source
-code][code] for details about API and [integration tests][integration-tests]
+code][built-ins] for details about API and [integration tests][integration-tests]
 for more advanced examples.
 
-[code]: offensive.js
+[built-ins]: lib/built-ins
 [integration-tests]: test/integration.coffee
 
 ## License
