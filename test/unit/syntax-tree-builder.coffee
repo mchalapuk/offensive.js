@@ -36,10 +36,10 @@ describe "SyntaxTreeBuilder", ->
 
   describe ".onEvaluateReady", ->
     it "is called after adding first operand", ->
-      testedBuilder.onEvaluateReady = sinon.spy()
-      operand = -> true
-      testedBuilder.addOperand operand
-      testedBuilder.onEvaluateReady.should.be.calledWith operand
+      result = null
+      testedBuilder.onEvaluateReady = (evaluate) -> result = evaluate()
+      testedBuilder.addOperand -> true
+      result.should.be.true
 
     it "is called after applying unary operator to operand", ->
       testedBuilder.addUnaryOperator (operand) -> "a"+ operand()
