@@ -1,7 +1,5 @@
 should = require "should"
-sinon = require "sinon"
 mocha = require "mocha"
-require "should-sinon"
 
 LogicalTreeBuilder = require "../../lib/syntax-tree-builder"
 
