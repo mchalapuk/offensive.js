@@ -15,24 +15,24 @@ describe "SyntaxTreeBuilder", ->
     it "throws when addding two operands without operator", ->
       testedBuilder.addOperand -> "a"
       should(-> testedBuilder.addOperand -> "b")
-        .throw "BUG! two operands added without binary operator!"
+        .throw "expected binary operator; got operand"
 
   describe ".addUnaryOperator", ->
     it "throws when addding two unary operators in a row", ->
       testedBuilder.addUnaryOperator -> "b"
       should(-> testedBuilder.addUnaryOperator -> "c")
-        .throw "BUG! unary operator added after unary operator!"
+        .throw "expected operand after unary operator; got unary operator"
 
   describe ".addBinaryOperator", ->
     it "throws when addding binary operator before operand", ->
       should(-> testedBuilder.addBinaryOperator -> "b")
-        .throw "BUG! binary operator added before operand!"
+        .throw "expected operand or unary operator; got binary operator"
 
     it "throws when addding two binary operators in a row", ->
       testedBuilder.addOperand -> "a"
       testedBuilder.addBinaryOperator -> "b"
       should(-> testedBuilder.addBinaryOperator -> "c")
-        .throw "BUG! binary operator added after binary operator!"
+        .throw "expected operand or unary operator after binary operator; got binary operator"
 
   describe ".onEvaluateReady", ->
     it "is called after adding first operand", ->
@@ -59,18 +59,18 @@ describe "SyntaxTreeBuilder", ->
   describe ".evaluate", ->
     it "throws when calling before addding operands", ->
       should(-> testedBuilder.evaluate())
-        .throw "BUG! evaluate called without before adding any operand!"
+        .throw "trying to evaluate with no syntax added"
 
     it "throws when calling after adding binary operator", ->
       testedBuilder.addOperand -> "a"
       testedBuilder.addBinaryOperator -> "b"
       should(-> testedBuilder.evaluate())
-        .throw "BUG! evaluate called with binary operator not applied!"
+        .throw "trying to evaluate with dangling binary operator"
 
     it "throws when calling after adding unary operator", ->
       testedBuilder.addUnaryOperator -> "a"
       should(-> testedBuilder.evaluate())
-        .throw "BUG! evaluate called with unary operator not applied!"
+        .throw "trying to evaluate with dangling unary operator"
 
     it "returns added operand", ->
       operand = -> true
@@ -93,12 +93,12 @@ describe "SyntaxTreeBuilder", ->
       testedBuilder.addOperand -> "a"
       testedBuilder.addBinaryOperator -> "b"
       should(-> testedBuilder.flush())
-        .throw "BUG! flush called with binary operator not applied!"
+        .throw "trying to flush with dangling binary operator"
 
     it "throws when calling after adding unary operator", ->
       testedBuilder.addUnaryOperator -> "a"
       should(-> testedBuilder.flush())
-        .throw "BUG! flush called with unary operator not applied!"
+        .throw "trying to flush with dangling unary operator"
 
     it "removes operand from the builder", ->
       testedBuilder.addOperand -> "a"
