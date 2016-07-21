@@ -20,7 +20,7 @@
 A human-readable, fast and boilerplate-free contract programming library
 for JavaScript.
 
-**Why do I want to use it?**
+**Why would I want to use it?**
  1. Reduces the boilerplate of writing error messsages to zero,
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
