@@ -95,12 +95,13 @@ Context.prototype = Object.assign(new Noop(), {
 });
 ```
 
+[null]: #null-assertion
 #### Null Assertion
 ```js
-get Null() { ... }, // aliases: null, Nil, nil
+get Null() { ... } // aliases: null, Nil, nil
 ```
-Checks if a value is `null` using `===`.
-Typically used in combination with [`not`][not] operator.
+Asserts that checked value is `null` using `===`.
+Typically used in combination with [`.not`][not] operator.
 
 ```js
 check(arg, 'arg').is.not.Null();
@@ -108,10 +109,10 @@ check(arg, 'arg').is.not.Null();
 
 #### Undefined Assertion
 ```js
-et Undefined() { ... }, // aliases: undefined
+get Undefined() { ... } // aliases: undefined
 ```
-Checks if a value is `undefined`.
-Typically used in combination with [`not`][not] operator.
+Asserts that checked value is `undefined`.
+Typically used in combination with [`.not`][not] operator.
 
 ```js
 check(arg, 'arg').is.not.Undefined();
@@ -119,13 +120,70 @@ check(arg, 'arg').is.not.Undefined();
 
 #### Empty Assertion
 ```js
-get Empty() { ... }, // aliases: empty
+get Empty() { ... } // aliases: empty
 ```
-Checks if a value is `null` or `undefined`.
-Typically used in combination with [`not`][not] operator.
+Asserts that checked value is `null` or `undefined`.
+Typically used in combination with [`.not`][not] operator.
 
 ```js
 check(arg, 'arg').is.not.Empty();
+```
+
+#### aNumber Assertion
+```js
+get aNumber() { ... }
+```
+Asserts that checked value is a number by ivoking `typeof` operator.
+
+```js
+check(arg, 'arg').is.aNumber();
+```
+
+#### aString Assertion
+```js
+get aString() { ... }
+```
+Asserts that checked value is a string by ivoking `typeof` operator.
+
+```js
+check(arg, 'arg').is.aString();
+```
+
+#### anObject Assertion
+```js
+get anObject() { ... }
+```
+Asserts that checked value is an object by ivoking `typeof` operator.
+Be wary that this will be true also for array instances and `null`.
+Use [`.anArray`][array] and [`.Null`][null] in order to test for these
+specific cases.
+
+```js
+check(arg, 'arg').is.anObject();
+```
+
+#### aFunction Assertion
+```js
+get aFunction() { ... }
+```
+Asserts that checked value is a function by ivoking `typeof` operator.
+
+```js
+check(arg, 'arg').is.aFunction();
+```
+
+[array]: #anarray-assertion
+#### anArray Assertion
+```js
+get anArray() { ... }
+```
+Asserts that checked value is an array, by performing few
+[duck typing][duck-typing] method checks.
+
+[duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
+
+```js
+check(arg, 'arg').is.anArray();
 ```
 
 ### Operator Context
