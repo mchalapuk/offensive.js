@@ -67,9 +67,41 @@ log({});
 
 ## API Reference
 
-### Operators
+### No Op Methods
 
-Boolean operators are implemented as property getters.
+Library contains following methods that do nothing.
+
+```js
+Noop.prototype = {
+  is: () => this,
+  be: () => this,
+  being: () => this,
+  which: () => this,
+  that: () => this,
+  to: () => this,
+  from: () => this,
+  under: () => this,
+  over: () => this,
+  has: () => this,
+  have: () => this,
+  defines: () => this,
+  define: () => this,
+  contains: () => this,
+  contain: () => this,
+  precondition: () => this,
+  postcondition: () => this,
+  invariant: () => this,
+};
+```
+
+Example usage:
+```js
+check(arg, 'arg').is.anObject();
+```
+
+### Boolean Operators
+
+All operators are implemented as property getters.
 
 #### AND Operator
 
