@@ -1,6 +1,6 @@
 'use strict';
 
-var OffensiveCore = require('./lib/core');
+var CheckFactory = require('./lib/check-factory');
 
 var NoopRegistry = require('./lib/registry/noop');
 var AssertionRegistry = require('./lib/registry/assertion');
@@ -25,9 +25,9 @@ Object.keys(builtInOperators).forEach(function(name) {
   operatorRegistry.add(name, builtInOperators[name]);
 });
 
-var core = new OffensiveCore(assertionRegistry, operatorRegistry);
+var offensive = new CheckFactory(assertionRegistry, operatorRegistry);
 
-module.exports = core.newCheck.bind(core);
+module.exports = offensive.newCheck.bind(offensive);
 module.exports.addNoop = noopRegistry.add.bind(noopRegistry);
 module.exports.addAssertion = assertionRegistry.add.bind(assertionRegistry);
 module.exports.addOperator = operatorRegistry.add.bind(operatorRegistry);
