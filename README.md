@@ -83,7 +83,7 @@ Context.prototype = Object.assign(new Noop(), {
   get anObject() { ... },
   get aFunction() { ... },
   get anArray() { ... },
-  property: (propertyName, propertyValue) => { ... }, // aliases: prop
+  property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
   length: (requiredLength) => { ... }, // aliases: len
   elementIs: (index, assertName, assertFunction) => { ... },
   eachElementIs: (assertName, assertFunction) => { ... },
@@ -184,6 +184,30 @@ Asserts that checked value is an array, by performing few
 
 ```js
 check(arg, 'arg').is.anArray();
+```
+
+#### Property Assertion
+```js
+property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
+```
+Asserts that checked value has property of name **propertyName**.
+It also asserts that value of the property equals **propertyValue**
+(if propertyValue is present). It uses `===` operator for comparing values.
+
+```js
+check(arg, 'arg').has.property('length');
+check(arg, 'arg').contains.property('nodeName', 'DIV');
+```
+
+#### Length Assertion
+```js
+length: (requiredLength) => { ... }, // aliases: len
+```
+Asserts that checked value has property of name "length" and value
+of **requiredLength**.
+
+```js
+check(arg, 'arg').has.length(0);
 ```
 
 ### Operator Context
