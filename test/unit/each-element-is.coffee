@@ -94,3 +94,56 @@ describe "check([0, 8, 14], 'arg')", ->
       it "should throw new Error('#{expectedMessage}')" , ->
         shouldThrow expectedMessage, -> testedCheck.eachElementIs(arg0, arg1)
 
+elementTypeTests = [
+  [
+    "onlyNumbers"
+    [ 0, 1, 2 ]
+    "arg[0] must be a number; got #0 and "+
+    "arg[1] must be a number; got #1 and "+
+    "arg[2] must be a number; got #2"
+  ]
+  [
+    "onlyStrings"
+    [ "a", "b", "c" ]
+    "arg[0] must be a string; got #0 and "+
+    "arg[1] must be a string; got #1 and "+
+    "arg[2] must be a string; got #2"
+  ]
+  [
+    "onlyObjects"
+    [ {}, [], null ]
+    "arg[0] must be an object; got #0 and "+
+    "arg[1] must be an object; got #1 and "+
+    "arg[2] must be an object; got #2"
+  ]
+  [
+    "onlyFunctions"
+    [ (->), (->), (->) ]
+    "arg[0] must be a function; got #0 and "+
+    "arg[1] must be a function; got #1 and "+
+    "arg[2] must be a function; got #2"
+  ]
+]
+
+elementTypeTests.forEach (params)->
+  [ assertionName, array, ] = params
+
+  describe "check([#{array}])", ->
+    testedCheck = null
+
+    beforeEach ->
+      testedCheck = check array, "arg"
+
+    describe ".#{assertionName}()", ->
+      it "should not throw", -> testedCheck[assertionName]()
+
+    errorTests = elementTypeTests.filter (test) -> not(test[0] is assertionName)
+    errorTests.forEach (errorParams)->
+      [ errorAssertionName, ignored, expectedMessage ] = errorParams
+      expectedMessage = expectedMessage
+        .replace(new RegExp("##{i}", "g"), "#{array[i]}") for i in [0..array.length]
+
+      describe ".#{errorAssertionName}", ->
+        it "should throw new Error('#{expectedMessage}')", ->
+          shouldThrow expectedMessage, -> testedCheck[errorAssertionName]()
+
