@@ -112,7 +112,7 @@ OperatorContext.prototype = {
 #### AND Operator
 
 ```js
-get and: () => { ... } // aliases: of, with
+get and() { ... } // aliases: of, with
 ```
 Logical conjunction of two boolean values which are separated by call to `.and` operator.
 
@@ -123,8 +123,8 @@ check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
 #### OR Operator
   
 ```js
-get either: () => { ... } // aliases: weather
-get or: () => { ... }
+get either() { ... } // aliases: weather
+get or() { ... }
 ```
 Logical alternative of two values which are separated by call to `.or` operator.
 Result of whole expression between `.either` and `.or` is taken as left-hand-side
@@ -136,7 +136,7 @@ check(arg, 'arg').is.either.anObject.or.aFunction();
 #### NOT Operator
 
 ```js
-get not: () => { ... } // aliases: no, dont, doesnt
+get not() { ... } // aliases: no, dont, doesnt
 ```
 
 Logical negation of a value after `.not` operator.
