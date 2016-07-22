@@ -67,6 +67,17 @@ log({});
 
 ## API Reference
 
+### Interfaces
+
+[condition]: #condition
+#### Condition
+
+```js
+interface Condition {
+  isSatisfiedBy(value: any): bool;
+};
+```
+
 ### Context
 
 Assertions are implemented as property getters or, if they accept arguments,
@@ -208,6 +219,22 @@ of **requiredLength**.
 
 ```js
 check(arg, 'arg').has.length(0);
+```
+
+#### ElementThatIs Assertion
+```js
+elementThatIs: (index, assertName, condition) => { ... },
+```
+Asserts that:
+ 1. Checked value is an array of length at least **`index`**` + 1`.
+ 2. Element under **index** satisfies **condition**.
+
+**condition** must be an object implementing [`Condition`][condition] interface
+or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
+method. **assertName** is used as assertion name in generated error message.
+
+```js
+check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 ```
 
 ### Operator Context
