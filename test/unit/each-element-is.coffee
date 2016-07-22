@@ -147,3 +147,21 @@ elementTypeTests.forEach (params)->
         it "should throw new Error('#{expectedMessage}')", ->
           shouldThrow expectedMessage, -> testedCheck[errorAssertionName]()
 
+
+describe "check([{}, {}, {}])", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check [ {}, {}, {} ], "arg"
+
+  describe ".has.onlyInstancesOf(Object)",->
+    it "should not throw", -> testedCheck.has.onlyInstancesOf Object
+
+  describe ".has.onlyInstancesOf(String)",->
+    expectedMessage = ""+
+      "arg[0] must be an instance of String; got [object Object] and "+
+      "arg[1] must be an instance of String; got [object Object] and "+
+      "arg[2] must be an instance of String; got [object Object]"
+    it "should throw new Error('#{expectedMessage}')", ->
+      shouldThrow expectedMessage, -> testedCheck.has.onlyInstancesOf String
+
