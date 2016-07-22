@@ -94,38 +94,6 @@ Context.prototype = Object.assign(new Noop(), {
 });
 ```
 
-### No Op Methods
-
-Library contains following methods that do nothing.
-
-```js
-Noop.prototype = {
-  is: () => this,
-  be: () => this,
-  being: () => this,
-  which: () => this,
-  that: () => this,
-  to: () => this,
-  from: () => this,
-  under: () => this,
-  over: () => this,
-  has: () => this,
-  have: () => this,
-  defines: () => this,
-  define: () => this,
-  contains: () => this,
-  contain: () => this,
-  precondition: () => this,
-  postcondition: () => this,
-  invariant: () => this,
-};
-```
-
-Example usage:
-```js
-check(arg, 'arg').is.anObject();
-```
-
 ### Operator Context
 
 All operators are implemented as property getters. They nevet have arguments
@@ -133,10 +101,10 @@ and always return instance of [`Context`](#context).
 
 ```js
 OperatorContext.prototype = {
-  get and: () => { ... }, // aliases: of, with
-  get either: () => { ... }, // aliases: weather
-  get or: () => { ... },
-  get not: () => { ... }, // aliases: no, dont, doesnt
+  get and() { ... }, // aliases: of, with
+  get either() { ... }, // aliases: weather
+  get or() { ... },
+  get not() { ... }, // aliases: no, dont, doesnt
 };
 ```
 
@@ -174,6 +142,38 @@ Logical negation of a value after `.not` operator.
 
 ```js
 check(arg, 'arg').is.not.Undefined();
+```
+
+### No Op Methods
+
+Library contains following methods that do nothing.
+
+```js
+Noop.prototype = {
+  is: () => this,
+  be: () => this,
+  being: () => this,
+  which: () => this,
+  that: () => this,
+  to: () => this,
+  from: () => this,
+  under: () => this,
+  over: () => this,
+  has: () => this,
+  have: () => this,
+  defines: () => this,
+  define: () => this,
+  contains: () => this,
+  contain: () => this,
+  precondition: () => this,
+  postcondition: () => this,
+  invariant: () => this,
+};
+```
+
+Example usage:
+```js
+check(arg, 'arg').is.anObject();
 ```
 
 ## Examples
