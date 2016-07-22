@@ -21,7 +21,7 @@ describe "check('arg', 'arg')", ->
 
   errorTests = [
     [ null, isDefined, 'assertName must be a string; got null' ]
-    [ "defined", undefined, 'assertFunction must be a function; got undefined' ]
+    [ "defined", undefined, 'condition must be a function or an object; got undefined' ]
     [ "defined", isDefined, 'arg must be an array; got arg' ]
   ]
 
