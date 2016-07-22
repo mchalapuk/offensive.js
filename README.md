@@ -67,6 +67,33 @@ log({});
 
 ## API Reference
 
+### Context
+
+Assertions are implemented as property getters or, if they accept arguments,
+as methods. They always return instance of&nbsp;[`OperatorContext`](#operator-context).
+This library contain following predefined assertions.
+
+```js
+Context.prototype = Object.assign(new Noop(), {
+  get Null() { ... }, // aliases: null, Nil, nil
+  get Empty() { ... }, // aliases: empty
+  get Undefined() { ... }, // aliases: undefined
+  get aNumber() { ... },
+  get aString() { ... },
+  get anObject() { ... },
+  get aFunction() { ... },
+  get anArray() { ... },
+  property: (propertyName, propertyValue) => { ... }, // aliases: prop
+  length: (requiredLength) => { ... }, // aliases: len
+  elementIs: (index, assertName, assertFunction) => { ... },
+  get onlyNumbers() { ... },
+  get onlyStrings() { ... },
+  get onlyObjects() { ... },
+  get onlyFunctions() { ... },
+  onlyInstancesOf: (RequiredClass) => { ... },
+});
+```
+
 ### No Op Methods
 
 Library contains following methods that do nothing.
@@ -101,14 +128,15 @@ check(arg, 'arg').is.anObject();
 
 ### Operator Context
 
-All operators are implemented as property getters. They nevet have arguments ans always return instance of Context.
+All operators are implemented as property getters. They nevet have arguments
+and always return instance of [`Context`](#context).
 
 ```js
 OperatorContext.prototype = {
-  get and: () => { ... } // aliases: of, with
-  get either: () => { ... } // aliases: weather
-  get or: () => { ... }
-  get not: () => { ... } // aliases: no, dont, doesnt
+  get and: () => { ... }, // aliases: of, with
+  get either: () => { ... }, // aliases: weather
+  get or: () => { ... },
+  get not: () => { ... }, // aliases: no, dont, doesnt
 };
 ```
 
