@@ -99,9 +99,18 @@ Example usage:
 check(arg, 'arg').is.anObject();
 ```
 
-### Boolean Operators
+### Operator Context
 
-All operators are implemented as property getters.
+All operators are implemented as property getters. They nevet have arguments ans always return instance of Context.
+
+```js
+OperatorContext.prototype = {
+  get and: () => { ... } // aliases: of, with
+  get either: () => { ... } // aliases: weather
+  get or: () => { ... }
+  get not: () => { ... } // aliases: no, dont, doesnt
+};
+```
 
 #### AND Operator
 
