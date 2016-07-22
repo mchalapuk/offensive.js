@@ -72,6 +72,9 @@ log({});
 [condition]: #condition
 #### Condition
 
+Interface of parameter used in [`.elementThatIs`][element-that-is]
+and [`.eachElementIs`][each-element-is] assertions.
+
 ```js
 interface Condition {
   isSatisfiedBy(value: any): bool;
@@ -96,8 +99,8 @@ Context.prototype = Object.assign(new Noop(), {
   get anArray() { ... },
   property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
   length: (requiredLength) => { ... }, // aliases: len
-  elementIs: (index, assertName, assertFunction) => { ... },
-  eachElementIs: (assertName, assertFunction) => { ... },
+  elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
+  eachElementIs: (assertName, condition) => { ... },
   get onlyNumbers() { ... },
   get onlyStrings() { ... },
   get onlyObjects() { ... },
@@ -221,12 +224,13 @@ of **requiredLength**.
 check(arg, 'arg').has.length(0);
 ```
 
+[element-that-is]: #elementthatis-assertion
 #### ElementThatIs Assertion
 ```js
-elementThatIs: (index, assertName, condition) => { ... },
+elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
 ```
 Asserts that:
- 1. Checked value is an array of length at least **`index`**` + 1`.
+ 1. Checked value is an array of length at least **`index`**` + 1`,
  2. Element under **index** satisfies **condition**.
 
 **condition** must be an object implementing [`Condition`][condition] interface
@@ -235,6 +239,23 @@ method. **assertName** is used as assertion name in generated error message.
 
 ```js
 check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
+```
+
+[each-element-is]: #eachelementis-assertion
+#### EachElementIs Assertion
+```js
+eachElementIs: (assertName, condition) => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element od this array satisfies **condition**.
+
+**condition** must be an object implementing [`Condition`][condition] interface
+or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
+method. **assertName** is used as assertion name in generated error message.
+
+```js
+check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 ```
 
 ### Operator Context
