@@ -76,8 +76,8 @@ This library contain following predefined assertions.
 ```js
 Context.prototype = Object.assign(new Noop(), {
   get Null() { ... }, // aliases: null, Nil, nil
-  get Empty() { ... }, // aliases: empty
   get Undefined() { ... }, // aliases: undefined
+  get Empty() { ... }, // aliases: empty
   get aNumber() { ... },
   get aString() { ... },
   get anObject() { ... },
@@ -93,6 +93,39 @@ Context.prototype = Object.assign(new Noop(), {
   get onlyFunctions() { ... },
   onlyInstancesOf: (RequiredClass) => { ... },
 });
+```
+
+#### Null Assertion
+```js
+get Null() { ... }, // aliases: null, Nil, nil
+```
+Checks if a value is `null` using `===`.
+Typically used in combination with [`not`][not] operator.
+
+```js
+check(arg, 'arg').is.not.Null();
+```
+
+#### Undefined Assertion
+```js
+et Undefined() { ... }, // aliases: undefined
+```
+Checks if a value is `undefined`.
+Typically used in combination with [`not`][not] operator.
+
+```js
+check(arg, 'arg').is.not.Undefined();
+```
+
+#### Empty Assertion
+```js
+get Empty() { ... }, // aliases: empty
+```
+Checks if a value is `null` or `undefined`.
+Typically used in combination with [`not`][not] operator.
+
+```js
+check(arg, 'arg').is.not.Empty();
 ```
 
 ### Operator Context
@@ -133,6 +166,7 @@ argument. First result after `.or` is taken as right-hand-side argument.
 check(arg, 'arg').is.either.anObject.or.aFunction();
 ```
 
+[not]: #not-operator
 #### NOT Operator
 
 ```js
