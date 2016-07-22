@@ -86,6 +86,7 @@ Context.prototype = Object.assign(new Noop(), {
   property: (propertyName, propertyValue) => { ... }, // aliases: prop
   length: (requiredLength) => { ... }, // aliases: len
   elementIs: (index, assertName, assertFunction) => { ... },
+  eachElementIs: (assertName, assertFunction) => { ... },
   get onlyNumbers() { ... },
   get onlyStrings() { ... },
   get onlyObjects() { ... },
