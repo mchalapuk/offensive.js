@@ -67,6 +67,12 @@ log({});
 
 ## API Reference
 
+**Table of Contents**
+
+1. [Assertions][assertions]
+2. [Boolean Operators][operators]
+3. [Interfaces][interfaces]
+
 [assertions]: #assertions
 ### Assertions
 
@@ -376,6 +382,7 @@ Logical negation of a value after `.not` operator.
 check(arg, 'arg').is.not.Undefined();
 ```
 
+[interfaces]: #interfaces
 ### Interfaces
 
 **Table of Contents**
