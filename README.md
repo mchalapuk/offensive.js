@@ -274,7 +274,7 @@ check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 [only-numbers]: #onlynumbers-assertion
 #### OnlyNumbers Assertion
 ```js
-get onlyNumbers() => { ... },
+get onlyNumbers() { ... },
 ```
 Asserts that:
  1. Checked value is an array,
@@ -287,7 +287,7 @@ check(arg, 'arg').contains.onlyNumbers();
 [only-strings]: #onlystrings-assertion
 #### OnlyStrings Assertion
 ```js
-get onlyStrings() => { ... },
+get onlyStrings() { ... },
 ```
 Asserts that:
  1. Checked value is an array,
@@ -300,7 +300,7 @@ check(arg, 'arg').contains.onlyStrings();
 [only-objects]: #onlyobjects-assertion
 #### OnlyObjects Assertion
 ```js
-get onlyObjects() => { ... },
+get onlyObjects() { ... },
 ```
 Asserts that:
  1. Checked value is an array,
@@ -313,7 +313,7 @@ check(arg, 'arg').contains.onlyObjects();
 [only-functions]: #onlyfunctions-assertion
 #### OnlyFunctions Assertion
 ```js
-get onlyFunctions) => { ... },
+get onlyFunctions() { ... },
 ```
 Asserts that:
  1. Checked value is an array,
@@ -321,6 +321,19 @@ Asserts that:
 
 ```js
 check(arg, 'arg').contains.onlyFunctions();
+```
+
+[only-instances-of]: #onlyinstancesof-assertion
+#### OnlyInstancesOf Assertion
+```js
+onlyInstancesOf: (RequiredClass) => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element of this array is an instance of **RequiredClass**.
+
+```js
+check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 ```
 
 ### Operator Context
