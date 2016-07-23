@@ -70,28 +70,28 @@ log({});
 [assertions]: #assertions
 ### Assertions
 
-Assertions are implemented as property getters or, if they accept arguments,
-as methods. They always return instance of&nbsp;[`OperatorContext`][operator-context].
-This library contain following predefined assertions.
+offensive.js contains following built-in assertions.
 
- [`.Null`][null]<br>
- [`.Undefined`][undefined]<br>
- [`.Empty`][empty]<br>
- [`.aNumber`][number]<br>
- [`.aString`][string]<br>
- [`.anObject`][object]<br>
- [`.aFunction`][function]<br>
- [`.anArray`][array]<br>
- [`.anInstanceOf(RequiredClass)`][instance-of]<br>
- [`.property(propertyName, propertyValue)`][property]<br>
- [`.length(requiredLength)`][length]<br>
- [`.elementThatIs(index, assertName, condition)`][element]<br>
- [`.eachElementIs(assertName, condition)`][each-element]<br>
- [`.onlyNumbers`][only-numbers]<br>
- [`.onlyStrings`][only-strings]<br>
- [`.onlyObjects`][only-objects]<br>
- [`.onlyFunctions`][only-functions]<br>
- [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
+**Table of Contents**
+
+ 1. [`.Null()`][null]<br>
+ 1. [`.Undefined()`][undefined]<br>
+ 1. [`.Empty()`][empty]<br>
+ 1. [`.aNumber()`][number]<br>
+ 1. [`.aString()`][string]<br>
+ 1. [`.anObject()`][object]<br>
+ 1. [`.aFunction()`][function]<br>
+ 1. [`.anArray()`][array]<br>
+ 1. [`.anInstanceOf(RequiredClass)`][instance-of]<br>
+ 1. [`.property(propertyName, propertyValue)`][property]<br>
+ 1. [`.length(requiredLength)`][length]<br>
+ 1. [`.elementThatIs(index, assertName, condition)`][element]<br>
+ 1. [`.eachElementIs(assertName, condition)`][each-element]<br>
+ 1. [`.onlyNumbers()`][only-numbers]<br>
+ 1. [`.onlyStrings()`][only-strings]<br>
+ 1. [`.onlyObjects()`][only-objects]<br>
+ 1. [`.onlyFunctions()`][only-functions]<br>
+ 1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
 
 [null]: #null-assertion
 #### Null Assertion
