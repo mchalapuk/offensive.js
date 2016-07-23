@@ -144,7 +144,7 @@ Typically used in combination with [`.not`][not] operator.
 check(arg, 'arg').is.not.Empty();
 ```
 
-#### aNumber Assertion
+#### Number Assertion
 ```js
 get aNumber() { ... }
 ```
@@ -154,7 +154,7 @@ Asserts that checked value is a number by ivoking `typeof` operator.
 check(arg, 'arg').is.aNumber();
 ```
 
-#### aString Assertion
+#### String Assertion
 ```js
 get aString() { ... }
 ```
@@ -164,7 +164,7 @@ Asserts that checked value is a string by ivoking `typeof` operator.
 check(arg, 'arg').is.aString();
 ```
 
-#### anObject Assertion
+#### Object Assertion
 ```js
 get anObject() { ... }
 ```
@@ -177,7 +177,7 @@ specific cases.
 check(arg, 'arg').is.anObject();
 ```
 
-#### aFunction Assertion
+#### Function Assertion
 ```js
 get aFunction() { ... }
 ```
@@ -187,8 +187,8 @@ Asserts that checked value is a function by ivoking `typeof` operator.
 check(arg, 'arg').is.aFunction();
 ```
 
-[array]: #anarray-assertion
-#### anArray Assertion
+[array]: #array-assertion
+#### Array Assertion
 ```js
 get anArray() { ... }
 ```
@@ -201,8 +201,8 @@ Asserts that checked value is an array, by performing few
 check(arg, 'arg').is.anArray();
 ```
 
-[instance-of]: #aninstanceof-assertion
-#### anInstanceOf Assertion
+[instance-of]: #instanceof-assertion
+#### InstanceOf Assertion
 ```js
 anInstanceOf: (RequiredClass) => { ... }, // aliases: instanceOf
 ```
@@ -261,7 +261,7 @@ eachElementIs: (assertName, condition) => { ... },
 ```
 Asserts that:
  1. Checked value is an array,
- 2. Each element od this array satisfies **condition**.
+ 2. Each element of this array satisfies **condition**.
 
 **condition** must be an object implementing [`Condition`][condition] interface
 or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
@@ -269,6 +269,58 @@ method. **assertName** is used as assertion name in generated error message.
 
 ```js
 check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
+```
+
+[only-numbers]: #onlynumbers-assertion
+#### OnlyNumbers Assertion
+```js
+get onlyNumbers() => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element of this array is a number.
+
+```js
+check(arg, 'arg').contains.onlyNumbers();
+```
+
+[only-strings]: #onlystrings-assertion
+#### OnlyStrings Assertion
+```js
+get onlyStrings() => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element of this array is a string.
+
+```js
+check(arg, 'arg').contains.onlyStrings();
+```
+
+[only-objects]: #onlyobjects-assertion
+#### OnlyObjects Assertion
+```js
+get onlyObjects() => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element of this array is an object.
+
+```js
+check(arg, 'arg').contains.onlyObjects();
+```
+
+[only-functions]: #onlyfunctions-assertion
+#### OnlyFunctions Assertion
+```js
+get onlyFunctions) => { ... },
+```
+Asserts that:
+ 1. Checked value is an array,
+ 2. Each element of this array is a function.
+
+```js
+check(arg, 'arg').contains.onlyFunctions();
 ```
 
 ### Operator Context
