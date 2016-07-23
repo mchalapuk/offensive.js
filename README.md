@@ -74,28 +74,24 @@ Assertions are implemented as property getters or, if they accept arguments,
 as methods. They always return instance of&nbsp;[`OperatorContext`][operator-context].
 This library contain following predefined assertions.
 
-```js
-Context.prototype = Object.assign(new Noop(), {
-  get Null() { ... }, // aliases: null, Nil, nil
-  get Undefined() { ... }, // aliases: undefined
-  get Empty() { ... }, // aliases: empty
-  get aNumber() { ... },
-  get aString() { ... },
-  get anObject() { ... },
-  get aFunction() { ... },
-  get anArray() { ... },
-  anInstanceOf: (RequiredClass) => { ... }, // aliases: instanceOf
-  property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
-  length: (requiredLength) => { ... }, // aliases: len
-  elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
-  eachElementIs: (assertName, condition) => { ... },
-  get onlyNumbers() { ... },
-  get onlyStrings() { ... },
-  get onlyObjects() { ... },
-  get onlyFunctions() { ... },
-  onlyInstancesOf: (RequiredClass) => { ... },
-});
-```
+ [`.Null`][null]<br>
+ [`.Undefined`][undefined]<br>
+ [`.Empty`][empty]<br>
+ [`.aNumber`][number]<br>
+ [`.aString`][string]<br>
+ [`.anObject`][object]<br>
+ [`.aFunction`][function]<br>
+ [`.anArray`][array]<br>
+ [`.anInstanceOf(RequiredClass)`][instance-of]<br>
+ [`.property(propertyName, propertyValue)`][property]<br>
+ [`.length(requiredLength)`][length]<br>
+ [`.elementThatIs(index, assertName, condition)`][element]<br>
+ [`.eachElementIs(assertName, condition)`][each-element]<br>
+ [`.onlyNumbers`][only-numbers]<br>
+ [`.onlyStrings`][only-strings]<br>
+ [`.onlyObjects`][only-objects]<br>
+ [`.onlyFunctions`][only-functions]<br>
+ [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
 
 [null]: #null-assertion
 #### Null Assertion
@@ -108,7 +104,7 @@ Typically used in combination with [`.not`][not] operator.
 ```js
 check(arg, 'arg').is.not.Null();
 ```
-
+[undefined]: #undefined-assertion
 #### Undefined Assertion
 ```js
 get Undefined() { ... } // aliases: undefined
@@ -120,6 +116,7 @@ Typically used in combination with [`.not`][not] operator.
 check(arg, 'arg').is.not.Undefined();
 ```
 
+[empty]: #empty-assertion
 #### Empty Assertion
 ```js
 get Empty() { ... } // aliases: empty
@@ -131,6 +128,7 @@ Typically used in combination with [`.not`][not] operator.
 check(arg, 'arg').is.not.Empty();
 ```
 
+[number]: #number-assertion
 #### Number Assertion
 ```js
 get aNumber() { ... }
@@ -141,6 +139,7 @@ Asserts that checked value is a number by ivoking `typeof` operator.
 check(arg, 'arg').is.aNumber();
 ```
 
+[string]: #string-assertion
 #### String Assertion
 ```js
 get aString() { ... }
@@ -151,6 +150,7 @@ Asserts that checked value is a string by ivoking `typeof` operator.
 check(arg, 'arg').is.aString();
 ```
 
+[object]: #object-assertion
 #### Object Assertion
 ```js
 get anObject() { ... }
@@ -164,6 +164,7 @@ specific cases.
 check(arg, 'arg').is.anObject();
 ```
 
+[function]: #function-assertion
 #### Function Assertion
 ```js
 get aFunction() { ... }
@@ -200,6 +201,7 @@ using `instanceof` operator.
 check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
 
+[property]: #property-assertion
 #### Property Assertion
 ```js
 property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
@@ -213,6 +215,7 @@ check(arg, 'arg').has.property('length');
 check(arg, 'arg').contains.property('nodeName', 'DIV');
 ```
 
+[length]: #length-assertion
 #### Length Assertion
 ```js
 length: (requiredLength) => { ... }, // aliases: len
@@ -224,7 +227,7 @@ of **requiredLength**.
 check(arg, 'arg').has.length(0);
 ```
 
-[element-that-is]: #elementthatis-assertion
+[element]: #elementthatis-assertion
 #### ElementThatIs Assertion
 ```js
 elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
@@ -241,7 +244,7 @@ method. **assertName** is used as assertion name in generated error message.
 check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 ```
 
-[each-element-is]: #eachelementis-assertion
+[each-element]: #eachelementis-assertion
 #### EachElementIs Assertion
 ```js
 eachElementIs: (assertName, condition) => { ... },
@@ -448,8 +451,8 @@ interface OperatorContext{
 [condition]: #condition
 #### Condition
 
-Interface of parameter used in [`.elementThatIs`][element-that-is]
-and [`.eachElementIs`][each-element-is] assertions.
+Interface of parameter used in [`.elementThatIs`][element]
+and [`.eachElementIs`][each-element] assertions.
 
 ```js
 interface Condition {
