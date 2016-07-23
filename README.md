@@ -67,10 +67,11 @@ log({});
 
 ## API Reference
 
-### Context
+[assertions]: #assertions
+### Assertions
 
 Assertions are implemented as property getters or, if they accept arguments,
-as methods. They always return instance of&nbsp;[`OperatorContext`](#operator-context).
+as methods. They always return instance of&nbsp;[`OperatorContext`][operator-context].
 This library contain following predefined assertions.
 
 ```js
@@ -322,10 +323,11 @@ Asserts that:
 check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 ```
 
-### Operator Context
+[operators]: #boolean-operators
+### Boolean Operators
 
 All operators are implemented as property getters. They nevet have arguments
-and always return instance of [`Context`](#context).
+and always return instance of [`Context`][context].
 
 ```js
 OperatorContext.prototype = {
@@ -373,40 +375,76 @@ Logical negation of a value after `.not` operator.
 check(arg, 'arg').is.not.Undefined();
 ```
 
-### No Op Methods
+### Interfaces
 
-Library contains following methods that do nothing.
+#### Noop
+
+Contains properties that do nothing and return [`Context`][context].
 
 ```js
-Noop.prototype = {
-  is: () => this,
-  be: () => this,
-  being: () => this,
-  which: () => this,
-  that: () => this,
-  to: () => this,
-  from: () => this,
-  under: () => this,
-  over: () => this,
-  has: () => this,
-  have: () => this,
-  defines: () => this,
-  define: () => this,
-  contains: () => this,
-  contain: () => this,
-  precondition: () => this,
-  postcondition: () => this,
-  invariant: () => this,
+interface Noop {
+  get is(): Context,
+  get be(): Context,
+  get being(): Context,
+  get which(): Context,
+  get that(): Context,
+  get to(): Context,
+  get from(): Context,
+  get under(): Context,
+  get over(): Context,
+  get has(): Context,
+  get have(): Context,
+  get defines(): Context,
+  get define(): Context,
+  get contains(): Context,
+  get contain(): Context,
+  get precondition(): Context,
+  get postcondition(): Context,
+  get invariant(): Context,
 };
 ```
 
-Example usage:
+[context]: #context
+#### Context
+
+Contains [assertion methods][assertions]. All assertion methods return [`OperatorContext`][operator-context];
+
 ```js
-check(arg, 'arg').is.anObject();
+interface Context extends Noop {
+  get Null(): OperatorContext,
+  get Undefined(): OperatorContext,
+  get Empty(): OperatorContext,
+  get aNumber(): OperatorContext,
+  get aString(): OperatorContext,
+  get anObject(): OperatorContext,
+  get aFunction(): OperatorContext,
+  get anArray(): OperatorContext,
+  anInstanceOf(RequiredClass): OperatorContext,
+  property(propertyName, propertyValue): OperatorContext,
+  length(requiredLength): OperatorContext,
+  elementThatIs(index, assertName, condition): OperatorContext,
+  eachElementIs(assertName, condition): OperatorContext,
+  get onlyNumbers(): OperatorContext,
+  get onlyStrings(): OperatorContext,
+  get onlyObjects(): OperatorContext,
+  get onlyFunctions(): OperatorContext,
+  onlyInstancesOf(RequiredClass): OperatorContext,
+});
 ```
 
-### Interfaces
+[operator-context]: #operator-context
+#### Operator Context
 
+Contains [operator methods][operators]. All operator methods return [`Context`][context].
+
+```js
+interface OperatorContext{
+  get and(): Context,
+  get either(): Context,
+  get or(): Context,
+  get not(): Context,
+};
+```
 [condition]: #condition
 #### Condition
 
@@ -417,6 +455,7 @@ and [`.eachElementIs`][each-element-is] assertions.
 interface Condition {
   isSatisfiedBy(value: any): bool;
 };
+
 ```
 
 ## Examples
