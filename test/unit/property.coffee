@@ -1,6 +1,6 @@
 mocha = require 'mocha'
 should = require 'should'
-shouldThrow = '../should-throw.coffee'
+shouldThrow = require '../should-throw.coffee'
 
 check = require '../../offensive'
 
@@ -21,7 +21,6 @@ describe "check(\"arg\", \"arg\")", ->
 
   beforeEach ->
     testedCheck = check 'arg', 'arg'
-#    debug.check testedCheck
 
   errorTests = [
     [ null, 'value', 'propertyName must be a string; got null' ]

@@ -1,6 +1,6 @@
 mocha = require 'mocha'
 should = require 'should'
-shouldThrow = '../should-throw.coffee'
+shouldThrow = require '../should-throw.coffee'
 
 check = require '../../offensive'
 
