@@ -97,6 +97,7 @@ Context.prototype = Object.assign(new Noop(), {
   get anObject() { ... },
   get aFunction() { ... },
   get anArray() { ... },
+  anInstanceOf: (RequiredClass) => { ... }, // aliases: instanceOf
   property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
   length: (requiredLength) => { ... }, // aliases: len
   elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
@@ -198,6 +199,18 @@ Asserts that checked value is an array, by performing few
 
 ```js
 check(arg, 'arg').is.anArray();
+```
+
+[instance-of]: #aninstanceof-assertion
+#### anInstanceOf Assertion
+```js
+anInstanceOf: (RequiredClass) => { ... }, // aliases: instanceOf
+```
+Asserts that checked value is a instance of **RequiredClass**, by
+using `instanceof` operator.
+
+```js
+check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
 
 #### Property Assertion
