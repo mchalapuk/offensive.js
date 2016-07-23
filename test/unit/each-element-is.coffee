@@ -1,15 +1,8 @@
 should = require "should"
 mocha = require "mocha"
+shouldThrow = require '../should-throw.coffee'
 
 check = require "../.."
-
-shouldThrow = (expectedMessage, test)->
-  try
-    test()
-
-    true.should.be.false "exception not thrown"
-  catch e
-    throw e unless e.message is expectedMessage
 
 isDefined = (arg) -> not (typeof arg is "undefined")
 
