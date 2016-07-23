@@ -41,3 +41,19 @@ describe "check([], 'arg')", ->
   describe ".anArray()", ->
     it "should not throw", -> testedCheck.anArray()
 
+describe "check(new String(), 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check new String(), "arg"
+
+  describe ".anInstanceOf(String)", ->
+    it "should not throw", -> testedCheck.anInstanceOf String
+  describe ".anInstanceOf(Object)", ->
+    it "should not throw", -> testedCheck.anInstanceOf Object
+
+  describe ".anInstanceOf(Number)", ->
+    expectedMessage = "arg must be an instance of Number; got "
+    it "should throw #{expectedMessage}", ->
+      shouldThrow expectedMessage, -> testedCheck.anInstanceOf Number
+
