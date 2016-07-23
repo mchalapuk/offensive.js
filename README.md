@@ -19,7 +19,7 @@
 A human-readable, fast and boilerplate-free contract programming library
 for JavaScript.
 
-**Why would I want it**?
+**Why would I want it?**
 
  1. It reduces the boilerplate of writing error messsages to zero,
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
@@ -395,7 +395,7 @@ check(arg, 'arg').is.not.Undefined();
 [noop]: #noop
 #### Noop
 
-Contains properties that do nothing and return [`Context`][context].
+Contains property getters that do nothing and return [`Context`][context].
 
 ```js
 interface Noop {
@@ -423,7 +423,7 @@ interface Noop {
 [context]: #context
 #### Context
 
-Contains [assertion methods][assertions]. All assertion methods return [`OperatorContext`][operator-context];
+Contains [assertion methods][assertions]. All assertion methods return [`OperatorContext`][operator-context]. Parameterized assertions are implemented as&nbsp;methods, assertions without parameters as property getters.
 
 ```js
 interface Context extends Noop {
@@ -451,7 +451,7 @@ interface Context extends Noop {
 [operator-context]: #operator-context
 #### Operator Context
 
-Contains [operator methods][operators]. All operator methods return [`Context`][context].
+Contains [operator methods][operators]. All operators are implemented as property getters and return [`Context`][context].
 
 ```js
 interface OperatorContext{
