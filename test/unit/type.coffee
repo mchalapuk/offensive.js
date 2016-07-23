@@ -31,3 +31,13 @@ typeTests.forEach (params) ->
           it "should throw new Error('#{expectedMessage} #{arg}')", ->
             shouldThrow "#{expectedMessage} #{arg}", -> testedCheck[assertion]()
 
+
+describe "check([], 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check [], "arg"
+
+  describe ".anArray()", ->
+    it "should not throw", -> testedCheck.anArray()
+
