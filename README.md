@@ -67,20 +67,6 @@ log({});
 
 ## API Reference
 
-### Interfaces
-
-[condition]: #condition
-#### Condition
-
-Interface of parameter used in [`.elementThatIs`][element-that-is]
-and [`.eachElementIs`][each-element-is] assertions.
-
-```js
-interface Condition {
-  isSatisfiedBy(value: any): bool;
-};
-```
-
 ### Context
 
 Assertions are implemented as property getters or, if they accept arguments,
@@ -417,6 +403,20 @@ Noop.prototype = {
 Example usage:
 ```js
 check(arg, 'arg').is.anObject();
+```
+
+### Interfaces
+
+[condition]: #condition
+#### Condition
+
+Interface of parameter used in [`.elementThatIs`][element-that-is]
+and [`.eachElementIs`][each-element-is] assertions.
+
+```js
+interface Condition {
+  isSatisfiedBy(value: any): bool;
+};
 ```
 
 ## Examples
