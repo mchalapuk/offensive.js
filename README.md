@@ -100,10 +100,9 @@ offensive.js contains following built-in assertions.
  1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
 
 [null]: #null-assertion
-#### Null Assertion
-```js
-get Null() { ... } // aliases: null, Nil, nil
-```
+<a id=null-assertion><br></a>
+**`.Null()`** aliases: `.null`, `.Nil`, `.nil`
+
 Asserts that checked value is `null` using `===`.
 Typically used in combination with [`.not`][not] operator.
 
@@ -111,10 +110,9 @@ Typically used in combination with [`.not`][not] operator.
 check(arg, 'arg').is.not.Null();
 ```
 [undefined]: #undefined-assertion
-#### Undefined Assertion
-```js
-get Undefined() { ... } // aliases: undefined
-```
+<a id=undefined-assertion><br></a>
+**`.Undefined()`** aliases: `.undefined`
+
 Asserts that checked value is `undefined`.
 Typically used in combination with [`.not`][not] operator.
 
@@ -123,10 +121,9 @@ check(arg, 'arg').is.not.Undefined();
 ```
 
 [empty]: #empty-assertion
-#### Empty Assertion
-```js
-get Empty() { ... } // aliases: empty
-```
+<a id=empty-assertion><br></a>
+**`.Empty()`** aliases: `.empty`
+
 Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
 
@@ -135,10 +132,9 @@ check(arg, 'arg').is.not.Empty();
 ```
 
 [number]: #number-assertion
-#### Number Assertion
-```js
-get aNumber() { ... }
-```
+<a id=number-assertion><br></a>
+**`.aNumber()`**
+
 Asserts that checked value is a number by ivoking `typeof` operator.
 
 ```js
@@ -146,10 +142,9 @@ check(arg, 'arg').is.aNumber();
 ```
 
 [string]: #string-assertion
-#### String Assertion
-```js
-get aString() { ... }
-```
+<a id=string-assertion><br></a>
+**`.aString()`**
+
 Asserts that checked value is a string by ivoking `typeof` operator.
 
 ```js
@@ -157,10 +152,9 @@ check(arg, 'arg').is.aString();
 ```
 
 [object]: #object-assertion
-#### Object Assertion
-```js
-get anObject() { ... }
-```
+<a id=object-assertion><br></a>
+**`.anObject()`**
+
 Asserts that checked value is an object by ivoking `typeof` operator.
 Be wary that this will be true also for array instances and `null`.
 Use [`.anArray`][array] and [`.Null`][null] in order to test for these
@@ -171,10 +165,9 @@ check(arg, 'arg').is.anObject();
 ```
 
 [function]: #function-assertion
-#### Function Assertion
-```js
-get aFunction() { ... }
-```
+<a id=function-assertion><br></a>
+**`.aFunction()`**
+
 Asserts that checked value is a function by ivoking `typeof` operator.
 
 ```js
@@ -182,10 +175,9 @@ check(arg, 'arg').is.aFunction();
 ```
 
 [array]: #array-assertion
-#### Array Assertion
-```js
-get anArray() { ... }
-```
+<a id=array-assertion><br></a>
+**`.anArray()`**
+
 Asserts that checked value is an array, by performing few
 [duck typing][duck-typing] method checks.
 
@@ -196,10 +188,9 @@ check(arg, 'arg').is.anArray();
 ```
 
 [instance-of]: #instanceof-assertion
-#### InstanceOf Assertion
-```js
-anInstanceOf: (RequiredClass) => { ... }, // aliases: instanceOf
-```
+<a id=instanceof-assertion><br></a>
+**`.anInstanceOf(RequiredClass)`** aliases: `.instanceOf`
+
 Asserts that checked value is a instance of **RequiredClass**, by
 using `instanceof` operator.
 
@@ -208,10 +199,9 @@ check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
 
 [property]: #property-assertion
-#### Property Assertion
-```js
-property: (propertyName, /* optional */ propertyValue) => { ... }, // aliases: prop
-```
+<a id=property-assertion><br></a>
+**`.property(propertyName, /* optional */ propertyValue)`** aliases: `.prop`
+
 Asserts that checked value has property of name **propertyName**.
 It also asserts that value of the property equals **propertyValue**
 (if propertyValue is present). It uses `===` operator for comparing values.
@@ -222,10 +212,9 @@ check(arg, 'arg').contains.property('nodeName', 'DIV');
 ```
 
 [length]: #length-assertion
-#### Length Assertion
-```js
-length: (requiredLength) => { ... }, // aliases: len
-```
+<a id=length-assertion><br></a>
+**`.length(requiredLength)`** aliases: `.len`
+
 Asserts that checked value has property of name "length" and value
 of **requiredLength**.
 
@@ -234,10 +223,9 @@ check(arg, 'arg').has.length(0);
 ```
 
 [element]: #elementthatis-assertion
-#### ElementThatIs Assertion
-```js
-elementThatIs: (index, assertName, condition) => { ... }, // aliases: elementWhichIs
-```
+<a id=elementthatis-assertion><br></a>
+**`.elementThatIs(index, assertName, condition)`** aliases: `.elementWhichIs`
+
 Asserts that:
  1. Checked value is an array of length at least **`index`**` + 1`,
  2. Element under **index** satisfies **condition**.
@@ -251,10 +239,9 @@ check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 ```
 
 [each-element]: #eachelementis-assertion
-#### EachElementIs Assertion
-```js
-eachElementIs: (assertName, condition) => { ... },
-```
+<a id=eachelementis-assertion><br></a>
+**`.eachElementIs(assertName, condition)`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array satisfies **condition**.
@@ -268,10 +255,9 @@ check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 ```
 
 [only-numbers]: #onlynumbers-assertion
-#### OnlyNumbers Assertion
-```js
-get onlyNumbers() { ... },
-```
+<a id=onlynumbers-assertion><br></a>
+**`.onlyNumbers()`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a number.
@@ -281,10 +267,9 @@ check(arg, 'arg').contains.onlyNumbers();
 ```
 
 [only-strings]: #onlystrings-assertion
-#### OnlyStrings Assertion
-```js
-get onlyStrings() { ... },
-```
+<a id=onlystrings-assertion><br></a>
+**`.onlyStrings()`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a string.
@@ -294,10 +279,9 @@ check(arg, 'arg').contains.onlyStrings();
 ```
 
 [only-objects]: #onlyobjects-assertion
-#### OnlyObjects Assertion
-```js
-get onlyObjects() { ... },
-```
+<a id=onlyobjects-assertion><br></a>
+**`onlyObjects()`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an object.
@@ -307,10 +291,9 @@ check(arg, 'arg').contains.onlyObjects();
 ```
 
 [only-functions]: #onlyfunctions-assertion
-#### OnlyFunctions Assertion
-```js
-get onlyFunctions() { ... },
-```
+<a id=onlyfunctions-assertion><br></a>
+**`.onlyFunctions()`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a function.
@@ -320,10 +303,9 @@ check(arg, 'arg').contains.onlyFunctions();
 ```
 
 [only-instances-of]: #onlyinstancesof-assertion
-#### OnlyInstancesOf Assertion
-```js
-onlyInstancesOf: (RequiredClass) => { ... },
-```
+<a id=onlyinstancesof-assertion><br></a>
+**`.onlyInstancesOf(RequiredClass)`**
+
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an instance of **RequiredClass**.
@@ -332,6 +314,7 @@ Asserts that:
 check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 ```
 
+<br>
 [operators]: #boolean-operators
 ### Boolean Operators
 
