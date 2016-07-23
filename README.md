@@ -329,18 +329,15 @@ check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 [operators]: #boolean-operators
 ### Boolean Operators
 
-All operators are implemented as property getters. They nevet have arguments
-and always return instance of [`Context`][context].
+offensive.js implements following operators.
 
-```js
-OperatorContext.prototype = {
-  get and() { ... }, // aliases: of, with
-  get either() { ... }, // aliases: weather
-  get or() { ... },
-  get not() { ... }, // aliases: no, dont, doesnt
-};
-```
+**Table of Contents**
 
+1. [`.and`][and]
+1. [`.or`][or]
+1. [`.not`][not]
+
+[and]: #and-operator
 #### AND Operator
 
 ```js
@@ -352,6 +349,7 @@ Logical conjunction of two boolean values which are separated by call to `.and` 
 check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
 ```
 
+[or]: #or-operator
 #### OR Operator
   
 ```js
