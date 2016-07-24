@@ -54,7 +54,7 @@ stance in most code bases if combined with unit testing.
 var check = require('offensive');
 
 // Ley's say that we have a log function
-// with contract is that argument must be a string.
+// with a contract that argument must be a string.
 function log(str) {
   // We can check this contract with
   // a simple offensive.js DSL expression.
