@@ -35,11 +35,6 @@ for JavaScript.
 [node-v4]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V4.md
 [node-v6]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V6.md
 
-**Links**:
-
- * [What is the difference between offensive and defensive
-   programming?][defensive-design]
-
 [defensive-design]: http://softwarephilosophy.ninja/defensive-design
 
 ## Installation
@@ -48,7 +43,14 @@ for JavaScript.
 npm install --save offensive
 ```
 
-## Usage
+### Offensive Programming
+
+
+
+**Links**:
+
+ * [What is the difference between offensive and defensive
+   programming?][defensive-design]
 
 ```js
 var check = require('offensive');
