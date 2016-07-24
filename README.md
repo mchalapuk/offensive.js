@@ -483,11 +483,15 @@ interface Condition {
 
 ```
 
-## Examples
+## Extension API
 
-For more usage examples, check out project's [integration tests][integration-tests].
+offensive.js is extensible, but extension API is not documented yet.
+If you wish to write an extension, take a look at the implementation
+of [built-in assertions][assertions-code] and [offensive.js][main-code]
+file.
 
-[integration-tests]: test/integration.coffee
+[assertions-code]: lib/built-ins/assertions
+[main-code]: offensive.js
 
 ## License
 
