@@ -52,7 +52,7 @@ bugs at&nbsp;their cause.
 ```js
 var check = require('offensive');
 
-// Ley's say that we have a log function
+// Let's say that we have a log function
 // with a contract that argument must be a string.
 function log(str) {
   // We can check this contract with
@@ -72,6 +72,51 @@ ContractError: str must be a string; got [object Object]
   at Object.aString (node_modules/offensive/lib/registry/assertion.js:59:21)
   at Object.log (example.js:8:24)
   at example.js:20:0
+```
+
+### Defensive Programming
+
+Offensive programming is not applicable when collaborating with
+external components. We don't want our program to crash in response
+to a bug in another program. Logging an error and trying to correct
+it or simply ignoring erroneus input would be a better way of
+handling such situation.
+
+```js
+var check = require('offensive');
+
+// Let's say that we have a Time class
+// with a contract that argument must have
+// a timestamp property of type number.
+function Time(init) {
+  // So we use offensive programming to check the contract.
+  check(init, 'init').is.anObject();
+  check(init.timestamp, 'init.timestamp').is.aNumber();
+
+  ...
+}
+
+// Now, let's create a function that fetches time data
+// from a time server and returns instance of Time.
+function fetchTime(url, callback) {
+  check(url, 'url').is.anInstanceOf(URL);
+  check(callback, 'callback').is.aFunction();
+  
+  http.get(url.toString(), (res) => {
+    var json = "";
+    res.on('data', (chunk) => {
+      json += chunk;
+    });
+    res.on('end', () => {
+      var init = JSON.parse(json);check.defensive(init, 'time init from '+ url).is.anObject()
+      if () {
+      }
+      callback(new Time(init));
+    });
+    res.resume();
+  });
+}
+
 ```
 
 **Further Rading:**
