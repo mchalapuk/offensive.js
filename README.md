@@ -118,9 +118,8 @@ offensive.js contains following built-in assertions.
  1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
 
 [null]: #null-assertion
-<a id=null-assertion><br></a>
-**`.Null()`** aliases: `.null`, `.Nil`, `.nil`
-
+<a id=null-assertion></a>
+#### `.Null()` aliases: `.null`, `.Nil`, `.nil`
 Asserts that checked value is `null` using `===`.
 Typically used in combination with [`.not`][not] operator.
 ```js
@@ -128,9 +127,8 @@ check(arg, 'arg').is.not.Null();
 ```
 
 [undefined]: #undefined-assertion
-<a id=undefined-assertion><br></a>
-**`.Undefined()`** aliases: `.undefined`
-
+<a id=undefined-assertion></a>
+#### `.Undefined()` aliases: `.undefined`
 Asserts that checked value is `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
@@ -138,9 +136,8 @@ check(arg, 'arg').is.not.Undefined();
 ```
 
 [empty]: #empty-assertion
-<a id=empty-assertion><br></a>
-**`.Empty()`** aliases: `.empty`
-
+<a id=empty-assertion></a>
+#### `.Empty()` aliases: `.empty`
 Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
@@ -148,27 +145,24 @@ check(arg, 'arg').is.not.Empty();
 ```
 
 [number]: #number-assertion
-<a id=number-assertion><br></a>
-**`.aNumber()`**
-
+<a id=number-assertion></a>
+#### `.aNumber()`
 Asserts that checked value is a number by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aNumber();
 ```
 
 [string]: #string-assertion
-<a id=string-assertion><br></a>
-**`.aString()`**
-
+<a id=string-assertion></a>
+#### `.aString()`
 Asserts that checked value is a string by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aString();
 ```
 
 [object]: #object-assertion
-<a id=object-assertion><br></a>
-**`.anObject()`**
-
+<a id=object-assertion></a>
+#### `.anObject()`
 Asserts that checked value is an object by ivoking `typeof` operator.
 Be wary that this will be true also for array instances and `null`.
 Use [`.anArray`][array] and [`.Null`][null] in order to test for these
@@ -178,30 +172,26 @@ check(arg, 'arg').is.anObject();
 ```
 
 [function]: #function-assertion
-<a id=function-assertion><br></a>
-**`.aFunction()`**
-
+<a id=function-assertion></a>
+#### `.aFunction()`
 Asserts that checked value is a function by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aFunction();
 ```
 
 [array]: #array-assertion
-<a id=array-assertion><br></a>
-**`.anArray()`**
-
+<a id=array-assertion></a>
+#### `.anArray()`
 Asserts that checked value is an array, by performing few
 [duck typing][duck-typing] method checks.
-
-[duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
 ```js
 check(arg, 'arg').is.anArray();
 ```
+[duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
 
 [instance-of]: #instanceof-assertion
-<a id=instanceof-assertion><br></a>
-**`.anInstanceOf(RequiredClass)`** aliases: `.instanceOf`
-
+<a id=instanceof-assertion></a>
+#### `.anInstanceOf(RequiredClass)` aliases: `.instanceOf`
 Asserts that checked value is a instance of **RequiredClass**, by
 using `instanceof` operator.
 ```js
@@ -209,9 +199,8 @@ check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
 
 [property]: #property-assertion
-<a id=property-assertion><br></a>
-**`.property(propertyName, /* optional */ propertyValue)`** aliases: `.prop`
-
+<a id=property-assertion></a>
+#### `.property(propertyName, propertyValue)` aliases: `.prop`
 Asserts that checked value has property of name **propertyName**.
 It also asserts that value of the property equals **propertyValue**
 (if propertyValue is present). It uses `===` operator for comparing values.
@@ -221,9 +210,8 @@ check(arg, 'arg').contains.property('nodeName', 'DIV');
 ```
 
 [length]: #length-assertion
-<a id=length-assertion><br></a>
-**`.length(requiredLength)`** aliases: `.len`
-
+<a id=length-assertion></a>
+#### `.length(requiredLength)` aliases: `.len`
 Asserts that checked value has property of name "length" and value
 of **requiredLength**.
 ```js
@@ -231,9 +219,8 @@ check(arg, 'arg').has.length(0);
 ```
 
 [element]: #elementthatis-assertion
-<a id=elementthatis-assertion><br></a>
-**`.elementThatIs(index, assertName, condition)`** aliases: `.elementWhichIs`
-
+<a id=elementthatis-assertion></a>
+#### `.elementThatIs(index, assertName, condition)` aliases: `.elementWhichIs`
 Asserts that:
  1. Checked value is an array of length at least **`index`**` + 1`,
  2. Element under **index** satisfies **condition**.
@@ -246,9 +233,8 @@ check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 ```
 
 [each-element]: #eachelementis-assertion
-<a id=eachelementis-assertion><br></a>
-**`.eachElementIs(assertName, condition)`**
-
+<a id=eachelementis-assertion></a>
+#### `.eachElementIs(assertName, condition)`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array satisfies **condition**.
@@ -261,9 +247,8 @@ check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 ```
 
 [only-numbers]: #onlynumbers-assertion
-<a id=onlynumbers-assertion><br></a>
-**`.onlyNumbers()`**
-
+<a id=onlynumbers-assertion></a>
+#### `.onlyNumbers()`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a number.
@@ -272,9 +257,8 @@ check(arg, 'arg').contains.onlyNumbers();
 ```
 
 [only-strings]: #onlystrings-assertion
-<a id=onlystrings-assertion><br></a>
-**`.onlyStrings()`**
-
+<a id=onlystrings-assertion></a>
+#### `.onlyStrings()`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a string.
@@ -283,9 +267,8 @@ check(arg, 'arg').contains.onlyStrings();
 ```
 
 [only-objects]: #onlyobjects-assertion
-<a id=onlyobjects-assertion><br></a>
-**`onlyObjects()`**
-
+<a id=onlyobjects-assertion></a>
+#### `.onlyObjects()`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an object.
@@ -294,8 +277,8 @@ check(arg, 'arg').contains.onlyObjects();
 ```
 
 [only-functions]: #onlyfunctions-assertion
-<a id=onlyfunctions-assertion><br></a>
-**`.onlyFunctions()`**
+<a id=onlyfunctions-assertion></a>
+#### `.onlyFunctions()`
 
 Asserts that:
  1. Checked value is an array,
@@ -305,9 +288,8 @@ check(arg, 'arg').contains.onlyFunctions();
 ```
 
 [only-instances-of]: #onlyinstancesof-assertion
-<a id=onlyinstancesof-assertion><br></a>
-**`.onlyInstancesOf(RequiredClass)`**
-
+<a id=onlyinstancesof-assertion></a>
+#### `.onlyInstancesOf(RequiredClass)`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an instance of **RequiredClass**.
@@ -315,7 +297,6 @@ Asserts that:
 check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 ```
 
-<br>
 [operators]: #boolean-operators
 ### Boolean Operators
 
@@ -328,21 +309,17 @@ offensive.js implements following operators.
 1. [`.not`][not]
 
 [and]: #and-operator
-<a id=and-operator><br></a>
-
-**`.and`** aliases: `.of`, `.with`
-
+<a id=and-operator></a>
+#### `.and` aliases: `.of`, `.with`
 Logical conjunction of two boolean values which are separated by call to `.and` operator.
 ```js
 check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
 ```
 
 [or]: #or-operator
-<a id=or-operator><br></a>
-  
-**`.either()`** aliases: `.weather`<br>
-**`.or()`**
-
+<a id=or-operator></a>
+#### `.either()` aliases: `.weather`
+#### `.or()`
 Logical alternative of two values which are separated by call to `.or` operator.
 Result of whole expression between `.either` and `.or` is taken as left-hand-side
 argument. First result after `.or` is taken as right-hand-side argument.
@@ -351,16 +328,13 @@ check(arg, 'arg').is.either.anObject.or.aFunction();
 ```
 
 [not]: #not-operator
-<a id=not-operator><br></a>
-
-**`.not`** aliases: `.no`, `.dont`, `.doesnt`
-
+<a id=not-operator></a>
+#### `.not` aliases: `.no`, `.dont`, `.doesnt`
 Logical negation of a value after `.not` operator.
 ```js
 check(arg, 'arg').is.not.Undefined();
 ```
 
-<br>
 [interfaces]: #interfaces
 ### Interfaces
 
