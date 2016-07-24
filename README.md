@@ -69,9 +69,27 @@ log({});
 
 **Table of Contents**
 
+1. [Check Function][check]
 1. [Assertions][assertions]
 2. [Boolean Operators][operators]
 3. [Interfaces][interfaces]
+
+[check]: #check-function
+<a id=check-function></a>
+### Check Function
+```js
+module.exports = function check(value, name) { ... }
+```
+Creates a [`Context`][context] object. All [assertions][assertions]
+called on returned context will be applied to passed **value**.
+In case some assertions fail, **name** will be used as part of
+error message.
+```js
+var check = require('offensive');
+...
+
+check(arg, 'arg')...
+```
 
 [assertions]: #assertions
 ### Assertions
@@ -105,17 +123,16 @@ offensive.js contains following built-in assertions.
 
 Asserts that checked value is `null` using `===`.
 Typically used in combination with [`.not`][not] operator.
-
 ```js
 check(arg, 'arg').is.not.Null();
 ```
+
 [undefined]: #undefined-assertion
 <a id=undefined-assertion><br></a>
 **`.Undefined()`** aliases: `.undefined`
 
 Asserts that checked value is `undefined`.
 Typically used in combination with [`.not`][not] operator.
-
 ```js
 check(arg, 'arg').is.not.Undefined();
 ```
@@ -126,7 +143,6 @@ check(arg, 'arg').is.not.Undefined();
 
 Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
-
 ```js
 check(arg, 'arg').is.not.Empty();
 ```
@@ -136,7 +152,6 @@ check(arg, 'arg').is.not.Empty();
 **`.aNumber()`**
 
 Asserts that checked value is a number by ivoking `typeof` operator.
-
 ```js
 check(arg, 'arg').is.aNumber();
 ```
@@ -146,7 +161,6 @@ check(arg, 'arg').is.aNumber();
 **`.aString()`**
 
 Asserts that checked value is a string by ivoking `typeof` operator.
-
 ```js
 check(arg, 'arg').is.aString();
 ```
@@ -159,7 +173,6 @@ Asserts that checked value is an object by ivoking `typeof` operator.
 Be wary that this will be true also for array instances and `null`.
 Use [`.anArray`][array] and [`.Null`][null] in order to test for these
 specific cases.
-
 ```js
 check(arg, 'arg').is.anObject();
 ```
@@ -169,7 +182,6 @@ check(arg, 'arg').is.anObject();
 **`.aFunction()`**
 
 Asserts that checked value is a function by ivoking `typeof` operator.
-
 ```js
 check(arg, 'arg').is.aFunction();
 ```
@@ -182,7 +194,6 @@ Asserts that checked value is an array, by performing few
 [duck typing][duck-typing] method checks.
 
 [duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
-
 ```js
 check(arg, 'arg').is.anArray();
 ```
@@ -193,7 +204,6 @@ check(arg, 'arg').is.anArray();
 
 Asserts that checked value is a instance of **RequiredClass**, by
 using `instanceof` operator.
-
 ```js
 check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
@@ -205,7 +215,6 @@ check(arg, 'arg').is.anInstanceOf(RegExp);
 Asserts that checked value has property of name **propertyName**.
 It also asserts that value of the property equals **propertyValue**
 (if propertyValue is present). It uses `===` operator for comparing values.
-
 ```js
 check(arg, 'arg').has.property('length');
 check(arg, 'arg').contains.property('nodeName', 'DIV');
@@ -217,7 +226,6 @@ check(arg, 'arg').contains.property('nodeName', 'DIV');
 
 Asserts that checked value has property of name "length" and value
 of **requiredLength**.
-
 ```js
 check(arg, 'arg').has.length(0);
 ```
@@ -233,7 +241,6 @@ Asserts that:
 **condition** must be an object implementing [`Condition`][condition] interface
 or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
 method. **assertName** is used as assertion name in generated error message.
-
 ```js
 check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 ```
@@ -249,7 +256,6 @@ Asserts that:
 **condition** must be an object implementing [`Condition`][condition] interface
 or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
 method. **assertName** is used as assertion name in generated error message.
-
 ```js
 check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 ```
@@ -261,7 +267,6 @@ check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a number.
-
 ```js
 check(arg, 'arg').contains.onlyNumbers();
 ```
@@ -273,7 +278,6 @@ check(arg, 'arg').contains.onlyNumbers();
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a string.
-
 ```js
 check(arg, 'arg').contains.onlyStrings();
 ```
@@ -285,7 +289,6 @@ check(arg, 'arg').contains.onlyStrings();
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an object.
-
 ```js
 check(arg, 'arg').contains.onlyObjects();
 ```
@@ -297,7 +300,6 @@ check(arg, 'arg').contains.onlyObjects();
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is a function.
-
 ```js
 check(arg, 'arg').contains.onlyFunctions();
 ```
@@ -309,7 +311,6 @@ check(arg, 'arg').contains.onlyFunctions();
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array is an instance of **RequiredClass**.
-
 ```js
 check(arg, 'arg').contains.onlyInstancesOf(MyClass);
 ```
@@ -332,7 +333,6 @@ offensive.js implements following operators.
 **`.and`** aliases: `.of`, `.with`
 
 Logical conjunction of two boolean values which are separated by call to `.and` operator.
-
 ```js
 check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
 ```
@@ -356,7 +356,6 @@ check(arg, 'arg').is.either.anObject.or.aFunction();
 **`.not`** aliases: `.no`, `.dont`, `.doesnt`
 
 Logical negation of a value after `.not` operator.
-
 ```js
 check(arg, 'arg').is.not.Undefined();
 ```
@@ -376,7 +375,6 @@ check(arg, 'arg').is.not.Undefined();
 #### Noop
 
 Contains property getters that do nothing and return [`Context`][context].
-
 ```js
 interface Noop {
   get is(): Context,
@@ -404,7 +402,6 @@ interface Noop {
 #### Context
 
 Contains [assertion methods][assertions]. All assertion methods return [`OperatorContext`][operator-context]. Parameterized assertions are implemented as&nbsp;methods, assertions without parameters as property getters.
-
 ```js
 interface Context extends Noop {
   get Null(): OperatorContext,
@@ -432,7 +429,6 @@ interface Context extends Noop {
 #### Operator Context
 
 Contains [operator methods][operators]. All operators are implemented as property getters and return [`Context`][context].
-
 ```js
 interface OperatorContext{
   get and(): Context,
@@ -446,7 +442,6 @@ interface OperatorContext{
 
 Interface of parameter used in [`.elementThatIs`][element]
 and [`.eachElementIs`][each-element] assertions.
-
 ```js
 interface Condition {
   isSatisfiedBy(value: any): bool;
