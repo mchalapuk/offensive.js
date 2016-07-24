@@ -102,18 +102,33 @@ function fetchTime(url, callback) {
   check(url, 'url').is.anInstanceOf(URL);
   check(callback, 'callback').is.aFunction();
   
+  var json = "";
+
   http.get(url.toString(), (res) => {
-    var json = "";
-    res.on('data', (chunk) => {
-      json += chunk;
-    });
-    res.on('end', () => {
-      var init = JSON.parse(json);check.defensive(init, 'time init from '+ url).is.anObject()
-      if () {
-      }
-      callback(new Time(init));
-    });
+    res.on('data', (chunk) => { json += chunk; });
+    res.on('end', parseAndReturn);
     res.resume();
+  });
+  
+  function parseAndReturn() {
+    // If JSON received from the server does not fulfill
+    // the contract, passing this init to the constructor
+    // of Time class will crash our program.
+    var init = JSON.parse(json);
+    
+    // We need defensive programming to validate external input,
+    // before creating actual Time object.
+    var context = check.defensive(init, 'init from '+ url).is.anObject;
+    if (context._result) {
+      context = check.defensive(init.timestamp, 'init.timestamp from '+ url).is.aNumber;
+    }
+    if (!context._result) {
+      log(context._message);
+      callback(context._message);
+      return 
+    }
+
+    callback(null, new Time(init));
   });
 }
 
