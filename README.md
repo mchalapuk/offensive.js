@@ -35,8 +35,6 @@ for JavaScript.
 [node-v4]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V4.md
 [node-v6]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V6.md
 
-[defensive-design]: http://softwarephilosophy.ninja/defensive-design
-
 ## Installation
 
 ```shell
@@ -45,12 +43,12 @@ npm install --save offensive
 
 ### Offensive Programming
 
-
-
-**Links**:
-
- * [What is the difference between offensive and defensive
-   programming?][defensive-design]
+Programming offensively is about throwing exceptions a lot. As soon
+as corrupted state or illegal parameter is detected, program is crashed
+by throwing an exception with descriptive error message.
+This technique greatly helps in finding bugs at&nbsp;their cause.
+Offensive programming is the best development stance in most code bases
+if combined with unit testing. 
 
 ```js
 var check = require('offensive');
@@ -66,6 +64,13 @@ log({});
 // ...will result in throwing
 // new Error('str must be a string; got [object Object]')
 ```
+
+**Further Rading**:
+
+ * [What is the difference between offensive and defensive
+   programming?][defensive-design]
+
+[defensive-design]: http://softwarephilosophy.ninja/defensive-design
 
 ## API Reference
 
