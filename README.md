@@ -73,6 +73,8 @@ ContractError: init.timestamp must be a numer; got undefined
   at Time (example.js:9:24)
   at example.js:20:0
 ```
+Above example uses only [`.anObject`][object] and [`.aNumber`][number] assertions.
+[See full list of offensive.js built-in assertions][assertions].
 
 ### Defensive Programming
 
