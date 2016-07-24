@@ -327,11 +327,10 @@ offensive.js implements following operators.
 1. [`.not`][not]
 
 [and]: #and-operator
-#### AND Operator
+<a id=and-operator><br></a>
 
-```js
-get and() { ... } // aliases: of, with
-```
+**`.and`** aliases: `.of`, `.with`
+
 Logical conjunction of two boolean values which are separated by call to `.and` operator.
 
 ```js
@@ -339,12 +338,11 @@ check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
 ```
 
 [or]: #or-operator
-#### OR Operator
+<a id=or-operator><br></a>
   
-```js
-get either() { ... } // aliases: weather
-get or() { ... }
-```
+**`.either()`** aliases: `.weather`<br>
+**`.or()`**
+
 Logical alternative of two values which are separated by call to `.or` operator.
 Result of whole expression between `.either` and `.or` is taken as left-hand-side
 argument. First result after `.or` is taken as right-hand-side argument.
@@ -353,11 +351,9 @@ check(arg, 'arg').is.either.anObject.or.aFunction();
 ```
 
 [not]: #not-operator
-#### NOT Operator
+<a id=not-operator><br></a>
 
-```js
-get not() { ... } // aliases: no, dont, doesnt
-```
+**`.not`** aliases: `.no`, `.dont`, `.doesnt`
 
 Logical negation of a value after `.not` operator.
 
@@ -365,6 +361,7 @@ Logical negation of a value after `.not` operator.
 check(arg, 'arg').is.not.Undefined();
 ```
 
+<br>
 [interfaces]: #interfaces
 ### Interfaces
 
