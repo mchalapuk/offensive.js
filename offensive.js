@@ -26,11 +26,21 @@ Object.keys(builtInOperators).forEach(function(name) {
 });
 
 var offensive = new CheckFactory(assertionRegistry, operatorRegistry);
+offensive.onError = throwContractError;
+
+var defensive = new CheckFactory(assertionRegistry, operatorRegistry);
 
 module.exports = offensive.newCheck.bind(offensive);
+module.exports.defensive = defensive.newCheck.bind(defensive);
 module.exports.addNoop = noopRegistry.add.bind(noopRegistry);
 module.exports.addAssertion = assertionRegistry.add.bind(assertionRegistry);
 module.exports.addOperator = operatorRegistry.add.bind(operatorRegistry);
+
+function throwContractError(context) {
+  var error = new Error(context._message);
+  error.name = 'ContractError';
+  throw error;
+}
 
 /*
   eslint-env node
