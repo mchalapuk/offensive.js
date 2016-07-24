@@ -47,10 +47,9 @@ npm install --save offensive
 
 Programming offensively is about throwing exceptions a lot. As soon
 as corrupted state or illegal parameter is detected, program is crashed
-by throwing an exception with descriptive error message.
-This technique greatly helps in finding bugs at&nbsp;their cause.
-Offensive programming is the best development stance in most code bases
-if combined with unit testing. 
+with a descriptive error message. This technique greatly helps in finding
+bugs at&nbsp;their cause. Offensive programming is the best development
+stance in most code bases if combined with unit testing. 
 ```js
 var check = require('offensive');
 
