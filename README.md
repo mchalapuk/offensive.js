@@ -97,13 +97,11 @@ function fetchTime(url, callback) {
   });
   
   function parseAndReturn() {
-    // If JSON received from the server does not fulfill
-    // the contract, passing this init to the constructor
-    // of Time class will crash our program.
     var init = JSON.parse(json);
     
-    // We need defensive programming to validate external input,
-    // before creating actual Time object.
+    // JSON received from the server may not fulfill our contract.
+    // In order to prevent crashing, we need to validate this
+    // external input before constructing an instance of Time.
     var context = check.defensive(init, 'init from '+ url).is.anObject;
     if (context._result) {
       context = check.defensive(init.timestamp, 'init.timestamp from '+ url).is.aNumber;
