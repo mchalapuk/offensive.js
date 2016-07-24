@@ -77,9 +77,9 @@ ContractError: init.timestamp must be a numer; got undefined
 ### Defensive Programming
 
 Offensive programming is not applicable when collaborating with
-external components. We don't want our program to crash in response
+external components. We don't want our program to crash in&nbsp;response
 to a bug in another program. Logging an error and trying to correct
-it or simply ignoring erroneus input would be a better way of
+it or simply ignoring erroneus input would be a&nbsp;better way of
 handling such situation.
 ```js
 // Now, let's create a function that fetches time data
