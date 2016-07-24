@@ -52,25 +52,25 @@ bugs at&nbsp;their cause.
 ```js
 var check = require('offensive');
 
-// Let's say that we have a log function
-// with a contract that argument must be a string.
-function log(str) {
-  // We can check this contract with
-  // a simple offensive.js DSL expression.
-  check(str, 'str').is.aString();
+// Let's say that we have a Time class
+// with a contract that argument must have
+// a timestamp property of type number.
+function Time(init) {
+  check(init, 'init').is.anObject();
+  check(init.timestamp, 'init.timestamp').is.aNumber();
 
   ...
 }
 ```
 Now, following erroneus call...
 ```js
-log({});
+new Time({});
 ```
 ...will result in throwing following exception.
 ```
-ContractError: str must be a string; got [object Object]
-  at Object.aString (node_modules/offensive/lib/registry/assertion.js:59:21)
-  at Object.log (example.js:8:24)
+ContractError: init.timestamp must be a numer; got undefined
+  at Object.aNumber (node_modules/offensive/lib/registry/assertion.js:59:21)
+  at Time (example.js:9:24)
   at example.js:20:0
 ```
 
@@ -81,21 +81,7 @@ external components. We don't want our program to crash in response
 to a bug in another program. Logging an error and trying to correct
 it or simply ignoring erroneus input would be a better way of
 handling such situation.
-
 ```js
-var check = require('offensive');
-
-// Let's say that we have a Time class
-// with a contract that argument must have
-// a timestamp property of type number.
-function Time(init) {
-  // So we use offensive programming to check the contract.
-  check(init, 'init').is.anObject();
-  check(init.timestamp, 'init.timestamp').is.aNumber();
-
-  ...
-}
-
 // Now, let's create a function that fetches time data
 // from a time server and returns instance of Time.
 function fetchTime(url, callback) {
@@ -131,7 +117,6 @@ function fetchTime(url, callback) {
     callback(null, new Time(init));
   });
 }
-
 ```
 
 **Further Rading:**
