@@ -41,6 +41,8 @@ for JavaScript.
 npm install --save offensive
 ```
 
+## Usage
+
 ### Offensive Programming
 
 Programming offensively is about throwing exceptions a lot. As soon
@@ -49,24 +51,32 @@ by throwing an exception with descriptive error message.
 This technique greatly helps in finding bugs at&nbsp;their cause.
 Offensive programming is the best development stance in most code bases
 if combined with unit testing. 
-
 ```js
 var check = require('offensive');
 
-// A wrapper for `console.log` function that checks is passed argument is a string.
+// Ley's say that we have a log function
+// with contract is that argument must be a string.
 function log(str) {
-  console.log(check(str, 'str').is.aString());
+  // We can check this contract with
+  // a simple offensive.js DSL expression.
+  check(str, 'str').is.aString();
+
+  ...
 }
-
-// Now following erroneus call...
+```
+Now, following erroneus call...
+```js
 log({});
-
-// ...will result in throwing
-// new Error('str must be a string; got [object Object]')
+```
+...will result in throwing following exception.
+```
+ContractError: str must be a string; got [object Object]
+  at Object.aString (node_modules/offensive/lib/registry/assertion.js:59:21)
+  at Object.log (example.js:8:24)
+  at example.js:20:0
 ```
 
-**Further Rading**:
-
+**Further Rading:**
  * [What is the difference between offensive and defensive
    programming?][defensive-design]
 
