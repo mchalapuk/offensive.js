@@ -146,7 +146,7 @@ check(arg, 'arg').is.not.Empty();
 
 [number]: #number-assertion
 <a id=number-assertion></a>
-#### `.aNumber()`
+#### `.aNumber()` aliases: `.Number`, `.number`
 Asserts that checked value is a number by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aNumber();
@@ -154,7 +154,7 @@ check(arg, 'arg').is.aNumber();
 
 [string]: #string-assertion
 <a id=string-assertion></a>
-#### `.aString()`
+#### `.aString()` aliases: `.String`, `.string`
 Asserts that checked value is a string by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aString();
@@ -162,7 +162,7 @@ check(arg, 'arg').is.aString();
 
 [object]: #object-assertion
 <a id=object-assertion></a>
-#### `.anObject()`
+#### `.anObject()` aliases: `.Object`, `.object`
 Asserts that checked value is an object by ivoking `typeof` operator.
 Be wary that this will be true also for array instances and `null`.
 Use [`.anArray`][array] and [`.Null`][null] in order to test for these
@@ -173,7 +173,7 @@ check(arg, 'arg').is.anObject();
 
 [function]: #function-assertion
 <a id=function-assertion></a>
-#### `.aFunction()`
+#### `.aFunction()` aliases: `.Function`, `.function`
 Asserts that checked value is a function by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aFunction();
@@ -181,7 +181,7 @@ check(arg, 'arg').is.aFunction();
 
 [array]: #array-assertion
 <a id=array-assertion></a>
-#### `.anArray()`
+#### `.anArray()` aliases: `.Array`, `.array`
 Asserts that checked value is an array, by performing few
 [duck typing][duck-typing] method checks.
 ```js
