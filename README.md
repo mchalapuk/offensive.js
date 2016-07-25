@@ -158,24 +158,25 @@ offensive.js contains following built-in assertions.
 
 **Table of Contents**
 
- 1. [`.Null()`][null]<br>
- 1. [`.Undefined()`][undefined]<br>
- 1. [`.Empty()`][empty]<br>
- 1. [`.aNumber()`][number]<br>
- 1. [`.aString()`][string]<br>
- 1. [`.anObject()`][object]<br>
- 1. [`.aFunction()`][function]<br>
- 1. [`.anArray()`][array]<br>
- 1. [`.anInstanceOf(RequiredClass)`][instance-of]<br>
- 1. [`.property(propertyName, propertyValue)`][property]<br>
+ 1. [`.Null()`][null]
+ 1. [`.Undefined()`][undefined]
+ 1. [`.Empty()`][empty]
+ 1. [`.aNumber()`][number]
+ 1. [`.aString()`][string]
+ 1. [`.anObject()`][object]
+ 1. [`.aFunction()`][function]
+ 1. [`.anArray()`][array]
+ 1. [`.anInstanceOf(RequiredClass)`][instance-of]
+ 1. [`.property(propertyName, propertyValue)`][property]
+ 1. [`.method(methodName)`][method]
  1. [`.length(requiredLength)`][length]<br>
- 1. [`.elementThatIs(index, assertName, condition)`][element]<br>
- 1. [`.eachElementIs(assertName, condition)`][each-element]<br>
- 1. [`.onlyNumbers()`][only-numbers]<br>
- 1. [`.onlyStrings()`][only-strings]<br>
- 1. [`.onlyObjects()`][only-objects]<br>
- 1. [`.onlyFunctions()`][only-functions]<br>
- 1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]<br>
+ 1. [`.elementThatIs(index, assertName, condition)`][element]
+ 1. [`.eachElementIs(assertName, condition)`][each-element]
+ 1. [`.onlyNumbers()`][only-numbers]
+ 1. [`.onlyStrings()`][only-strings]
+ 1. [`.onlyObjects()`][only-objects]
+ 1. [`.onlyFunctions()`][only-functions]
+ 1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]
 
 [null]: #null-assertion
 <a id=null-assertion></a>
@@ -260,13 +261,22 @@ check(arg, 'arg').is.anInstanceOf(RegExp);
 
 [property]: #property-assertion
 <a id=property-assertion></a>
-#### `.property(propertyName, propertyValue)` aliases: `.prop`
+#### `.property(propertyName, propertyValue)` aliases: `.field`
 Asserts that checked value has property of name **propertyName**.
 It also asserts that value of the property equals **propertyValue**
 (if propertyValue is present). It uses `===` operator for comparing values.
 ```js
 check(arg, 'arg').has.property('length');
 check(arg, 'arg').contains.property('nodeName', 'DIV');
+```
+
+[method]: #method-assertion
+<a id=method-assertion></a>
+#### `.method(methodName)` aliases: `.prop`
+Asserts that checked value has property of name **methodName**
+which is a function.
+```js
+check(arg, 'arg').has.method('toString');
 ```
 
 [length]: #length-assertion
