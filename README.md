@@ -89,7 +89,7 @@ handling such situation.
 function fetchTime(url, callback) {
   check(url, 'url').is.anInstanceOf(URL);
   check(callback, 'callback').is.aFunction();
-  
+
   var json = "";
 
   http.get(url.toString(), (res) => {
@@ -97,10 +97,10 @@ function fetchTime(url, callback) {
     res.on('end', parseAndReturn);
     res.resume();
   });
-  
+
   function parseAndReturn() {
     var init = JSON.parse(json);
-    
+
     // JSON received from the server may not fulfill our contract.
     // In order to prevent crashing, we need to validate this
     // external input before constructing an instance of Time.
@@ -111,7 +111,7 @@ function fetchTime(url, callback) {
     if (!context._result) {
       log(context._message);
       callback(context._message);
-      return 
+      return
     }
 
     callback(null, new Time(init));
@@ -294,7 +294,7 @@ check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 
 [each-element]: #eachelementis-assertion
 <a id=eachelementis-assertion></a>
-#### `.eachElementIs(assertName, condition)`
+#### `.eachElementIs(assertName, condition)` aliases: `.everyElementIs`, `.allElements`, `.onlyElements`
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array satisfies **condition**.
