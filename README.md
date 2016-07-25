@@ -439,7 +439,7 @@ interface Noop {
   get precondition(): Context,
   get postcondition(): Context,
   get invariant(): Context,
-};
+}
 ```
 
 [context]: #context
@@ -466,7 +466,7 @@ interface Context extends Noop {
   get onlyObjects(): OperatorContext,
   get onlyFunctions(): OperatorContext,
   onlyInstancesOf(RequiredClass): OperatorContext,
-});
+}
 ```
 
 [operator-context]: #operator-context
@@ -479,7 +479,7 @@ interface OperatorContext{
   get either(): Context,
   get or(): Context,
   get not(): Context,
-};
+}
 ```
 [condition]: #condition
 #### Condition
@@ -489,7 +489,7 @@ and [`.eachElementIs`][each-element] assertions.
 ```js
 interface Condition {
   isSatisfiedBy(value: any): bool;
-};
+}
 
 ```
 
