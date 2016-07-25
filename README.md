@@ -272,7 +272,7 @@ check(arg, 'arg').contains.property('nodeName', 'DIV');
 
 [method]: #method-assertion
 <a id=method-assertion></a>
-#### `.method(methodName)` aliases: `.prop`
+#### `.method(methodName)`
 Asserts that checked value has property of name **methodName**
 which is a function.
 ```js
@@ -304,7 +304,7 @@ check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
 
 [each-element]: #eachelementis-assertion
 <a id=eachelementis-assertion></a>
-#### `.eachElementIs(assertName, condition)` aliases: `.everyElementIs`, `.allElements`, `.onlyElements`
+#### `.eachElementIs(assertName, condition)` <sup>aliases: `.everyElementIs`, `.allElements`, `.onlyElements`</sup>
 Asserts that:
  1. Checked value is an array,
  2. Each element of this array satisfies **condition**.
