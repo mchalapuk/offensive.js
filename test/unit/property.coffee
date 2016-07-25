@@ -14,7 +14,13 @@ describe "check(undefined, \"arg\")", ->
 
     expectedMessage = "arg must be not empty; got undefined"
     it "should throw new Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, -> testedCheck.property("name", "value")
+      shouldThrow expectedMessage, -> testedCheck.property "name", "value"
+
+  describe ".method(\"name\", \"value\")", ->
+
+    expectedMessage = "arg must be not empty; got undefined"
+    it "should throw new Error('#{expectedMessage}')", ->
+      shouldThrow expectedMessage, -> testedCheck.property "name", "value"
 
 describe "check(\"arg\", \"arg\")", ->
   testedCheck = null
@@ -33,7 +39,7 @@ describe "check(\"arg\", \"arg\")", ->
 
     describe ".property(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
       it "should throw new Error('#{expectedMessage}')" , ->
-        shouldThrow expectedMessage, -> testedCheck.property(arg0, arg1)
+        shouldThrow expectedMessage, -> testedCheck.property arg0, arg1
 
   tests = [
     [ "charAt", undefined ]
@@ -44,5 +50,20 @@ describe "check(\"arg\", \"arg\")", ->
     [ arg0, arg1 ] = params
 
     describe ".property(\"#{arg0}\", \"#{arg1}\")", ->
-      it "should not throw", -> testedCheck.property(arg0, arg1)
+      it "should not throw", -> testedCheck.property arg0, arg1
+
+  describe ".method(\"charAt\")", ->
+    it "should not throw", -> testedCheck.method "charAt"
+
+  methodErrorTests = [
+    [ 'length', 'arg.length must be a function; got 3' ]
+    [ 'concentrate', 'arg.concentrate must be a function; got undefined' ]
+  ]
+
+  methodErrorTests.forEach (params) ->
+    [ arg0, expectedMessage] = params
+
+    describe ".method(#{JSON.stringify(arg0)})", ->
+      it "should throw new Error('#{expectedMessage}')" , ->
+        shouldThrow expectedMessage, -> testedCheck.method arg0
 
