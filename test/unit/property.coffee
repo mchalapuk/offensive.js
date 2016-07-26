@@ -31,7 +31,7 @@ describe "check(\"arg\", \"arg\")", ->
   errorTests = [
     [ null, 'value', 'propertyName must be a string; got null' ]
     [ 'defined', undefined, 'arg.defined must be not undefined; got undefined' ]
-    [ 'length', 2, 'arg.length must be 2; got 3' ]
+    [ 'length', 0, 'arg.length must be 0; got 3' ]
   ]
 
   errorTests.forEach (params) ->
