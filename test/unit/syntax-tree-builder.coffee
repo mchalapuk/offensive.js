@@ -57,7 +57,7 @@ describe "SyntaxTreeBuilder", ->
   describe ".evaluate", ->
     it "throws when calling before addding operands", ->
       should(-> testedBuilder.evaluate())
-        .throw "trying to evaluate with no syntax added"
+        .throw "trying to evaluate an empty expression"
 
     it "throws when calling after adding binary operator", ->
       testedBuilder.addOperand -> "a"
