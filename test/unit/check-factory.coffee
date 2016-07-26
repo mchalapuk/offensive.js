@@ -19,6 +19,7 @@ describe "check object returned from", ->
     assertionRegistry = new AssertionRegistry noopRegistry
     operatorRegistry = new OperatorRegistry noopRegistry, assertionRegistry
     testedFactory = new CheckFactory assertionRegistry, operatorRegistry
+    testedFactory.onError = null
 
   describe "checkFactory.newCheck(\"name\", \"value\")", ->
     testedCheck = null
@@ -39,11 +40,16 @@ describe "check object returned from", ->
       testedCheck.test.operator
       called.should.be.true
 
-    it "has call operator that returns \"name\"", ->
-      assertionRegistry.add 'test', new Assertion (->)
-      testedCheck.test().should.be.equal "name"
+    describe ".test", ->
+      it "has call operator that returns \"name\"", ->
+        assertionRegistry.add 'test', new Assertion (->)
+        testedCheck.test().should.be.equal "name"
 
-    it "has _result property containing true", ->
-      assertionRegistry.add 'test', new Assertion (->)
-      testedCheck.test._result.should.be.exactly true
+      it "._result === true", ->
+        assertionRegistry.add 'test', new Assertion (->)
+        testedCheck.test._result.should.be.exactly true
+
+      it "._result === false", ->
+        assertionRegistry.add 'test', new Assertion(-> @condition = -> false)
+        testedCheck.test._result.should.be.exactly false
 
