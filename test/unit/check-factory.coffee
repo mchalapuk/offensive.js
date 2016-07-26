@@ -43,3 +43,7 @@ describe "check object returned from", ->
       assertionRegistry.add 'test', new Assertion (->)
       testedCheck.test().should.be.equal "name"
 
+    it "has _result property containing true", ->
+      assertionRegistry.add 'test', new Assertion (->)
+      testedCheck.test._result.should.be.exactly true
+
