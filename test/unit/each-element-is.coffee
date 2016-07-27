@@ -138,7 +138,7 @@ elementTypeTests.forEach (params)->
 
       describe ".#{errorAssertionName}", ->
         it "should throw new Error('#{expectedMessage}')", ->
-          shouldThrow expectedMessage, -> testedCheck[errorAssertionName]()
+          shouldThrow expectedMessage, -> testedCheck[errorAssertionName]
 
 
 describe "check([{}, {}, {}])", ->
