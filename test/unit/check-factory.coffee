@@ -95,10 +95,10 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         assertionRegistry.add 'assertion', new Assertion ->
           @message = "proper"
           @condition = -> true
-        operatorRegistry.add 'binary', new BinaryOperator (context) ->
+        operatorRegistry.add 'binary', new BinaryOperator ->
           @message = "nor"
           @apply = -> false
-        operatorRegistry.add 'unary', new UnaryOperator (context) ->
+        operatorRegistry.add 'unary', new UnaryOperator ->
           @message = "not"
           @apply = -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
@@ -110,4 +110,55 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
 
       it "has ._message contains proper message", ->
         testedCheck._message.should.equal "value must be not proper nor proper; got improper"
+
+    describe "(not passing)", ->
+      beforeEach ->
+        assertionRegistry.add 'assertion', new Assertion ->
+          @message = "proper"
+          @condition = -> true
+        operatorRegistry.add 'binary', new BinaryOperator ->
+          @message = "nor"
+          @apply = -> false
+        operatorRegistry.add 'unary', new UnaryOperator ->
+          @message = "not"
+          @apply = -> false
+        testedCheck = testedCheck.unary.assertion.binary.assertion
+
+      describeNameValueTest -> testedCheck
+
+      it "has ._result property equal false", ->
+        testedCheck._result.should.be.exactly false
+
+      it "has ._message contains proper message", ->
+        testedCheck._message.should.equal "value must be not proper nor proper; got improper"
+
+  describe ".complex", ->
+    beforeEach ->
+      assertionRegistry.add 'simple', new Assertion ->
+        @message = "proper"
+        @condition = -> true
+      operatorRegistry.add 'and', new BinaryOperator ->
+        @message = "and"
+        @apply = -> false
+      assertionRegistry.add 'complex', new Assertion (context) ->
+        context._push()
+        context._push()
+        context.simple
+        context._pop()
+        context._operatorContext.and
+        context._push()
+        context.simple
+        context._reset()
+        context.simple
+        context._pop()
+        context._pop()
+      testedCheck = testedCheck.complex
+
+    describeNameValueTest -> testedCheck
+
+    it "has ._result property equal false", ->
+      testedCheck._result.should.be.exactly false
+
+    it "has ._message contains proper message", ->
+      testedCheck._message.should.equal "value must be proper and proper; got improper"
 
