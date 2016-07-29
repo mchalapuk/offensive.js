@@ -22,6 +22,15 @@ describe "check(undefined, \"arg\")", ->
     it "should throw new Error('#{expectedMessage}')", ->
       shouldThrow expectedMessage, -> testedCheck.property "name", "value"
 
+describe "check({ \"undefined\": undefined }, \"arg\")", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check { undefined: undefined }, 'arg'
+
+  describe ".property(\"undefined\")", ->
+    it "should not throw", -> testedCheck.property "undefined"
+
 describe "check(\"arg\", \"arg\")", ->
   testedCheck = null
 
