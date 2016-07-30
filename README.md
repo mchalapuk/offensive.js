@@ -52,10 +52,11 @@ bugs at&nbsp;their cause.
 ```js
 var check = require('offensive');
 
-// Let's say that we have a Time class
-// with a contract that argument must have
-// a timestamp property of type number.
+// Let's say we have class `Time` with a constructor
+// that accepts initializer object.
 function Time(init) {
+  // Contract of this constructor is satisfied
+  // if init contains 'timestamp' property of type number.
   check(init, 'init').is.anObject();
   check(init.timestamp, 'init.timestamp').is.aNumber();
 
