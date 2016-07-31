@@ -7,6 +7,7 @@ check = require "../.."
 typeTests = [
   [ "string", "aString", "arg must be a string; got" ]
   [ -1, "aNumber", "arg must be a number; got" ]
+  [ true, "aBoolean", "arg must be a boolean; got" ]
   [ (->), "aFunction", "arg must be a function; got" ]
   [ {}, "anObject", "arg must be an object; got" ]
   [ undefined, "Undefined", "arg must be undefined; got" ]

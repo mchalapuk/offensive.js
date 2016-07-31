@@ -162,6 +162,7 @@ offensive.js contains following built-in assertions.
  1. [`.Null()`][null]
  1. [`.Undefined()`][undefined]
  1. [`.Empty()`][empty]
+ 1. [`.aBoolean()`][boolean]
  1. [`.aNumber()`][number]
  1. [`.aString()`][string]
  1. [`.anObject()`][object]
@@ -204,6 +205,14 @@ Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
 check(arg, 'arg').is.not.Empty();
+```
+
+[boolean]: #boolean-assertion
+<a id=boolean-assertion></a>
+#### `.aBoolean()` aliases: `.Boolean`, `.boolean`
+Asserts that checked value is a boolean by ivoking `typeof` operator.
+```js
+check(arg, 'arg').is.aBoolean();
 ```
 
 [number]: #number-assertion
