@@ -18,15 +18,6 @@ trueErrorTests.forEach (arg) ->
       it "should throw new Error('#{expectedMessage}')", ->
         shouldThrow "#{expectedMessage}; got #{arg}", -> testedCheck.true
 
-describe "check(true, 'arg')", ->
-  testedCheck = null
-
-  beforeEach ->
-    testedCheck = check true, "arg"
-
-  describe ".true()", ->
-    it "should not throw", -> testedCheck.true
-
 falseErrorTests = [ null, undefined, true, 0, (->), {}, [], "string" ]
 
 falseErrorTests.forEach (arg) ->
@@ -41,12 +32,46 @@ falseErrorTests.forEach (arg) ->
       it "should throw new Error('#{expectedMessage}')", ->
         shouldThrow "#{expectedMessage}; got #{arg}", -> testedCheck.false
 
-describe "check(false, 'arg')", ->
-  testedCheck = null
+nonErrorTests = [
+  [ true, "true" ]
+  [ false, "false" ]
+]
 
-  beforeEach ->
-    testedCheck = check false, "arg"
+nonErrorTests.forEach (params) ->
+  [ arg, assertion ] = params
 
-  describe ".false()", ->
-    it "should not throw", -> testedCheck.false
+  describe "check(#{arg}, 'arg')", ->
+    testedCheck = null
+
+    beforeEach ->
+      testedCheck = check arg, "arg"
+
+    describe ".#{assertion}()", ->
+      it "should not throw", -> testedCheck[assertion]
+
+tests = [
+  [ "truthy", [ true, 1, 'a', {}, [], (->) ] ]
+  [ "falsy", [ false, undefined, null, 0, '' ] ]
+]
+
+tests.forEach (params) ->
+  [ assertion, ignored ] = params
+
+  tests.forEach (params) ->
+    [ key, args ] = params
+
+    args.forEach (arg) ->
+      describe "check(#{arg}, 'arg')", ->
+        testedCheck = null
+
+        beforeEach ->
+          testedCheck = check arg, "arg"
+
+        describe ".#{assertion}()", ->
+          if assertion is key
+            it "should not throw", -> testedCheck[assertion]
+          else
+            expectedMessage = "arg must be #{assertion}"
+            it "should throw new Error('#{expectedMessage}')", ->
+              shouldThrow "#{expectedMessage}; got #{arg}", -> testedCheck[assertion]
 
