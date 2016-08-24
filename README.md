@@ -168,6 +168,10 @@ offensive.js contains following built-in assertions.
  1. [`.anObject()`][object]
  1. [`.aFunction()`][function]
  1. [`.anArray()`][array]
+ 1. [`.True()`][true]
+ 1. [`.False()`][false]
+ 1. [`.truthy()`][truthy]
+ 1. [`.falsy()`][falsy]
  1. [`.anInstanceOf(RequiredClass)`][instance-of]
  1. [`.property(propertyName, propertyValue)`][property]
  1. [`.method(methodName)`][method]
@@ -259,6 +263,38 @@ Asserts that checked value is an array, by performing few
 check(arg, 'arg').is.anArray();
 ```
 [duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
+
+[true]: #true-assertion
+<a id=true-assertion></a>
+#### `.True()` aliases: `.true`
+Asserts that checked value is a boolean of value `true`.
+```js
+check(arg, 'arg').is.True();
+```
+
+[false]: #false-assertion
+<a id=false-assertion></a>
+#### `.False()` aliases: `.false`
+Asserts that checked value is a boolean of value `false`.
+```js
+check(arg, 'arg').is.False();
+```
+
+[truthy]: #truthy-assertion
+<a id=truthy-assertion></a>
+#### `.truthy()` aliases: `.Truthy`, `.truethy`, `.Truethy`
+Asserts that checked value is truthy (converts to `true`).
+```js
+check(arg, 'arg').is.truthy();
+```
+
+[falsy]: #falsy-assertion
+<a id=falsy-assertion></a>
+#### `.falsy()` aliases: `.Falsy`, `.falsey`, `.Falsey`
+Asserts that checked value is falsy (converts to `false`).
+```js
+check(arg, 'arg').is.falsy();
+```
 
 [instance-of]: #instanceof-assertion
 <a id=instanceof-assertion></a>
