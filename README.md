@@ -168,6 +168,7 @@ offensive.js contains following built-in assertions.
  1. [`.anObject()`][object]
  1. [`.aFunction()`][function]
  1. [`.anArray()`][array]
+ 1. [`.anInstanceOf(RequiredClass)`][instance-of]
  1. [`.True()`][true]
  1. [`.False()`][false]
  1. [`.truthy()`][truthy]
@@ -175,10 +176,10 @@ offensive.js contains following built-in assertions.
  1. [`.lessThan(rightBounds)`][less-than]
  1. [`.greaterThan(leftBounds)`][greater-than]
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
- 1. [`.anInstanceOf(RequiredClass)`][instance-of]
  1. [`.property(propertyName, propertyValue)`][property]
  1. [`.method(methodName)`][method]
- 1. [`.length(requiredLength)`][length]<br>
+ 1. [`.length(requiredLength)`][length]
+ 1. [`.oneOf(set, name)`][one-of]
  1. [`.elementThatIs(index, assertName, condition)`][element]
  1. [`.eachElementIs(assertName, condition)`][each-element]
  1. [`.onlyNumbers()`][only-numbers]
@@ -267,6 +268,15 @@ check(arg, 'arg').is.anArray();
 ```
 [duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
 
+[instance-of]: #instanceof-assertion
+<a id=instanceof-assertion></a>
+#### `.anInstanceOf(RequiredClass)` aliases: `.instanceOf`
+Asserts that checked value is a instance of **RequiredClass**, by
+using `instanceof` operator.
+```js
+check(arg, 'arg').is.anInstanceOf(RegExp);
+```
+
 [true]: #true-assertion
 <a id=true-assertion></a>
 #### `.True()` aliases: `.true`
@@ -324,15 +334,6 @@ and less than **rightBounds**.
 check(arg, 'arg').is.inRange(0, 100);
 ```
 
-[instance-of]: #instanceof-assertion
-<a id=instanceof-assertion></a>
-#### `.anInstanceOf(RequiredClass)` aliases: `.instanceOf`
-Asserts that checked value is a instance of **RequiredClass**, by
-using `instanceof` operator.
-```js
-check(arg, 'arg').is.anInstanceOf(RegExp);
-```
-
 [property]: #property-assertion
 <a id=property-assertion></a>
 #### `.property(propertyName, propertyValue)` aliases: `.field`
@@ -360,6 +361,15 @@ Asserts that checked value has property of name "length" and value
 of **requiredLength**.
 ```js
 check(arg, 'arg').has.length(0);
+```
+
+[one-of]: #one-of-assertion
+<a id=one-of-assertion></a>
+#### `.oneOf(set, name)` aliases: `.elementOf`, `.containedIn`
+Asserts that checked value is contained in given **set**. Given **name** (if
+present) is used as a name of set in produced error message.
+```js
+check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ]);
 ```
 
 [element]: #elementthatis-assertion
@@ -530,6 +540,7 @@ interface Context extends Noop {
   get anObject(): OperatorContext,
   get aFunction(): OperatorContext,
   get anArray(): OperatorContext,
+  anInstanceOf(RequiredClass): OperatorContext,
   get True(): OperatorContext,
   get False(): OperatorContext,
   get truthy(): OperatorContext,
@@ -537,9 +548,9 @@ interface Context extends Noop {
   lessThan(rightBounds): OperatorContext,
   greaterThan(leftBounds): OperatorContext,
   inRange(leftBounds, rightBounds): OperatorContext,
-  anInstanceOf(RequiredClass): OperatorContext,
   property(propertyName, propertyValue): OperatorContext,
   length(requiredLength): OperatorContext,
+  oneOf(set, name): OperatorContext,
   elementThatIs(index, assertName, condition): OperatorContext,
   eachElementIs(assertName, condition): OperatorContext,
   get onlyNumbers(): OperatorContext,
