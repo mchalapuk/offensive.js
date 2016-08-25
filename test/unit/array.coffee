@@ -6,6 +6,28 @@ check = require "../.."
 
 isDefined = (arg) -> not (typeof arg is "undefined")
 
+describe "check(0, 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check 0, "arg"
+
+  errorSet = [1, 2, 3]
+  describe ".oneOf(#{JSON.stringify(errorSet)})", ->
+    expectedMessage = "arg must be one of [1, 2, 3]; got 0"
+    it "should throw new Error('#{expectedMessage}')" , ->
+      shouldThrow expectedMessage, -> testedCheck.oneOf errorSet
+
+  errorSetName = "super numbers"
+  describe ".oneOf(#{JSON.stringify(errorSet)}, #{JSON.stringify(errorSetName)})", ->
+    expectedMessage = "arg must be one of #{errorSetName}; got 0"
+    it "should throw new Error('#{expectedMessage}')" , ->
+      shouldThrow expectedMessage, -> testedCheck.oneOf errorSet, errorSetName
+
+  nonErrorSet = [1, 2, 3, 0]
+  describe ".oneOf(#{JSON.stringify(nonErrorSet)})", ->
+    it "should not throw" , -> testedCheck.oneOf nonErrorSet
+
 describe "check('arg', 'arg')", ->
   testedCheck = null
 
@@ -23,7 +45,7 @@ describe "check('arg', 'arg')", ->
 
     describe ".eachElementIs(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
       it "should throw new Error('#{expectedMessage}')" , ->
-        shouldThrow expectedMessage, -> testedCheck.eachElementIs(arg0, arg1)
+        shouldThrow expectedMessage, -> testedCheck.eachElementIs arg0, arg1
 
 describe "check([], 'arg')", ->
   testedCheck = null
@@ -39,7 +61,7 @@ describe "check([], 'arg')", ->
     [ arg0, arg1] = params
 
     describe ".eachElementIs(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
-      it "should not throw" , -> testedCheck.eachElementIs(arg0, arg1)
+      it "should not throw" , -> testedCheck.eachElementIs arg0, arg1
 
 isString = (arg) -> typeof arg is "string"
 isNumber = (arg) -> typeof arg is "number"
@@ -63,7 +85,7 @@ describe "check([0, 8, 14], 'arg')", ->
     [ arg0, arg1] = params
 
     describe ".eachElementIs(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
-      it "should not throw" , -> testedCheck.eachElementIs(arg0, arg1)
+      it "should not throw" , -> testedCheck.eachElementIs arg0, arg1
 
   errorTests = [
     [
@@ -85,7 +107,7 @@ describe "check([0, 8, 14], 'arg')", ->
 
     describe ".eachElementIs(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
       it "should throw new Error('#{expectedMessage}')" , ->
-        shouldThrow expectedMessage, -> testedCheck.eachElementIs(arg0, arg1)
+        shouldThrow expectedMessage, -> testedCheck.eachElementIs arg0, arg1
 
 elementTypeTests = [
   [
