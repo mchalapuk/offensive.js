@@ -1,6 +1,6 @@
 {
   "name": "offensive",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "offensive.js",
   "scripts": {
@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/webfront-toolkit/offensive.js",
   "devDependencies": {
-    "coffee-script": "~1.10.0",
+    "coffee-script": "^1.11.0",
     "eslint": "^3.0.1",
     "mocha": "*",
     "should": "^11.1.0"
