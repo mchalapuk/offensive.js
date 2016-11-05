@@ -35,6 +35,7 @@ module.exports.defensive = defensive.newCheck.bind(defensive);
 module.exports.addNoop = noopRegistry.add.bind(noopRegistry);
 module.exports.addAssertion = assertionRegistry.add.bind(assertionRegistry);
 module.exports.addOperator = operatorRegistry.add.bind(operatorRegistry);
+module.exports.default = module.exports;
 
 function throwContractError(context) {
   var error = new Error(context._message);

@@ -5,7 +5,7 @@
   "main": "offensive.js",
   "scripts": {
     "lint": "eslint offensive.js `find lib`",
-    "test": "mocha"
+    "test": "mocha && tsc test/types.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,9 @@
     "readable",
     "boilerplate",
     "dsl",
-    "browserify"
+    "browserify",
+    "webpack",
+    "typescript"
   ],
   "author": "Maciej Chałapuk",
   "license": "MIT",
@@ -36,7 +38,8 @@
     "coffee-script": "^1.11.0",
     "eslint": "^3.0.1",
     "mocha": "*",
-    "should": "^11.1.0"
+    "should": "^11.1.0",
+    "typescript": "^2.0.7"
   },
   "dependencies": {}
 }
