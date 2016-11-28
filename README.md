@@ -1,11 +1,11 @@
-[travis-url]: http://travis-ci.org/webfront-toolkit/offensive.js
-[travis-image]: https://travis-ci.org/webfront-toolkit/offensive.js.svg?branch=master
+[travis-url]: http://travis-ci.org/muroc/offensive.js
+[travis-image]: https://travis-ci.org/muroc/offensive.js.svg?branch=master
 
-[david-url]: https://david-dm.org/webfront-toolkit/offensive.js
-[david-image]: https://david-dm.org/webfront-toolkit/offensive.js.svg
+[david-url]: https://david-dm.org/muroc/offensive.js
+[david-image]: https://david-dm.org/muroc/offensive.js.svg
 
-[david-url-dev]: https://david-dm.org/webfront-toolkit/offensive.js#info=devDependencies
-[david-image-dev]: https://david-dm.org/webfront-toolkit/offensive.js/dev-status.svg
+[david-url-dev]: https://david-dm.org/muroc/offensive.js#info=devDependencies
+[david-image-dev]: https://david-dm.org/muroc/offensive.js/dev-status.svg
 
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
