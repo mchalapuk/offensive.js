@@ -173,6 +173,7 @@ offensive.js contains following built-in assertions.
  1. [`.False()`][false]
  1. [`.truthy()`][truthy]
  1. [`.falsy()`][falsy]
+ 1. [`.equalTo()`][equalTo]
  1. [`.lessThan(rightBounds)`][less-than]
  1. [`.greaterThan(leftBounds)`][greater-than]
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
@@ -309,10 +310,19 @@ Asserts that checked value is falsy (converts to `false`).
 check(arg, 'arg').is.falsy();
 ```
 
+[equal-to]: #equal-to-assertion
+<a id=equal-to-assertion></a>
+#### `.equalTo(another)` aliases: `.equal`, `.equals`
+Asserts that checked value is equal to **another**.
+Comparison is made with `==` (double equals) operator.
+```js
+check(arg, 'arg').is.lessThan(100);
+```
+
 [less-than]: #less-than-assertion
 <a id=less-than-assertion></a>
 #### `.lessThan(rightBounds)` aliases: `.lt`, `.less`
-Asserts that checked value a number, which is less than **rightBounds**.
+Asserts that checked value is a number, which is less than **rightBounds**.
 ```js
 check(arg, 'arg').is.lessThan(100);
 ```
@@ -320,7 +330,7 @@ check(arg, 'arg').is.lessThan(100);
 [greater-than]: #greater-than-assertion
 <a id=greater-than-assertion></a>
 #### `.greaterThan(leftBounds)` aliases: `.lt`, `.greater`
-Asserts that checked value a number, which is greater than **leftBounds**.
+Asserts that checked value is a number, which is greater than **leftBounds**.
 ```js
 check(arg, 'arg').is.greaterThan(0);
 ```
@@ -328,7 +338,7 @@ check(arg, 'arg').is.greaterThan(0);
 [in-range]: #in-range-assertion
 <a id=in-range-assertion></a>
 #### `.inRange(leftBounds, rightBounds)` aliases: `.between`
-Asserts that checked value a number, which is grater than **leftBounds - 1**
+Asserts that checked value is a number, which is grater than **leftBounds - 1**
 and less than **rightBounds**.
 ```js
 check(arg, 'arg').is.inRange(0, 100);

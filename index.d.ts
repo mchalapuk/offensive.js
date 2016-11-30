@@ -34,6 +34,7 @@ interface Assertions<T> {
   anInstanceOf: <U>(requiredClass: Newable<U>) => OperatorContext<T>;
   True: OperatorContext<T>;
   False: OperatorContext<T>;
+  equalTo: (another: any) => OperatorContext<T>;
   lessThan: (rightBounds: number) => OperatorContext<T>;
   greaterThan: (leftBounds: number) => OperatorContext<T>;
   inRange: (leftBounds: number, rightBounds: number) => OperatorContext<T>;
