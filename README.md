@@ -173,7 +173,8 @@ offensive.js contains following built-in assertions.
  1. [`.False()`][false]
  1. [`.truthy()`][truthy]
  1. [`.falsy()`][falsy]
- 1. [`.equalTo()`][equalTo]
+ 1. [`.equalTo()`][equal-to]
+ 1. [`.exactly()`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
  1. [`.greaterThan(leftBounds)`][greater-than]
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
@@ -317,6 +318,15 @@ Asserts that checked value is equal to **another**.
 Comparison is made with `==` (double equals) operator.
 ```js
 check(arg, 'arg').is.lessThan(100);
+```
+
+[exactly]: #exactly-assertion
+<a id=exactly-assertion></a>
+#### `.exactly(another)`
+Asserts that checked value is exactly the same as **another**.
+Comparison is made with `===` (double equals) operator.
+```js
+check(arg, 'arg').is.exactly(instance);
 ```
 
 [less-than]: #less-than-assertion

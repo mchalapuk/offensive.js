@@ -35,6 +35,7 @@ interface Assertions<T> {
   True: OperatorContext<T>;
   False: OperatorContext<T>;
   equalTo: (another: any) => OperatorContext<T>;
+  exactly: (instance: any) => OperatorContext<T>;
   lessThan: (rightBounds: number) => OperatorContext<T>;
   greaterThan: (leftBounds: number) => OperatorContext<T>;
   inRange: (leftBounds: number, rightBounds: number) => OperatorContext<T>;
