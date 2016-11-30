@@ -24,3 +24,12 @@ describe "check(undefined, \"arg\")", ->
     it "should not throw", ->
       testedCheck.is.equalTo null
 
+  describe ".is.exactly(undefined)", ->
+    it "should not throw", ->
+      testedCheck.is.exactly undefined
+
+  describe ".is.exactly(null)", ->
+    expectedMessage = "arg must be null; got undefined"
+    it "should throw new Error('#{expectedMessage}')", ->
+      shouldThrow expectedMessage, -> testedCheck.is.exactly null
+
