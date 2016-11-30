@@ -13,59 +13,104 @@ createTests = (test)-> [
         false.should.be.true 'exception not thrown'
       catch e
         throw e if not (e.message is expectedMessage)
-  (arg)->
-    it "should not throw when called on #{JSON.stringify(arg)}", ->
+  (arg, got)->
+    it "should not throw when called on #{got}", ->
       test arg
 ]
 
 describe "check", ->
   describe ".is.either.Undefined.or.Null()", ->
-    [throwTest, noThrowTest] = createTests (arg)->
+    [throwTest, noThrowTest] = createTests (arg) ->
       check(arg, "arg").is.either.Undefined.or.Null
 
-    throwTest arg, "arg must be undefined or null; got #{arg}" for arg in  [ {}, false, "a", 42 ]
-    noThrowTest arg for arg in [ undefined, null ]
+    m = "arg must be undefined or null; got"
+
+    throwTest {}, "#{m} {}"
+    throwTest false, "#{m} false"
+    throwTest "a", "#{m} a"
+    throwTest 42, "#{m} 42"
+
+    noThrowTest undefined, "undefined"
+    noThrowTest null, "null"
 
   describe ".is.anArray.with.length(2)", ->
-    [throwTest, noThrowTest] = createTests (arg)->
+    [throwTest, noThrowTest] = createTests (arg) ->
       check(arg, "arg").is.anArray.with.length(2)
 
-    throwTest arg, "arg must be an array; got #{arg}" for arg in [ null, undefined, 'invalid', {} ]
-    throwTest arg, "arg.length must be 2; got #{arg.length}" for arg in [ [], [0, 0, 0] ]
-    noThrowTest arg for arg in [ [0, 0], new Array 2 ]
+    m = "arg must be an array; got"
+
+    throwTest null, "#{m} null"
+    throwTest undefined, "#{m} undefined"
+    throwTest "invalid", "#{m} invalid"
+    throwTest {}, "#{m} {}"
+
+    m = "arg.length must be 2; got"
+
+    throwTest [], "#{m} 0"
+    throwTest [0, 0 , 0], "#{m} 3"
+
+    noThrowTest [0, 0], "[0, 0]"
+    noThrowTest new Array 2, "new Array(2)"
 
   describe ".has.either.length(2).or.length(4)", ->
     [throwTest, noThrowTest] = createTests (arg)->
       check(arg, "arg").has.either.length(2).or.length(4)
 
-    throwTest arg, "arg.length must be 2 or 4; got #{arg.length}" for arg in [ [], [1], [3, 3, 3] ]
-    noThrowTest arg for arg in [ [2, 2], [4, 4, 4, 4] ]
+    m = "arg.length must be 2 or 4; got"
+
+    throwTest [], "#{m} 0"
+    throwTest [1], "#{m} 1"
+    throwTest [3, 3, 3], "#{m} 3"
+
+    noThrowTest [2, 2], "[2, 2]"
+    noThrowTest [4, 4, 4, 4], "[4, 4, 4, 4]"
 
   describe ".has.length(2).and.length(4)", ->
     [throwTest, noThrowTest] = createTests (arg)->
       check(arg, "arg").has.length(2).and.length(4)
 
-    throwTest arg, "arg.length must be 2; got #{arg.length}" for arg in [ [4, 4, 4, 4] ]
-    throwTest arg, "arg.length must be 4; got #{arg.length}" for arg in [ [2, 2] ]
+    throwTest [4, 4, 4, 4], "arg.length must be 2; got 4"
+    throwTest [2, 2], "arg.length must be 4; got 2"
 
   describe ".has.either.length(2).or.either.property('hello')", ->
     [throwTest, noThrowTest] = createTests (arg)->
       check(arg, "arg").has.either.length(2).or.property('hello')
 
-    throwTest arg, "arg.length must be 2; got #{arg.length} or arg.hello must be not undefined; got #{arg.hello}" for arg in [ [], {}, 'a' ]
-    noThrowTest arg for arg in [ new Array(2), { hello: 'Neo' } ]
+    m0 = "arg.length must be 2; got"
+    m1 = "or arg.hello must be not undefined; got"
+
+    throwTest [], "#{m0} 0 #{m1} undefined"
+    throwTest {}, "#{m0} undefined #{m1} undefined"
+    throwTest 'a', "#{m0} 1 #{m1} undefined"
+
+    noThrowTest new Array(2), "new Array(2)"
+    noThrowTest { hello: 'Neo' }, "{ hello: 'Neo' }"
 
   describe ".is.either.aNumber.or.either.aString.or.aFunction()", ->
     [throwTest, noThrowTest] = createTests (arg)->
       check(arg, "arg").is.either.aNumber.or.either.aString.or.aFunction()
 
-    throwTest arg, "arg must be a number or a string or a function; got #{arg}" for arg in [ [], {} ]
-    noThrowTest arg for arg in [ (->), 'arrow', 10 ]
+    m = "arg must be a number or a string or a function; got"
+    throwTest [], "#{m} []"
+    throwTest {}, "#{m} {}"
+
+    noThrowTest (->), "(->)"
+    noThrowTest 'arrow', "'arrow'"
+    noThrowTest 10, "10"
 
   describe ".has.either.length(2).or.either.property('hi').or.value('there', 'Jane')", ->
     [throwTest, noThrowTest] = createTests (arg)->
       check(arg, "arg").has.either.length(2).or.either.property('hi').or.property('there', 'Jane')
 
-    throwTest arg, "arg.length must be 2; got #{arg.length} or arg.hi must be not undefined; got #{arg.hi} or arg.there must be Jane; got #{arg.there}" for arg in [ [], {}, 'a' ]
-    noThrowTest arg for arg in [ new Array(2), { hi: 'Bob' }, { there: 'Jane' } ]
+    m0 = "arg.length must be 2; got"
+    m1 = "or arg.hi must be not undefined; got"
+    m2 = "or arg.there must be Jane; got"
+
+    throwTest [], "#{m0} 0 #{m1} undefined #{m2} undefined"
+    throwTest {}, "#{m0} undefined #{m1} undefined #{m2} undefined"
+    throwTest 'a', "#{m0} 1 #{m1} undefined #{m2} undefined"
+
+    noThrowTest new Array(2), "new Array(2)"
+    noThrowTest { hi: 'Bob' }, "{ hi: 'Bob' }"
+    noThrowTest { there: 'Jane' }, "{ there: 'Jane' }"
 

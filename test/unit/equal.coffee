@@ -23,3 +23,4 @@ describe "check(undefined, \"arg\")", ->
   describe ".is.equal(null)", ->
     it "should not throw", ->
       testedCheck.is.equalTo null
+

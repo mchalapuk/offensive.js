@@ -13,19 +13,19 @@ describe "check(0, 'arg')", ->
     testedCheck = check 0, "arg"
 
   errorSet = [1, 2, 3]
-  describe ".oneOf(#{JSON.stringify(errorSet)})", ->
+  describe ".oneOf([1, 2, 3])", ->
     expectedMessage = "arg must be one of [1, 2, 3]; got 0"
     it "should throw new Error('#{expectedMessage}')" , ->
       shouldThrow expectedMessage, -> testedCheck.oneOf errorSet
 
   errorSetName = "super numbers"
-  describe ".oneOf(#{JSON.stringify(errorSet)}, #{JSON.stringify(errorSetName)})", ->
+  describe ".oneOf([1, 2, 3], 'super numbers')", ->
     expectedMessage = "arg must be one of #{errorSetName}; got 0"
     it "should throw new Error('#{expectedMessage}')" , ->
       shouldThrow expectedMessage, -> testedCheck.oneOf errorSet, errorSetName
 
   nonErrorSet = [1, 2, 3, 0]
-  describe ".oneOf(#{JSON.stringify(nonErrorSet)})", ->
+  describe ".oneOf([1, 2, 3, 0])", ->
     it "should not throw" , -> testedCheck.oneOf nonErrorSet
 
 describe "check('arg', 'arg')", ->
@@ -112,13 +112,15 @@ describe "check([0, 8, 14], 'arg')", ->
 elementTypeTests = [
   [
     "onlyNumbers"
-    [ 0, 1, 2 ]
+    [ 0, 1, 2 ],
+    [ "0", "1", "2" ],
     "arg[0] must be a number; got #0 and "+
     "arg[1] must be a number; got #1 and "+
     "arg[2] must be a number; got #2"
   ]
   [
     "onlyStrings"
+    [ "a", "b", "c" ]
     [ "a", "b", "c" ]
     "arg[0] must be a string; got #0 and "+
     "arg[1] must be a string; got #1 and "+
@@ -127,6 +129,7 @@ elementTypeTests = [
   [
     "onlyObjects"
     [ {}, [], null ]
+    [ "{}", "[]", "null" ]
     "arg[0] must be an object; got #0 and "+
     "arg[1] must be an object; got #1 and "+
     "arg[2] must be an object; got #2"
@@ -134,6 +137,7 @@ elementTypeTests = [
   [
     "onlyFunctions"
     [ (->), (->), (->) ]
+    [ "unnamed function", "unnamed function", "unnamed function" ]
     "arg[0] must be a function; got #0 and "+
     "arg[1] must be a function; got #1 and "+
     "arg[2] must be a function; got #2"
@@ -141,9 +145,9 @@ elementTypeTests = [
 ]
 
 elementTypeTests.forEach (params)->
-  [ assertionName, array, ] = params
+  [ assertionName, array, got ] = params
 
-  describe "check([#{array}])", ->
+  describe "check([#{got}])", ->
     testedCheck = null
 
     beforeEach ->
@@ -154,9 +158,9 @@ elementTypeTests.forEach (params)->
 
     errorTests = elementTypeTests.filter (test) -> not(test[0] is assertionName)
     errorTests.forEach (errorParams)->
-      [ errorAssertionName, ignored, expectedMessage ] = errorParams
+      [ errorAssertionName, ignored0, ignored1, expectedMessage ] = errorParams
       expectedMessage = expectedMessage
-        .replace(new RegExp("##{i}", "g"), "#{array[i]}") for i in [0..array.length]
+        .replace(new RegExp("##{i}", "g"), "#{got[i]}") for i in [0..got.length]
 
       describe ".#{errorAssertionName}", ->
         it "should throw new Error('#{expectedMessage}')", ->
@@ -174,9 +178,9 @@ describe "check([{}, {}, {}])", ->
 
   describe ".has.onlyInstancesOf(String)",->
     expectedMessage = ""+
-      "arg[0] must be an instance of String; got [object Object] and "+
-      "arg[1] must be an instance of String; got [object Object] and "+
-      "arg[2] must be an instance of String; got [object Object]"
+      "arg[0] must be an instance of String; got {} and "+
+      "arg[1] must be an instance of String; got {} and "+
+      "arg[2] must be an instance of String; got {}"
     it "should throw new Error('#{expectedMessage}')", ->
       shouldThrow expectedMessage, -> testedCheck.has.onlyInstancesOf String
 
