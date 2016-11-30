@@ -141,7 +141,7 @@ function fetchTime(url, callback) {
 ```js
 module.exports = function check(value, name) { ... }
 ```
-Creates a [`Context`][context] object. All [assertions][assertions]
+Creates a [Context][interfaces] object. All [assertions][assertions]
 called on returned context will be applied to passed **value**.
 In case some assertions fail, **name** will be used as part of
 error message.
@@ -399,8 +399,8 @@ Asserts that:
  1. Checked value is an array of length at least **`index`**` + 1`,
  2. Element under **index** satisfies **condition**.
 
-**condition** must be an object implementing [`Condition`][condition] interface
-or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
+**condition** must be an object implementing [`Condition`][interfaces] interface
+or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][interfaces]
 method. **assertName** is used as assertion name in generated error message.
 ```js
 check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
@@ -413,8 +413,8 @@ Asserts that:
  1. Checked value is an array,
  2. Each element of this array satisfies **condition**.
 
-**condition** must be an object implementing [`Condition`][condition] interface
-or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][condition]
+**condition** must be an object implementing [`Condition`][interfaces] interface
+or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][interfaces]
 method. **assertName** is used as assertion name in generated error message.
 ```js
 check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
@@ -512,7 +512,9 @@ check(arg, 'arg').is.not.Undefined();
 [interfaces]: #interfaces
 ### Interfaces
 
-See [index.d.ts](index.d.ts).
+See [index.d.ts][interfaces].
+
+[interfaces]: index.d.ts
 
 ## Extension API
 
