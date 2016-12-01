@@ -56,7 +56,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
       beforeEach ->
         assertionRegistry.add 'test', new Assertion ->
           @condition = -> false
-          @message = "proper"
+          @message.appendString "proper"
         testedCheck = testedCheck.test
 
       it "has call operator that returns checked value", ->
@@ -93,13 +93,13 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion ->
-          @message = "proper"
+          @message.appendString "proper"
           @condition = -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
-          @message = "nor"
+          @message.appendString "nor"
           @apply = -> false
         operatorRegistry.add 'unary', new UnaryOperator ->
-          @message = "not"
+          @message.appendString "not"
           @apply = -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
@@ -114,13 +114,13 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion ->
-          @message = "proper"
+          @message.appendString "proper"
           @condition = -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
-          @message = "nor"
+          @message.appendString "nor"
           @apply = -> false
         operatorRegistry.add 'unary', new UnaryOperator ->
-          @message = "not"
+          @message.appendString "not"
           @apply = -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
@@ -135,10 +135,10 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
   describe ".complex", ->
     beforeEach ->
       assertionRegistry.add 'simple', new Assertion ->
-        @message = "proper"
+        @message.appendString "proper"
         @condition = -> true
       operatorRegistry.add 'and', new BinaryOperator ->
-        @message = "and"
+        @message.appendString "and"
         @apply = -> false
       assertionRegistry.add 'complex', new Assertion (context) ->
         context._push()
@@ -160,5 +160,5 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
       testedCheck._result.should.be.exactly false
 
     it "has ._message contains proper message", ->
-      testedCheck._message.should.equal "value must be proper and proper; got improper"
+      testedCheck._message.should.equal "value must be proper; got improper"
 

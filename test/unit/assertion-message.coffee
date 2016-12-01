@@ -19,24 +19,29 @@ describe "AssertionMessage", ->
       testedMessage.applyVisitor visitor
       visitor.visitString.should.be.calledWith "lucky"
 
-    describe "after prending string 'not'", ->
+    describe "after appending string 'number'", ->
       beforeEach ->
-        testedMessage.prependString "not so"
+        testedMessage.appendString "number"
 
-      it "contains strings 'not so' and 'lucky'", ->
+      it "contains strings 'lucky' and 'number'", ->
         visitor = visitString : sinon.spy()
         testedMessage.applyVisitor visitor
-        visitor.visitString.should.be.calledWith "not so"
         visitor.visitString.should.be.calledWith "lucky"
+        visitor.visitString.should.be.calledWith "number"
 
       describe "after appending value 7", ->
         beforeEach ->
           testedMessage.appendValue 7
 
-        it "contains strings 'not so', 'lucky' and value 7", ->
+        it "contains strings 'lucky', 'number' and value 7", ->
           visitor = visitString : sinon.spy(), visitValue: sinon.spy()
           testedMessage.applyVisitor visitor
-          visitor.visitString.should.be.calledWith "not so"
           visitor.visitString.should.be.calledWith "lucky"
+          visitor.visitString.should.be.calledWith "number"
           visitor.visitValue.should.be.calledWith 7
+
+        it ".applyVisitor returns array of returns from visitors", ->
+          returnArg = (arg) -> arg
+          visitor = visitString : returnArg, visitValue: returnArg
+          testedMessage.applyVisitor(visitor).should.be.eql [ "lucky", "number", 7 ]
 
