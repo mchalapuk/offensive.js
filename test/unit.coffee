@@ -1,5 +1,6 @@
 require './unit/syntax-tree-builder.coffee'
 require './unit/object-serializer.coffee'
+require './unit/assertion-message.coffee'
 require './unit/check-factory.coffee'
 require './unit/type.coffee'
 require './unit/boolean.coffee'
