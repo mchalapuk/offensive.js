@@ -180,6 +180,7 @@ offensive.js contains following built-in assertions.
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
  1. [`.property(propertyName, propertyValue)`][property]
  1. [`.method(methodName)`][method]
+ 1. [`.propertyOfType(propertyName, propertyType)`][property-of-type]
  1. [`.length(requiredLength)`][length]
  1. [`.oneOf(set, name)`][one-of]
  1. [`.elementThatIs(index, assertName, condition)`][element]
@@ -372,6 +373,16 @@ Asserts that checked value has property of name **methodName**
 which is a function.
 ```js
 check(arg, 'arg').has.method('toString');
+```
+
+[property-of-type]: #property-of-type-assertion
+<a id=property-of-type-assertion></a>
+#### `.propertyOfType(propertyName, propertyType)`
+Asserts that checked value has property of name **propertyName** and that this
+property is of type **propertyType**. Type is checked with `typeof` operator.
+```js
+check(arg, 'arg').has.propertyOfType('length', 'number');
+check(arg, 'arg').contains.propertyType('nodeName', 'string');
 ```
 
 [length]: #length-assertion

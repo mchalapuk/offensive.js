@@ -76,3 +76,20 @@ describe "check(\"arg\", \"arg\")", ->
       it "should throw new Error('#{expectedMessage}')" , ->
         shouldThrow expectedMessage, -> testedCheck.method arg0
 
+  propTypeErrorTests = [
+    [ null, Type.STRING, 'propertyName must be a string; got null' ]
+    [ 'length', 0, 'propertyType must be one of [\'boolean\', \'number\', \'string\', \'object\', \'function\', \'undefined\']; got 0' ]
+    [ 'length', Type.STRING, 'arg.length must be a string; got 3' ]
+    [ 'length', Type.UNDEFINED, 'arg.length must be undefined; got 3' ]
+    [ 'length', Type.BOOLEAN, 'arg.length must be a boolean; got 3' ]
+  ]
+  propTypeErrorTests.forEach (params) ->
+    [ arg0, arg1, expectedMessage] = params
+
+    describe ".propertyOfType(#{JSON.stringify(arg0)}, #{JSON.stringify(arg1)})", ->
+      it "should throw new Error('#{expectedMessage}')" , ->
+        shouldThrow expectedMessage, -> testedCheck.propertyOfType arg0, arg1
+
+  describe ".propertyOfType('length', 'number')", ->
+    it "should not throw" , -> testedCheck.propertyOfType "length", "number"
+
