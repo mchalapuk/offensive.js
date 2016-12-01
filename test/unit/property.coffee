@@ -1,8 +1,8 @@
-mocha = require 'mocha'
-should = require 'should'
-shouldThrow = require '../should-throw.coffee'
+should = require "should"
+shouldThrow = require "../should-throw.coffee"
 
-check = require '../../offensive'
+check = require "../../offensive"
+Type = require "../../lib/utils/Type"
 
 describe "check(undefined, \"arg\")", ->
   testedCheck = null

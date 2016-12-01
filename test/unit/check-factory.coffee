@@ -56,7 +56,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
       beforeEach ->
         assertionRegistry.add 'test', new Assertion ->
           @condition = -> false
-          @message.appendString "proper"
+          @message.appendText "proper"
         testedCheck = testedCheck.test
 
       it "has call operator that returns checked value", ->
@@ -93,13 +93,13 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion ->
-          @message.appendString "proper"
+          @message.appendText "proper"
           @condition = -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
-          @message.appendString "nor"
+          @message.appendText "nor"
           @apply = -> false
         operatorRegistry.add 'unary', new UnaryOperator ->
-          @message.appendString "not"
+          @message.appendText "not"
           @apply = -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
@@ -114,13 +114,13 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion ->
-          @message.appendString "proper"
+          @message.appendText "proper"
           @condition = -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
-          @message.appendString "nor"
+          @message.appendText "nor"
           @apply = -> false
         operatorRegistry.add 'unary', new UnaryOperator ->
-          @message.appendString "not"
+          @message.appendText "not"
           @apply = -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
@@ -135,10 +135,10 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
   describe ".complex", ->
     beforeEach ->
       assertionRegistry.add 'simple', new Assertion ->
-        @message.appendString "proper"
+        @message.appendText "proper"
         @condition = -> true
       operatorRegistry.add 'and', new BinaryOperator ->
-        @message.appendString "and"
+        @message.appendText "and"
         @apply = -> false
       assertionRegistry.add 'complex', new Assertion (context) ->
         context._push()
