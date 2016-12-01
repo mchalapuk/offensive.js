@@ -5,7 +5,7 @@ shouldThrow = require "../should-throw.coffee"
 check = require "../.."
 
 typeTests = [
-  [ "string", "string", "aString", "arg must be a string; got" ]
+  [ "string", "'string'", "aString", "arg must be a string; got" ]
   [ -1, "-1", "aNumber", "arg must be a number; got" ]
   [ true, "true", "aBoolean", "arg must be a boolean; got" ]
   [ (->), "unnamed function", "aFunction", "arg must be a function; got" ]

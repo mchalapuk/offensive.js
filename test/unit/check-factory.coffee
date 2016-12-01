@@ -68,7 +68,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         testedCheck._result.should.be.exactly false
 
       it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be proper; got improper"
+        testedCheck._message.should.equal "value must be proper; got 'improper'"
 
   describe ".unary.assertion.binary.assertion", ->
     describe "(passing)", ->
@@ -109,7 +109,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         testedCheck._result.should.be.exactly false
 
       it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be not proper nor proper; got improper"
+        testedCheck._message.should.equal "value must be not proper nor proper; got 'improper'"
 
     describe "(not passing)", ->
       beforeEach ->
@@ -130,7 +130,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         testedCheck._result.should.be.exactly false
 
       it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be not proper nor proper; got improper"
+        testedCheck._message.should.equal "value must be not proper nor proper; got 'improper'"
 
   describe ".complex", ->
     beforeEach ->
@@ -160,5 +160,5 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
       testedCheck._result.should.be.exactly false
 
     it "has ._message contains proper message", ->
-      testedCheck._message.should.equal "value must be proper; got improper"
+      testedCheck._message.should.equal "value must be proper; got 'improper'"
 

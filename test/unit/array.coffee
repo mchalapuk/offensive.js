@@ -35,9 +35,9 @@ describe "check('arg', 'arg')", ->
     testedCheck = check "arg", "arg"
 
   errorTests = [
-    [ null, isDefined, 'assertName must be a string; got null' ]
-    [ "defined", undefined, 'condition must be a function or an object; got undefined' ]
-    [ "defined", isDefined, 'arg must be an array; got arg' ]
+    [ null, isDefined, "assertName must be a string; got null" ]
+    [ "defined", undefined, "condition must be a function or an object; got undefined" ]
+    [ "defined", isDefined, "arg must be an array; got 'arg'" ]
   ]
 
   errorTests.forEach (params) ->
@@ -121,7 +121,7 @@ elementTypeTests = [
   [
     "onlyStrings"
     [ "a", "b", "c" ]
-    [ "a", "b", "c" ]
+    [ "'a'", "'b'", "'c'" ]
     "arg[0] must be a string; got #0 and "+
     "arg[1] must be a string; got #1 and "+
     "arg[2] must be a string; got #2"

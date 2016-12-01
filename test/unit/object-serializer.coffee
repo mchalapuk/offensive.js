@@ -13,7 +13,7 @@ describe "ObjectSerializer", ->
     testedSerializer = new ObjectSerializer
 
   tests = [
-    #[ "a", "'a'" ]
+    [ "a", "'a'" ]
     [ 0, "0" ]
     [ false, "false" ]
     [ (->), "unnamed function" ]
@@ -21,7 +21,7 @@ describe "ObjectSerializer", ->
     [ null, "null" ]
     [ undefined, "undefined" ]
     [ {}, "{}" ]
-    #    [ { a: "a" }, "{ a: 'a' }" ]
+    [ { a: "a" }, "{ a: 'a' }" ]
     [ { b: 0 }, "{ b: 0 }" ]
     [ { c: true }, "{ c: true }" ]
     [ { d: (->) }, "{ d: unnamed function }" ]

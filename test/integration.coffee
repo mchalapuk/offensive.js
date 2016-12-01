@@ -27,7 +27,7 @@ describe "check", ->
 
     throwTest {}, "#{m} {}"
     throwTest false, "#{m} false"
-    throwTest "a", "#{m} a"
+    throwTest "a", "#{m} 'a'"
     throwTest 42, "#{m} 42"
 
     noThrowTest undefined, "undefined"
@@ -41,7 +41,7 @@ describe "check", ->
 
     throwTest null, "#{m} null"
     throwTest undefined, "#{m} undefined"
-    throwTest "invalid", "#{m} invalid"
+    throwTest "invalid", "#{m} 'invalid'"
     throwTest {}, "#{m} {}"
 
     m = "arg.length must be 2; got"
@@ -104,7 +104,7 @@ describe "check", ->
 
     m0 = "arg.length must be 2; got"
     m1 = "or arg.hi must be not undefined; got"
-    m2 = "or arg.there must be Jane; got"
+    m2 = "or arg.there must be 'Jane'; got"
 
     throwTest [], "#{m0} 0 #{m1} undefined #{m2} undefined"
     throwTest {}, "#{m0} undefined #{m1} undefined #{m2} undefined"

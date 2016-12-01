@@ -12,7 +12,7 @@ trueErrorTests = [
   [ (->), "unnamed function" ]
   [ {}, "{}" ]
   [ [], "[]" ]
-  [ "string", "string" ]
+  [ "true", "'true'" ]
 ]
 
 trueErrorTests.forEach (params) ->
@@ -37,7 +37,7 @@ falseErrorTests = [
   [ (->), "unnamed function" ]
   [ {}, "{}" ]
   [ [], "[]" ]
-  [ "string", "string" ]
+  [ "false", "'false'" ]
 ]
 
 falseErrorTests.forEach (params) ->
@@ -77,7 +77,7 @@ tests = [
     [
       [ true, "true" ]
       [ 1, "1" ]
-      [ 'a', "a" ]
+      [ 'a', "'a'" ]
       [ {}, "{}" ]
       [ [], "[]" ]
       [ (->), "unnamed function"]
@@ -90,7 +90,7 @@ tests = [
       [ undefined, "undefined" ]
       [ null, "null" ]
       [ 0, "0" ]
-      [ "", "" ]
+      [ "", "''" ]
     ]
   ]
 ]
