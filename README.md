@@ -162,6 +162,7 @@ offensive.js contains following built-in assertions.
  1. [`.Null()`][null]
  1. [`.Undefined()`][undefined]
  1. [`.Empty()`][empty]
+ 1. [`.ofType()`][of-type]
  1. [`.aBoolean()`][boolean]
  1. [`.aNumber()`][number]
  1. [`.aString()`][string]
@@ -216,6 +217,14 @@ Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
 check(arg, 'arg').is.not.Empty();
+```
+
+[of-type]: #of-type-assertion
+<a id=of-type-assertion></a>
+#### `.ofType(requiredType)` aliases: `.type`
+Asserts that checked value is of **requiredType** by ivoking `typeof` operator.
+```js
+check(arg, 'arg').is.ofType('boolean');
 ```
 
 [boolean]: #boolean-assertion
