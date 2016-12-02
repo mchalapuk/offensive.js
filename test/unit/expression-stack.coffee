@@ -20,19 +20,20 @@ describe "ExpressionStack", ->
     it "throws Error('#{expectedMessage}')", ->
       shouldThrow expectedMessage, -> testedStack.pop()
 
+  describe "after .addOperand(() => true)", ->
+    beforeEach ->
+      testedStack.addOperand () -> true
+
+    it ".evaluate() returns true", ->
+      testedStack.evaluate().should.equal true
+
+
   describe "after .push()", ->
     beforeEach ->
       testedStack.push()
 
     it ".stackName is 'unnamed'", ->
       testedStack.stackName.should.equal "unnamed"
-
-  describe "after .push('next')", ->
-    beforeEach ->
-      testedStack.push "next"
-
-    it ".stackName is 'next'", ->
-      testedStack.stackName.should.equal "next"
 
     describe ".evaluate()", ->
       expectedMessage = ".evaluate() called not at the bottom of the stack"
@@ -46,10 +47,18 @@ describe "ExpressionStack", ->
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
 
-  describe "after .addOperand(() => true)", ->
-    beforeEach ->
-      testedStack.addOperand () -> true
+    describe "after .addOperand(() => true) and .pop()", ->
+      beforeEach ->
+        testedStack.addOperand () -> true
+        testedStack.pop()
 
-    it ".evaluate() returns true", ->
-      testedStack.evaluate().should.equal true
+      it ".evaluate() returns true", ->
+        testedStack.evaluate().should.equal true
+
+  describe "after .push('next')", ->
+    beforeEach ->
+      testedStack.push "next"
+
+    it ".stackName is 'next'", ->
+      testedStack.stackName.should.equal "next"
 
