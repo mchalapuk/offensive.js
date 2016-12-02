@@ -119,6 +119,42 @@ describe "ExpressionStack", ->
       it ".evaluate() returns true", ->
         testedStack.evaluate().should.equal true
 
+      it ".stackName is 'bottom'", ->
+        testedStack.stackName.should.equal "bottom"
+
+    describe "after .addUnaryOperator((a) => !a())", ->
+      beforeEach ->
+        testedStack.addUnaryOperator (a, b) -> !a()
+
+      describe "after .addOperand(() => true) and .pop()", ->
+        beforeEach ->
+          testedStack.addOperand () -> true
+          testedStack.pop()
+
+        it ".evaluate() returns false", ->
+          testedStack.evaluate().should.equal false
+
+        it ".stackName is 'bottom'", ->
+          testedStack.stackName.should.equal "bottom"
+
+      describe "after .forcePop()", ->
+        beforeEach ->
+          testedStack.forcePop()
+
+        it ".evaluate() returns false", ->
+          testedStack.evaluate().should.equal false
+
+      describe "after .popWhenReady() and .addOperand(() => true)", ->
+        beforeEach ->
+          testedStack.popWhenReady()
+          testedStack.addOperand () -> true
+
+        it ".evaluate() returns false", ->
+          testedStack.evaluate().should.equal false
+
+        it ".stackName is 'bottom'", ->
+          testedStack.stackName.should.equal "bottom"
+
   describe "after .push('next')", ->
     beforeEach ->
       testedStack.push "next"
