@@ -40,13 +40,6 @@ describe "ExpressionStack", ->
       it "throws Error('#{expectedMessage}')", ->
         shouldThrow expectedMessage, -> testedStack.evaluate()
 
-    describe "after .pop()", ->
-      beforeEach ->
-        testedStack.pop()
-
-      it ".stackName is 'bottom'", ->
-        testedStack.stackName.should.equal "bottom"
-
     describe "after .addOperand(() => true) and .pop()", ->
       beforeEach ->
         testedStack.addOperand () -> true
@@ -54,6 +47,9 @@ describe "ExpressionStack", ->
 
       it ".evaluate() returns true", ->
         testedStack.evaluate().should.equal true
+
+      it ".stackName is 'bottom'", ->
+        testedStack.stackName.should.equal "bottom"
 
   describe "after .push('next')", ->
     beforeEach ->
