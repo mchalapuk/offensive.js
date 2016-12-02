@@ -30,6 +30,18 @@ describe "ExpressionStack", ->
     it ".evaluate() returns true", ->
       testedStack.evaluate().should.equal true
 
+    describe "after .addBinaryOperator((a, b) => a() && b())", ->
+      beforeEach ->
+        testedStack.addBinaryOperator (a, b) -> a() && b()
+
+      [true, false].forEach (value) ->
+        describe "after .addOperand(() => #{value})", ->
+          beforeEach ->
+            testedStack.addOperand () -> value
+
+          it ".evaluate() returns false", ->
+            testedStack.evaluate().should.equal value
+
   describe "after .push()", ->
     beforeEach ->
       testedStack.push()
@@ -53,13 +65,52 @@ describe "ExpressionStack", ->
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
 
-    describe "after .addOperand(() => false) and .pop()", ->
+    describe "after .addOperand(() => false)", ->
       beforeEach ->
         testedStack.addOperand () -> false
-        testedStack.pop()
 
-      it ".evaluate() returns false", ->
-        testedStack.evaluate().should.equal false
+      describe "after .pop()", ->
+        beforeEach ->
+          testedStack.pop()
+
+        it ".evaluate() returns false", ->
+          testedStack.evaluate().should.equal false
+
+      describe "after .addBinaryOperator((a, b) => a() && b())", ->
+        beforeEach ->
+          testedStack.addBinaryOperator (a, b) -> a() && b()
+
+        describe "after .addOperand(() => true) and .pop()", ->
+          beforeEach ->
+            testedStack.addOperand () -> true
+            testedStack.pop()
+
+          it ".evaluate() returns false", ->
+            testedStack.evaluate().should.equal false
+
+          it ".stackName is 'bottom'", ->
+            testedStack.stackName.should.equal "bottom"
+
+        describe "after .forcePop()", ->
+          beforeEach ->
+            testedStack.forcePop()
+
+          it ".evaluate() returns false", ->
+            testedStack.evaluate().should.equal false
+
+          it ".stackName is 'bottom'", ->
+            testedStack.stackName.should.equal "bottom"
+
+        describe "after .popWhenReady() and .addOperand(() => true)", ->
+          beforeEach ->
+            testedStack.popWhenReady()
+            testedStack.addOperand () -> true
+
+          it ".evaluate() returns false", ->
+            testedStack.evaluate().should.equal false
+
+          it ".stackName is 'bottom'", ->
+            testedStack.stackName.should.equal "bottom"
 
     describe "after .forcePop()", ->
       beforeEach ->
