@@ -12,11 +12,6 @@ describe "ExpressionStack", ->
   it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
 
-  describe ".evaluate()", ->
-    expectedMessage = ".evaluate() called on empty syntax tree"
-    it "throws Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, -> testedStack.evaluate()
-
   describe ".pop()", ->
     expectedMessage = ".pop() called at the bottom of the stack"
     it "throws Error('#{expectedMessage}')", ->
@@ -35,6 +30,11 @@ describe "ExpressionStack", ->
 
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
+
+    describe ".evaluate()", ->
+      expectedMessage = ".evaluate() called not at the bottom of the stack"
+      it "throws Error('#{expectedMessage}')", ->
+        shouldThrow expectedMessage, -> testedStack.evaluate()
 
     describe "after .pop()", ->
       beforeEach ->
