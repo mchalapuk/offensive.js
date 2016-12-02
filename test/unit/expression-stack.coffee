@@ -8,6 +8,13 @@ describe "ExpressionStack", ->
   beforeEach ->
     testedStack = new ExpressionStack()
 
-  it "contains stack named 'bottom'", ->
+  it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
+
+  describe "after .push('next')", ->
+    beforeEach ->
+      testedStack.push "next"
+
+    it ".stackName is 'next'", ->
+      testedStack.stackName.should.equal "next"
 
