@@ -49,6 +49,9 @@ describe "ExpressionStack", ->
     it ".stackName is 'unnamed'", ->
       testedStack.stackName.should.equal "unnamed"
 
+    it ".stackId is not 0", ->
+      testedStack.stackId.should.not.equal 0
+
     describe ".evaluate()", ->
       expectedMessage = ".evaluate() called not at the bottom of the stack"
       it "throws Error('#{expectedMessage}')", ->
