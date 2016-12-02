@@ -15,7 +15,7 @@ describe "ExpressionStack", ->
   it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
 
-  popMethods = [ 'pop', 'forcePop' ]
+  popMethods = [ 'pop', 'forcePop', 'popWhenReady' ]
 
   popMethods.forEach (method) ->
     describe ".#{method}()", ->
