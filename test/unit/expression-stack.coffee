@@ -9,6 +9,9 @@ describe "ExpressionStack", ->
   beforeEach ->
     testedStack = new ExpressionStack()
 
+  it ".stackId is 0", ->
+    testedStack.stackId.should.equal 0
+
   it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
 
