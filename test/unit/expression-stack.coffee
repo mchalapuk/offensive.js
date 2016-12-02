@@ -15,7 +15,7 @@ describe "ExpressionStack", ->
   describe ".evaluate()", ->
     expectedMessage = ".evaluate() called on empty syntax tree"
     it "throws Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, - testedStack.evaluate()
+      shouldThrow expectedMessage, -> testedStack.evaluate()
 
   describe ".pop()", ->
     expectedMessage = ".pop() called at the bottom of the stack"
@@ -42,4 +42,11 @@ describe "ExpressionStack", ->
 
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
+
+  describe "after .addOperand(() => true)", ->
+    beforeEach ->
+      testedStack.addOperand () -> true
+
+    it ".evaluate() returns true", ->
+      testedStack.evaluate().should.equal true
 
