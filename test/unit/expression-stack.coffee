@@ -8,3 +8,6 @@ describe "ExpressionStack", ->
   beforeEach ->
     testedStack = new ExpressionStack()
 
+  it "contains stack named 'bottom'", ->
+    testedStack.stackName.should.equal "bottom"
+
