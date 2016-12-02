@@ -15,10 +15,13 @@ describe "ExpressionStack", ->
   it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
 
-  describe ".pop()", ->
-    expectedMessage = ".pop() called at the bottom of the stack"
-    it "throws Error('#{expectedMessage}')", ->
-      shouldThrow expectedMessage, -> testedStack.pop()
+  popMethods = [ 'pop', 'forcePop' ]
+
+  popMethods.forEach (method) ->
+    describe ".#{method}()", ->
+      expectedMessage = ".#{method}() called at the bottom of the stack"
+      it "throws Error('#{expectedMessage}')", ->
+        shouldThrow expectedMessage, -> testedStack[method]()
 
   describe "after .addOperand(() => true)", ->
     beforeEach ->
@@ -26,7 +29,6 @@ describe "ExpressionStack", ->
 
     it ".evaluate() returns true", ->
       testedStack.evaluate().should.equal true
-
 
   describe "after .push()", ->
     beforeEach ->
