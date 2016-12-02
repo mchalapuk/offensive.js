@@ -51,6 +51,21 @@ describe "ExpressionStack", ->
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
 
+    describe "after .addOperand(() => false) and .pop()", ->
+      beforeEach ->
+        testedStack.addOperand () -> false
+        testedStack.pop()
+
+      it ".evaluate() returns false", ->
+        testedStack.evaluate().should.equal false
+
+    describe "after .forcePop()", ->
+      beforeEach ->
+        testedStack.forcePop()
+
+      it ".evaluate() returns true", ->
+        testedStack.evaluate().should.equal true
+
   describe "after .push('next')", ->
     beforeEach ->
       testedStack.push "next"
