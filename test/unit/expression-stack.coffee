@@ -11,6 +11,11 @@ describe "ExpressionStack", ->
   it ".stackName is 'bottom'", ->
     testedStack.stackName.should.equal "bottom"
 
+  describe ".pop()", ->
+    expectedMessage = ".pop() called at the bottom of the stack"
+    it "throws Error('#{expectedMessage}')", ->
+      shouldThrow expectedMessage, -> testedStack.pop()
+
   describe "after .push()", ->
     beforeEach ->
       testedStack.push()
@@ -24,3 +29,4 @@ describe "ExpressionStack", ->
 
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
+
