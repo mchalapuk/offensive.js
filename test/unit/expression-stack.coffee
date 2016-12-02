@@ -1,4 +1,5 @@
 should = require "should"
+shouldThrow = require "../should-throw.coffee"
 
 ExpressionStack = require "../../lib/expression-stack"
 
