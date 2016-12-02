@@ -31,3 +31,10 @@ describe "ExpressionStack", ->
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
 
+    describe "after .pop()", ->
+      beforeEach ->
+        testedStack.pop()
+
+      it ".stackName is 'bottom'", ->
+        testedStack.stackName.should.equal "bottom"
+
