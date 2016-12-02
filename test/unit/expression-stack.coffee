@@ -75,3 +75,17 @@ describe "ExpressionStack", ->
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
 
+    describe "after .popWhenReady()", ->
+      beforeEach ->
+        testedStack.popWhenReady()
+
+      it ".stackName is still 'next'", ->
+        testedStack.stackName.should.equal "next"
+
+      describe "after .addOperand(() => true)", ->
+        beforeEach ->
+          testedStack.addOperand () -> true
+
+        it ".stackName is 'bottom'", ->
+          testedStack.stackName.should.equal "bottom"
+
