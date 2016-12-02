@@ -75,6 +75,15 @@ describe "ExpressionStack", ->
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
 
+    describe "after .addOperand(() => true)", ->
+      beforeEach ->
+        testedStack.addOperand () -> true
+
+      describe ".popWhenReady()", ->
+        expectedMessage = ".popWhenReady called on a stack, which is ready; call .pop() instead"
+        it "throws Error('#{expectedMessage}')", ->
+          shouldThrow expectedMessage, -> testedStack.popWhenReady()
+
     describe "after .popWhenReady()", ->
       beforeEach ->
         testedStack.popWhenReady()
