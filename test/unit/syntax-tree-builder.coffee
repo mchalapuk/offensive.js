@@ -1,5 +1,6 @@
 should = require "should"
-mocha = require "mocha"
+sinon = require "sinon"
+require "should-sinon"
 
 LogicalTreeBuilder = require "../../lib/syntax-tree-builder"
 
@@ -71,20 +72,41 @@ describe "SyntaxTreeBuilder", ->
         .throw "trying to evaluate with dangling unary operator"
 
     it "returns added operand", ->
-      operand = -> true
+      operand = -> 'exactly'
       testedBuilder.addOperand operand
-      testedBuilder.evaluate().should.be.exactly operand
+      testedBuilder.evaluate()().should.be.exactly 'exactly'
+
+    it "calls callback added with operand", ->
+      callback = sinon.spy()
+      testedBuilder.addOperand (-> true), callback
+      testedBuilder.evaluate()()
+      callback.should.be.calledWith true
 
     it "returns unary operator applied to operand", ->
       testedBuilder.addUnaryOperator (operand) -> "a"+ operand()
       testedBuilder.addOperand -> "b"
       testedBuilder.evaluate()().should.be.equal "ab"
 
+    it "calls callback added with unary operator", ->
+      callback = sinon.spy()
+      testedBuilder.addUnaryOperator ((operand) -> "a"+ operand()), callback
+      testedBuilder.addOperand -> "b"
+      testedBuilder.evaluate()()
+      callback.should.be.calledWith "ab"
+
     it "returns binary operator applied to operands", ->
       testedBuilder.addOperand -> "a"
       testedBuilder.addBinaryOperator (lhs, rhs) -> "#{lhs()}#{rhs()}"
       testedBuilder.addOperand -> "b"
       testedBuilder.evaluate()().should.be.equal "ab"
+
+    it "calls callback added with binary operator", ->
+      callback = sinon.spy()
+      testedBuilder.addOperand -> "a"
+      testedBuilder.addBinaryOperator ((lhs, rhs) -> "#{lhs()}#{rhs()}"), callback
+      testedBuilder.addOperand -> "b"
+      testedBuilder.evaluate()()
+      callback.should.be.calledWith "ab"
 
   describe ".flush", ->
     it "throws when calling after adding binary operator", ->
