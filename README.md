@@ -162,7 +162,7 @@ offensive.js contains following built-in assertions.
  1. [`.Null()`][null]
  1. [`.Undefined()`][undefined]
  1. [`.Empty()`][empty]
- 1. [`.ofType()`][of-type]
+ 1. [`.ofType(requiredType)`][of-type]
  1. [`.aBoolean()`][boolean]
  1. [`.aNumber()`][number]
  1. [`.aString()`][string]
