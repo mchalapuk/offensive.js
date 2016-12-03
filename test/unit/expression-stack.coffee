@@ -27,8 +27,8 @@ describe "ExpressionStack", ->
     beforeEach ->
       testedStack.addOperand () -> true
 
-    it ".evaluate() returns true", ->
-      testedStack.evaluate().should.equal true
+    it ".result returns true", ->
+      testedStack.result.should.equal true
 
     describe "after .addBinaryOperator((a, b) => a() && b())", ->
       beforeEach ->
@@ -39,8 +39,8 @@ describe "ExpressionStack", ->
           beforeEach ->
             testedStack.addOperand () -> value
 
-          it ".evaluate() returns false", ->
-            testedStack.evaluate().should.equal value
+          it ".result returns false", ->
+            testedStack.result.should.equal value
 
   describe "after .push()", ->
     beforeEach ->
@@ -52,18 +52,18 @@ describe "ExpressionStack", ->
     it ".stackId is not 0", ->
       testedStack.stackId.should.not.equal 0
 
-    describe ".evaluate()", ->
-      expectedMessage = ".evaluate() called not at the bottom of the stack"
+    xdescribe ".result", ->
+      expectedMessage = "couldn't fetch .result (not at the bottom of the stack)"
       it "throws Error('#{expectedMessage}')", ->
-        shouldThrow expectedMessage, -> testedStack.evaluate()
+        shouldThrow expectedMessage, -> testedStack.result
 
     describe "after .addOperand(() => true) and .pop()", ->
       beforeEach ->
         testedStack.addOperand () -> true
         testedStack.pop()
 
-      it ".evaluate() returns true", ->
-        testedStack.evaluate().should.equal true
+      it ".result returns true", ->
+        testedStack.result.should.equal true
 
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
@@ -76,8 +76,8 @@ describe "ExpressionStack", ->
         beforeEach ->
           testedStack.pop()
 
-        it ".evaluate() returns false", ->
-          testedStack.evaluate().should.equal false
+        it ".result returns false", ->
+          testedStack.result.should.equal false
 
       describe "after .addBinaryOperator((a, b) => a() && b())", ->
         beforeEach ->
@@ -88,8 +88,8 @@ describe "ExpressionStack", ->
             testedStack.addOperand () -> true
             testedStack.pop()
 
-          it ".evaluate() returns false", ->
-            testedStack.evaluate().should.equal false
+          it ".result returns false", ->
+            testedStack.result.should.equal false
 
           it ".stackName is 'bottom'", ->
             testedStack.stackName.should.equal "bottom"
@@ -98,8 +98,8 @@ describe "ExpressionStack", ->
           beforeEach ->
             testedStack.forcePop()
 
-          it ".evaluate() returns false", ->
-            testedStack.evaluate().should.equal false
+          it ".result returns false", ->
+            testedStack.result.should.equal false
 
           it ".stackName is 'bottom'", ->
             testedStack.stackName.should.equal "bottom"
@@ -109,8 +109,8 @@ describe "ExpressionStack", ->
             testedStack.popWhenReady()
             testedStack.addOperand () -> true
 
-          it ".evaluate() returns false", ->
-            testedStack.evaluate().should.equal false
+          it ".result returns false", ->
+            testedStack.result.should.equal false
 
           it ".stackName is 'bottom'", ->
             testedStack.stackName.should.equal "bottom"
@@ -119,8 +119,8 @@ describe "ExpressionStack", ->
       beforeEach ->
         testedStack.forcePop()
 
-      it ".evaluate() returns true", ->
-        testedStack.evaluate().should.equal true
+      it ".result returns true", ->
+        testedStack.result.should.equal true
 
       it ".stackName is 'bottom'", ->
         testedStack.stackName.should.equal "bottom"
@@ -134,8 +134,8 @@ describe "ExpressionStack", ->
           testedStack.addOperand () -> true
           testedStack.pop()
 
-        it ".evaluate() returns false", ->
-          testedStack.evaluate().should.equal false
+        it ".result returns false", ->
+          testedStack.result.should.equal false
 
         it ".stackName is 'bottom'", ->
           testedStack.stackName.should.equal "bottom"
@@ -144,16 +144,16 @@ describe "ExpressionStack", ->
         beforeEach ->
           testedStack.forcePop()
 
-        it ".evaluate() returns false", ->
-          testedStack.evaluate().should.equal false
+        it ".result returns false", ->
+          testedStack.result.should.equal false
 
       describe "after .popWhenReady() and .addOperand(() => true)", ->
         beforeEach ->
           testedStack.popWhenReady()
           testedStack.addOperand () -> true
 
-        it ".evaluate() returns false", ->
-          testedStack.evaluate().should.equal false
+        it ".result returns false", ->
+          testedStack.result.should.equal false
 
         it ".stackName is 'bottom'", ->
           testedStack.stackName.should.equal "bottom"
