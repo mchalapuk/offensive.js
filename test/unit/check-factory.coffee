@@ -36,8 +36,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
   describe ".assertion", ->
     describe "(passing)", ->
       beforeEach ->
-        assertionRegistry.add 'assertion', new Assertion ->
-          @condition = -> true
+        assertionRegistry.add 'assertion', new Assertion -> -> true
         testedCheck = testedCheck.assertion
 
       describeNameValueTest -> testedCheck
@@ -55,8 +54,8 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'test', new Assertion ->
-          @condition = -> false
           @message.appendText "proper"
+          -> false
         testedCheck = testedCheck.test
 
       it "() returns 'improper'", ->
@@ -74,8 +73,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
   describe ".unary.assertion.binary.assertion", ->
     describe "(passing)", ->
       beforeEach ->
-        assertionRegistry.add 'assertion', new Assertion ->
-          @condition = -> true
+        assertionRegistry.add 'assertion', new Assertion -> -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
           @apply = -> true
         operatorRegistry.add 'unary', new UnaryOperator ->
@@ -95,7 +93,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion ->
           @message.appendText "proper"
-          @condition = -> true
+          -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
           @message.appendText "nor"
           @apply = -> false
@@ -117,7 +115,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     beforeEach ->
       assertionRegistry.add 'simple', new Assertion ->
         @message.appendText "proper"
-        @condition = -> true
+        -> true
       operatorRegistry.add 'and', new BinaryOperator ->
         @message.appendText "and"
         @apply = -> false
