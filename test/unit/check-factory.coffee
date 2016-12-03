@@ -11,9 +11,9 @@ UnaryOperator = require '../../lib/model/unary-operator'
 BinaryOperator = require '../../lib/model/binary-operator'
 
 describeNameValueTest = (testedCheck) ->
-  it "has ._name property containing name of checked value", ->
+  it "._name is 'value'", ->
     testedCheck()._name.should.be.equal "value"
-  it "has ._value property containing checked value", ->
+  it "._value is 'improper'", ->
     testedCheck()._value.should.be.equal "improper"
 
 describe "checkFactory.newCheck(\"improper\", \"value\")", ->
@@ -42,15 +42,15 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
 
       describeNameValueTest -> testedCheck
 
-      it "has call operator that returns checked value", ->
+      it "() returns 'improper'", ->
         testedCheck().should.equal "improper"
 
-      it "has ._result property equal true", ->
+      it "._result is true", ->
         testedCheck._result.should.be.exactly true
 
-      it "throws when trying to get ._message", ->
-        should(-> testedCheck._message)
-          .throw "trying to build a message without failed assertions"
+      expectedMessage = "trying to build a message without failed assertions"
+      it "._message throws Error('#{expectedMessage}')", ->
+        should(-> testedCheck._message).throw expectedMessage
 
     describe "(not passing)", ->
       beforeEach ->
@@ -59,16 +59,17 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
           @message.appendText "proper"
         testedCheck = testedCheck.test
 
-      it "has call operator that returns checked value", ->
+      it "() returns 'improper'", ->
         testedCheck().should.equal "improper"
 
       describeNameValueTest -> testedCheck
 
-      it "has ._result property equal false", ->
+      it "._result is false", ->
         testedCheck._result.should.be.exactly false
 
-      it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be proper; got 'improper'"
+      expectedMessage = "value must be proper; got 'improper'"
+      it "._message is '#{expectedMessage}'", ->
+        testedCheck._message.should.equal expectedMessage
 
   describe ".unary.assertion.binary.assertion", ->
     describe "(passing)", ->
@@ -83,12 +84,12 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
 
       describeNameValueTest -> testedCheck
 
-      it "has ._result property equal true", ->
+      it "._result is true", ->
         testedCheck._result.should.be.exactly true
 
-      it "throws when trying to get ._message", ->
-        should(-> testedCheck._message)
-          .throw "trying to build a message without failed assertions"
+      expectedMessage = "trying to build a message without failed assertions"
+      it "._message throws Error('#{expectedMessage}')", ->
+        should(-> testedCheck._message).throw expectedMessage
 
     describe "(not passing)", ->
       beforeEach ->
@@ -105,32 +106,12 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
 
       describeNameValueTest -> testedCheck
 
-      it "has ._result property equal false", ->
+      it "._result is false", ->
         testedCheck._result.should.be.exactly false
 
-      it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be not proper nor proper; got 'improper'"
-
-    describe "(not passing)", ->
-      beforeEach ->
-        assertionRegistry.add 'assertion', new Assertion ->
-          @message.appendText "proper"
-          @condition = -> true
-        operatorRegistry.add 'binary', new BinaryOperator ->
-          @message.appendText "nor"
-          @apply = -> false
-        operatorRegistry.add 'unary', new UnaryOperator ->
-          @message.appendText "not"
-          @apply = -> false
-        testedCheck = testedCheck.unary.assertion.binary.assertion
-
-      describeNameValueTest -> testedCheck
-
-      it "has ._result property equal false", ->
-        testedCheck._result.should.be.exactly false
-
-      it "has ._message contains proper message", ->
-        testedCheck._message.should.equal "value must be not proper nor proper; got 'improper'"
+      expectedMessage = "value must be not proper nor proper; got 'improper'"
+      it "._message is '#{expectedMessage}'", ->
+        testedCheck._message.should.equal expectedMessage
 
   describe ".complex", ->
     beforeEach ->
@@ -156,9 +137,10 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
 
     describeNameValueTest -> testedCheck
 
-    it "has ._result property equal false", ->
+    it "._result is false", ->
       testedCheck._result.should.be.exactly false
 
-    it "has ._message contains proper message", ->
-      testedCheck._message.should.equal "value must be proper; got 'improper'"
+    expectedMessage = "value must be proper; got 'improper'"
+    it "._message is '#{expectedMessage}'", ->
+      testedCheck._message.should.equal expectedMessage
 
