@@ -78,7 +78,7 @@ describe "check(\"arg\", \"arg\")", ->
 
   propTypeErrorTests = [
     [ null, Type.STRING, 'propertyName must be a string; got null' ]
-    [ 'length', 0, 'propertyType must be one of [\'boolean\', \'number\', \'string\', \'object\', \'function\', \'undefined\']; got 0' ]
+    [ 'length', 0, 'propertyType must be a valid type; got 0' ]
     [ 'length', Type.STRING, 'arg.length must be a string; got 3' ]
     [ 'length', Type.UNDEFINED, 'arg.length must be undefined; got 3' ]
     [ 'length', Type.BOOLEAN, 'arg.length must be a boolean; got 3' ]
