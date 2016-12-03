@@ -24,6 +24,7 @@ type Condition<T> = ConditionFunction<T> | ConditionObject<T>;
  */
 interface Assertions<T> {
   Null: OperatorContext<T>;
+  ofType: (requiredType: string) => OperatorContext<T>;
   Undefined: OperatorContext<T>;
   Empty: OperatorContext<T>;
   aNumber: OperatorContext<T>;
@@ -41,6 +42,7 @@ interface Assertions<T> {
   inRange: (leftBounds: number, rightBounds: number) => OperatorContext<T>;
   property: (propertyName: string, propertyValue: any) => OperatorContext<T>;
   length: (requiredLength: number) => OperatorContext<T>;
+  propertyOfType: (propertyName: string, requiredType: string) => OperatorContext<T>;
   oneOf: (collection: any[], name: string) => OperatorContext<T>;
   elementThatIs: (index: number, assertName: string, condition: Condition<T>) => OperatorContext<T>;
   eachElementIs: (assertName: string, condition: Condition<T>) => OperatorContext<T>;
