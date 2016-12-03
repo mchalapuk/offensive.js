@@ -74,10 +74,8 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
     describe "(passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion -> -> true
-        operatorRegistry.add 'binary', new BinaryOperator ->
-          @apply = -> true
-        operatorRegistry.add 'unary', new UnaryOperator ->
-          @apply = -> true
+        operatorRegistry.add 'binary', new BinaryOperator -> -> true
+        operatorRegistry.add 'unary', new UnaryOperator -> -> true
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
       describeNameValueTest -> testedCheck
@@ -96,10 +94,10 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
           -> true
         operatorRegistry.add 'binary', new BinaryOperator ->
           @message.appendText "nor"
-          @apply = -> false
+          -> false
         operatorRegistry.add 'unary', new UnaryOperator ->
           @message.appendText "not"
-          @apply = -> false
+          -> false
         testedCheck = testedCheck.unary.assertion.binary.assertion
 
       describeNameValueTest -> testedCheck
@@ -118,7 +116,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         -> true
       operatorRegistry.add 'and', new BinaryOperator ->
         @message.appendText "and"
-        @apply = -> false
+        -> false
       assertionRegistry.add 'complex', new Assertion (context) ->
         context._push()
         context._push()
@@ -131,6 +129,7 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         context.simple
         context._pop()
         context._pop()
+        undefined
       testedCheck = testedCheck.complex
 
     describeNameValueTest -> testedCheck
