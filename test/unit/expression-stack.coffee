@@ -46,8 +46,8 @@ describe "ExpressionStack", ->
     beforeEach ->
       testedStack.push()
 
-    it ".stackName is 'unnamed'", ->
-      testedStack.stackName.should.equal "unnamed"
+    it ".stackName is undefined", ->
+      should(testedStack.stackName).equal undefined
 
     it ".stackId is not 0", ->
       testedStack.stackId.should.not.equal 0
@@ -158,6 +158,21 @@ describe "ExpressionStack", ->
         it ".stackName is 'bottom'", ->
           testedStack.stackName.should.equal "bottom"
 
+    describe "after .addOperand(() => true)", ->
+      beforeEach ->
+        testedStack.addOperand () -> true
+
+      describe ".popWhenReady()", ->
+        expectedMessage = ".popWhenReady() called on a stack, which is ready; use .pop() instead"
+        it "throws Error('#{expectedMessage}')", ->
+          shouldThrow expectedMessage, -> testedStack.popWhenReady()
+
+    describe ".pop('next')", ->
+      expectedMessage = "expected call .pop(); got .pop('next'); "+
+        "stack level of name 'next' does not exist"
+      it "throws Error('#{expectedMessage}')", ->
+        shouldThrow expectedMessage, -> testedStack.pop "next"
+
   describe "after .push('next')", ->
     beforeEach ->
       testedStack.push "next"
@@ -165,18 +180,38 @@ describe "ExpressionStack", ->
     it ".stackName is 'next'", ->
       testedStack.stackName.should.equal "next"
 
-    describe "after .addOperand(() => true)", ->
-      beforeEach ->
-        testedStack.addOperand () -> true
+    describe ".pop()", ->
+      expectedMessage = "expected call .pop('next'); got .pop()"
+      it " throws Error('#{expectedMessage}')", ->
+        shouldThrow expectedMessage, -> testedStack.pop()
 
-      describe ".popWhenReady()", ->
-        expectedMessage = ".popWhenReady called on a stack, which is ready; call .pop() instead"
-        it "throws Error('#{expectedMessage}')", ->
-          shouldThrow expectedMessage, -> testedStack.popWhenReady()
+    describe ".pop('another')", ->
+      expectedMessage = "expected call .pop('next'); got .pop('another'); "+
+        "stack level of name 'another' does not exist"
+      it " throws Error('#{expectedMessage}')", ->
+        shouldThrow expectedMessage, -> testedStack.pop 'another'
 
-    describe "after .popWhenReady()", ->
+    describe "after .push('another')", ->
       beforeEach ->
-        testedStack.popWhenReady()
+        testedStack.push "another"
+
+      describe ".pop('next')", ->
+        expectedMessage = "expected call .pop('another'); got .pop('next'); "+
+          "stack level of name 'next' is 1 level(s) below"
+        it " throws Error('#{expectedMessage}')", ->
+          shouldThrow expectedMessage, -> testedStack.pop 'next'
+
+    describe "after .addOperand(() => true) and .pop('next')", ->
+      beforeEach ->
+        testedStack.addOperand -> true
+        testedStack.pop "next"
+
+      it ".stackName is 'bottom'", ->
+        testedStack.stackName.should.equal "bottom"
+
+    describe "after .popWhenReady('next')", ->
+      beforeEach ->
+        testedStack.popWhenReady "next"
 
       it ".stackName is still 'next'", ->
         testedStack.stackName.should.equal "next"

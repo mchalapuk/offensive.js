@@ -12,7 +12,7 @@ describe "check(undefined, \"arg\")", ->
 
   describe ".or", ->
 
-    expectedMessage = ".or used without .either"
+    expectedMessage = ".or called without previous .either; try .either.assertionA.or.assertionB"
     it "should throw new Error('#{expectedMessage}')", ->
       shouldThrow expectedMessage, -> testedCheck.is.Undefined.or
 
