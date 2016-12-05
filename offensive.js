@@ -1,6 +1,6 @@
 'use strict';
 
-var CheckFactory = require('./lib/check-factory');
+var ContextFactory = require('./lib/context-factory');
 
 var NoopRegistry = require('./lib/registry/noop');
 var AssertionRegistry = require('./lib/registry/assertion');
@@ -25,13 +25,13 @@ Object.keys(builtInOperators).forEach(function(name) {
   operatorRegistry.add(name, builtInOperators[name]);
 });
 
-var offensive = new CheckFactory(assertionRegistry, operatorRegistry);
+var offensive = new ContextFactory(assertionRegistry, operatorRegistry);
 offensive.onError = throwContractError;
 
-var defensive = new CheckFactory(assertionRegistry, operatorRegistry);
+var defensive = new ContextFactory(assertionRegistry, operatorRegistry);
 
-module.exports = offensive.newCheck.bind(offensive);
-module.exports.defensive = defensive.newCheck.bind(defensive);
+module.exports = offensive.newContext.bind(offensive);
+module.exports.defensive = defensive.newContext.bind(defensive);
 module.exports.addNoop = noopRegistry.add.bind(noopRegistry);
 module.exports.addAssertion = assertionRegistry.add.bind(assertionRegistry);
 module.exports.addOperator = operatorRegistry.add.bind(operatorRegistry);

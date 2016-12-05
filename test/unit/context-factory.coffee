@@ -2,7 +2,7 @@ mocha = require 'mocha'
 should = require 'should'
 shouldThrow = require '../should-throw.coffee'
 
-CheckFactory = require '../../lib/check-factory'
+ContextFactory = require '../../lib/context-factory'
 AssertionRegistry = require '../../lib/registry/assertion'
 OperatorRegistry = require '../../lib/registry/operator'
 NoopRegistry = require '../../lib/registry/noop'
@@ -10,65 +10,65 @@ Assertion = require '../../lib/model/assertion'
 UnaryOperator = require '../../lib/model/unary-operator'
 BinaryOperator = require '../../lib/model/binary-operator'
 
-describeNameValueTest = (testedCheck) ->
+describeNameValueTest = (testedContext) ->
   it "._name is 'value'", ->
-    testedCheck()._name.should.be.equal "value"
+    testedContext()._name.should.be.equal "value"
   it "._value is 'improper'", ->
-    testedCheck()._value.should.be.equal "improper"
+    testedContext()._value.should.be.equal "improper"
 
-describe "checkFactory.newCheck(\"improper\", \"value\")", ->
+describe "checkFactory.newContext(\"improper\", \"value\")", ->
   noopRegistry = null
   assertionRegistry = null
   operatorRegistry = null
   testedFactory = null
-  testedCheck = null
+  testedContext = null
 
   beforeEach ->
     noopRegistry = new NoopRegistry
     assertionRegistry = new AssertionRegistry noopRegistry
     operatorRegistry = new OperatorRegistry noopRegistry, assertionRegistry
-    testedFactory = new CheckFactory assertionRegistry, operatorRegistry
+    testedFactory = new ContextFactory assertionRegistry, operatorRegistry
     testedFactory.onError = null
-    testedCheck = testedFactory.newCheck "improper", "value"
+    testedContext = testedFactory.newContext "improper", "value"
 
-  describeNameValueTest -> testedCheck
+  describeNameValueTest -> testedContext
 
   describe ".assertion", ->
     describe "(passing)", ->
       beforeEach ->
         assertionRegistry.add 'assertion', new Assertion -> -> true
-        testedCheck = testedCheck.assertion
+        testedContext = testedContext.assertion
 
-      describeNameValueTest -> testedCheck
+      describeNameValueTest -> testedContext
 
       it "() returns 'improper'", ->
-        testedCheck().should.equal "improper"
+        testedContext().should.equal "improper"
 
       it "._result is true", ->
-        testedCheck._result.should.be.exactly true
+        testedContext._result.should.be.exactly true
 
       expectedMessage = "trying to build a message without failed assertions"
       it "._message throws Error('#{expectedMessage}')", ->
-        should(-> testedCheck._message).throw expectedMessage
+        should(-> testedContext._message).throw expectedMessage
 
     describe "(not passing)", ->
       beforeEach ->
         assertionRegistry.add 'test', new Assertion ->
           @message.appendText "proper"
           -> false
-        testedCheck = testedCheck.test
+        testedContext = testedContext.test
 
       it "() returns 'improper'", ->
-        testedCheck().should.equal "improper"
+        testedContext().should.equal "improper"
 
-      describeNameValueTest -> testedCheck
+      describeNameValueTest -> testedContext
 
       it "._result is false", ->
-        testedCheck._result.should.be.exactly false
+        testedContext._result.should.be.exactly false
 
       expectedMessage = "value must be proper; got 'improper'"
       it "._message is '#{expectedMessage}'", ->
-        testedCheck._message.should.equal expectedMessage
+        testedContext._message.should.equal expectedMessage
 
   describe ".unary.assertion.binary.assertion", ->
     describe "(passing)", ->
@@ -76,16 +76,16 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         assertionRegistry.add 'assertion', new Assertion -> -> true
         operatorRegistry.add 'binary', new BinaryOperator -> -> true
         operatorRegistry.add 'unary', new UnaryOperator -> -> true
-        testedCheck = testedCheck.unary.assertion.binary.assertion
+        testedContext = testedContext.unary.assertion.binary.assertion
 
-      describeNameValueTest -> testedCheck
+      describeNameValueTest -> testedContext
 
       it "._result is true", ->
-        testedCheck._result.should.be.exactly true
+        testedContext._result.should.be.exactly true
 
       expectedMessage = "trying to build a message without failed assertions"
       it "._message throws Error('#{expectedMessage}')", ->
-        should(-> testedCheck._message).throw expectedMessage
+        should(-> testedContext._message).throw expectedMessage
 
     describe "(not passing)", ->
       beforeEach ->
@@ -98,16 +98,16 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         operatorRegistry.add 'unary', new UnaryOperator ->
           @message.appendText "not"
           -> false
-        testedCheck = testedCheck.unary.assertion.binary.assertion
+        testedContext = testedContext.unary.assertion.binary.assertion
 
-      describeNameValueTest -> testedCheck
+      describeNameValueTest -> testedContext
 
       it "._result is false", ->
-        testedCheck._result.should.be.exactly false
+        testedContext._result.should.be.exactly false
 
       expectedMessage = "value must be not proper nor proper; got 'improper'"
       it "._message is '#{expectedMessage}'", ->
-        testedCheck._message.should.equal expectedMessage
+        testedContext._message.should.equal expectedMessage
 
   describe ".complex", ->
     beforeEach ->
@@ -130,14 +130,14 @@ describe "checkFactory.newCheck(\"improper\", \"value\")", ->
         context._pop()
         context._pop()
         undefined
-      testedCheck = testedCheck.complex
+      testedContext = testedContext.complex
 
-    describeNameValueTest -> testedCheck
+    describeNameValueTest -> testedContext
 
     it "._result is false", ->
-      testedCheck._result.should.be.exactly false
+      testedContext._result.should.be.exactly false
 
     expectedMessage = "value must be proper; got 'improper'"
     it "._message is '#{expectedMessage}'", ->
-      testedCheck._message.should.equal expectedMessage
+      testedContext._message.should.equal expectedMessage
 
