@@ -16,7 +16,7 @@ describeNameValueTest = (testedContext) ->
   it "._value is 'improper'", ->
     testedContext()._value.should.be.equal "improper"
 
-describe "checkFactory.newContext(\"improper\", \"value\")", ->
+describe "contextFactory.newContext(\"improper\", \"value\")", ->
   noopRegistry = null
   assertionRegistry = null
   operatorRegistry = null
