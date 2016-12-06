@@ -328,14 +328,14 @@ check(arg, 'arg').is.falsy();
 Asserts that checked value is equal to **another**.
 Comparison is made with `==` (double equals) operator.
 ```js
-check(arg, 'arg').is.lessThan(100);
+check(arg, 'arg').is.equalTo(100);
 ```
 
 [exactly]: #exactly-assertion
 <a id=exactly-assertion></a>
 #### `.exactly(another)`
 Asserts that checked value is exactly the same as **another**.
-Comparison is made with `===` (double equals) operator.
+Comparison is made with `===` (triple equals) operator.
 ```js
 check(arg, 'arg').is.exactly(instance);
 ```
@@ -350,7 +350,7 @@ check(arg, 'arg').is.lessThan(100);
 
 [greater-than]: #greater-than-assertion
 <a id=greater-than-assertion></a>
-#### `.greaterThan(leftBounds)` aliases: `.lt`, `.greater`
+#### `.greaterThan(leftBounds)` aliases: `.gt`, `.greater`
 Asserts that checked value is a number, which is greater than **leftBounds**.
 ```js
 check(arg, 'arg').is.greaterThan(0);
@@ -400,7 +400,7 @@ check(arg, 'arg').contains.propertyType('nodeName', 'string');
 #### `.propertyLessThan(propertyName, rightBounds)` aliases: `.propertyLT`, `.fieldLessThan`
 `Asserts that checked value has property of name **propertyName**, value
 of this property is of type `number`, and that this value is less than
-**rightBounds** .
+**rightBounds**.
 ```js
 check(arg, 'arg').has.propertyLessThan('index', 10);
 ```
