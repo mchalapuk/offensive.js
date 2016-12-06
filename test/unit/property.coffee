@@ -99,6 +99,10 @@ errorTests = [
   [ false, 'propertyLessThan', 0, 'arg.prop must be a number; got undefined' ]
   [ { prop: 0 }, 'propertyLessThan', 0, 'arg.prop must be < 0; got 0' ]
   [ { prop: 0 }, 'propertyLessThan', -1, 'arg.prop must be < -1; got 0' ]
+  [ null, 'propertyGreaterThan', 0, 'arg must be not empty; got null' ]
+  [ false, 'propertyGreaterThan', 0, 'arg.prop must be a number; got undefined' ]
+  [ { prop: 0 }, 'propertyGreaterThan', 0, 'arg.prop must be > 0; got 0' ]
+  [ { prop: 0 }, 'propertyGreaterThan', 1, 'arg.prop must be > 1; got 0' ]
 ]
 
 errorTests.forEach (params) ->
@@ -117,6 +121,8 @@ errorTests.forEach (params) ->
 nonErrorTests = [
   [ { prop: 0 }, 'propertyLessThan', 1 ]
   [ { prop: -1 }, 'propertyLessThan', 0 ]
+  [ { prop: 0 }, 'propertyGreaterThan', -1 ]
+  [ { prop: 1 }, 'propertyGreaterThan', 0 ]
 ]
 
 nonErrorTests.forEach (params) ->

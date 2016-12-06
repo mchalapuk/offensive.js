@@ -183,6 +183,7 @@ offensive.js contains following built-in assertions.
  1. [`.method(methodName)`][method]
  1. [`.propertyOfType(propertyName, propertyType)`][property-of-type]
  1. [`.propertyLessThan(propertyName, rightBounds)`][property-less-than]
+ 1. [`.propertyGreaterThan(propertyName, leftBounds)`][property-greater-than]
  1. [`.length(requiredLength)`][length]
  1. [`.oneOf(set, name)`][one-of]
  1. [`.elementThatIs(index, assertName, condition)`][element]
@@ -401,6 +402,16 @@ check(arg, 'arg').contains.propertyType('nodeName', 'string');
 `Asserts that checked value has property of name **propertyName**, value
 of this property is of type `number`, and that this value is less than
 **rightBounds**.
+```js
+check(arg, 'arg').has.propertyLessThan('index', 10);
+```
+
+[property-greater-than]: #property-greater-than-assertion
+<a id=property-greater-than-assertion></a>
+#### `.propertyGreaterThan(propertyName, leftBounds)` aliases: `.propertyGT`, `.fieldGreaterThan`
+`Asserts that checked value has property of name **propertyName**, value
+of this property is of type `number`, and that this value is greater than
+**leftBounds**.
 ```js
 check(arg, 'arg').has.propertyLessThan('index', 10);
 ```
