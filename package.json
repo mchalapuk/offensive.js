@@ -5,7 +5,7 @@
   "main": "offensive.js",
   "scripts": {
     "lint": "eslint offensive.js `find lib`",
-    "test": "mocha && tsc test/types.spec.ts"
+    "test": "mocha && tsc test/types.spec.ts && node test/types.spec.js"
   },
   "repository": {
     "type": "git",

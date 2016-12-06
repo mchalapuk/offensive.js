@@ -182,6 +182,7 @@ offensive.js contains following built-in assertions.
  1. [`.property(propertyName, propertyValue)`][property]
  1. [`.method(methodName)`][method]
  1. [`.propertyOfType(propertyName, propertyType)`][property-of-type]
+ 1. [`.propertyLessThan(propertyName, rightBounds)`][property-less-than]
  1. [`.length(requiredLength)`][length]
  1. [`.oneOf(set, name)`][one-of]
  1. [`.elementThatIs(index, assertName, condition)`][element]
@@ -392,6 +393,16 @@ property is of type **propertyType**. Type is checked with `typeof` operator.
 ```js
 check(arg, 'arg').has.propertyOfType('length', 'number');
 check(arg, 'arg').contains.propertyType('nodeName', 'string');
+```
+
+[property-less-than]: #property-less-than-assertion
+<a id=property-less-than-assertion></a>
+#### `.propertyLessThan(propertyName, rightBounds)` aliases: `.propertyLT`, `.fieldLessThan`
+`Asserts that checked value has property of name **propertyName**, value
+of this property is of type `number`, and that this value is less than
+**rightBounds** .
+```js
+check(arg, 'arg').has.propertyLessThan('index', 10);
 ```
 
 [length]: #length-assertion

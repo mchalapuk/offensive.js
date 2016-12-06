@@ -93,3 +93,41 @@ describe "check(\"arg\", \"arg\")", ->
   describe ".propertyOfType('length', 'number')", ->
     it "should not throw" , -> testedCheck.propertyOfType "length", "number"
 
+
+errorTests = [
+  [ null, 'propertyLessThan', 0, 'arg must be not empty; got null' ]
+  [ false, 'propertyLessThan', 0, 'arg.prop must be a number; got undefined' ]
+  [ { prop: 0 }, 'propertyLessThan', 0, 'arg.prop must be < 0; got 0' ]
+  [ { prop: 0 }, 'propertyLessThan', -1, 'arg.prop must be < -1; got 0' ]
+]
+
+errorTests.forEach (params) ->
+  [ arg, assertion, param, expectedMessage ] = params
+
+  describe "check(#{arg}, 'arg')", ->
+    testedCheck = null
+
+    beforeEach ->
+      testedCheck = check arg, "arg"
+
+    describe ".#{assertion}(#{param})", ->
+      it "should throw new Error('#{expectedMessage}')", ->
+        shouldThrow "#{expectedMessage}", -> testedCheck[assertion] "prop", param
+
+nonErrorTests = [
+  [ { prop: 0 }, 'propertyLessThan', 1 ]
+  [ { prop: -1 }, 'propertyLessThan', 0 ]
+]
+
+nonErrorTests.forEach (params) ->
+  [ arg, assertion, param ] = params
+
+  describe "check(#{arg}, 'arg')", ->
+    testedCheck = null
+
+    beforeEach ->
+      testedCheck = check arg, "arg"
+
+    describe ".#{assertion}(#{param})", ->
+      it "should not throw", -> testedCheck[assertion] "prop", param
+

@@ -43,6 +43,7 @@ interface Assertions<T> {
   property: (propertyName: string, propertyValue: any) => OperatorContext<T>;
   length: (requiredLength: number) => OperatorContext<T>;
   propertyOfType: (propertyName: string, requiredType: string) => OperatorContext<T>;
+  propertyLessThan: (propertyName: string, rightBounds: number) => OperatorContext<T>;
   oneOf: (collection: any[], name: string) => OperatorContext<T>;
   elementThatIs: (index: number, assertName: string, condition: Condition<T>) => OperatorContext<T>;
   eachElementIs: (assertName: string, condition: Condition<T>) => OperatorContext<T>;
