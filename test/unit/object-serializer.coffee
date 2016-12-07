@@ -1,6 +1,6 @@
 should = require "should"
 
-ObjectSerializer = require "../../lib/object-serializer"
+ObjectSerializer = require "../../lib/message/object-serializer"
 
 class Bob
   constructor: -> ""
