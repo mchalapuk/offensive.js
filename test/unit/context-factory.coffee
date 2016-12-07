@@ -2,7 +2,7 @@ mocha = require 'mocha'
 should = require 'should'
 shouldThrow = require '../should-throw.coffee'
 
-ContextFactory = require '../../lib/context-factory'
+ContextFactory = require '../../lib/core/context-factory'
 AssertionRegistry = require '../../lib/registry/assertion'
 OperatorRegistry = require '../../lib/registry/operator'
 NoopRegistry = require '../../lib/registry/noop'

@@ -1,6 +1,6 @@
 'use strict';
 
-var ContextFactory = require('./lib/context-factory');
+var ContextFactory = require('./lib/core/context-factory');
 
 var NoopRegistry = require('./lib/registry/noop');
 var AssertionRegistry = require('./lib/registry/assertion');

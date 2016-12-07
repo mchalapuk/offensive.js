@@ -2,7 +2,7 @@ should = require "should"
 sinon = require "sinon"
 require "should-sinon"
 
-LogicalTreeBuilder = require "../../lib/syntax-tree-builder"
+LogicalTreeBuilder = require "../../lib/core/syntax-tree-builder"
 
 describe "SyntaxTreeBuilder", ->
   testedBuilder = null

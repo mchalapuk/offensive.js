@@ -1,7 +1,7 @@
 should = require "should"
 shouldThrow = require "../should-throw.coffee"
 
-ExpressionStack = require "../../lib/expression-stack"
+ExpressionStack = require "../../lib/core/expression-stack"
 
 describe "ExpressionStack", ->
   testedStack = null
