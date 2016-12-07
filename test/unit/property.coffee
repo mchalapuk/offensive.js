@@ -2,7 +2,7 @@ should = require "should"
 shouldThrow = require "../should-throw.coffee"
 
 check = require "../../offensive"
-Type = require "../../lib/utils/Type"
+Type = require "../../lib/utils/type"
 
 describe "check(undefined, \"arg\")", ->
   testedCheck = null
