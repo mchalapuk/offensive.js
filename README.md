@@ -10,7 +10,7 @@
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
 
-# offensive.js
+# offensive :facepunch: js
 [![Build Status][travis-image]][travis-url]
 [![Dependency Status][david-image]][david-url]
 [![devDependency Status][david-image-dev]][david-url-dev]
