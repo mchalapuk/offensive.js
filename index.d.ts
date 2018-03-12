@@ -27,6 +27,7 @@ interface Assertions<T> {
   ofType: (requiredType: string) => OperatorContext<T>;
   Undefined: OperatorContext<T>;
   Empty: OperatorContext<T>;
+  aBoolean: OperatorContext<T>;
   aNumber: OperatorContext<T>;
   aString: OperatorContext<T>;
   anObject: OperatorContext<T>;
