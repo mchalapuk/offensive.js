@@ -114,3 +114,13 @@ describe "check", ->
     noThrowTest { hi: 'Bob' }, "{ hi: 'Bob' }"
     noThrowTest { there: 'Jane' }, "{ there: 'Jane' }"
 
+  describe ".either.contains.onlyStrings().or.is.Undefined", ->
+    [throwTest, noThrowTest] = createTests (arg)->
+      check(arg, "arg").either.contains.onlyStrings.or.is.Undefined()
+
+    throwTest [undefined], "arg[0] must be a string; got undefined or arg must be undefined; got [undefined]"
+    throwTest {}, "arg must be an array or undefined; got {}"
+
+    noThrowTest undefined, "undefined"
+    noThrowTest ["hi"], "[\"hi\"]"
+
