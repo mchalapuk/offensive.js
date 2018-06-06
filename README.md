@@ -4,7 +4,7 @@
 [david-url]: https://david-dm.org/mchalapuk/offensive.js
 [david-image]: https://david-dm.org/mchalapuk/offensive.js.svg
 
-[david-url-dev]: https://david-dm.org/mchalapuk/offensive.js#info=devDependencies
+[david-url-dev]: https://david-dm.org/mchalapuk/offensive.js?type=dev
 [david-image-dev]: https://david-dm.org/mchalapuk/offensive.js/dev-status.svg
 
 [npm-url]: https://npmjs.org/package/offensive
