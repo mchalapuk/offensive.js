@@ -24,16 +24,7 @@ for JavaScript.
  1. It reduces the boilerplate of writing error messsages to zero,
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
- 4. Is compatible with web browsers (when used via [browserify][browserify])
-  and with node ([v0.10][node-v0.10], [v0.12][node-v0.12], [v4.x][node-v4], [v6.x][node-v6]).
-
-[browserify]: https://github.com/substack/node-browserify
-
-[node]: https://github.com/nodejs/node
-[node-v0.10]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V010.md
-[node-v0.12]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V012.md
-[node-v4]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V4.md
-[node-v6]: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V6.md
+ 4. Has zero runtime dependencies.
 
 ## Installation
 
@@ -43,6 +34,16 @@ npm install --save offensive
 
 ## Usage
 
+### Loading the Library
+
+```js
+// node-style require
+const check = require('offensive');
+
+// es6-style default import
+import check from 'offensive';
+```
+
 ### Offensive Programming
 
 Programming offensively is about throwing exceptions a lot. As soon
@@ -50,22 +51,25 @@ as corrupted state or illegal parameter is detected, program is crashed
 with a descriptive error message. This technique greatly helps in finding
 bugs at&nbsp;their cause.
 ```js
-var check = require('offensive');
+class Time {
+  timestamp;
 
-// Let's say we have class `Time` with a constructor
-// that accepts initializer object.
-function Time(init) {
-  // Contract of this constructor is satisfied
-  // if init contains 'timestamp' property of type number.
-  check(init, 'init').is.anObject();
-  check(init.timestamp, 'init.timestamp').is.aNumber();
+  /**
+   * @param init initializer object containing `timestamp` property.
+   */
+  constructor(init) {
+    // Contract is satisfied
+    // if init contains 'timestamp' property of type number.
+    check(init, 'init').is.anObject();
+    check(init.timestamp, 'init.timestamp').is.aNumber();
 
-  ...
+    this.timestamp = init.timestamp;
+  }
 }
 ```
 Now, following erroneus call...
 ```js
-new Time({});
+const time = new Time({ time : 1528271117 });
 ```
 ...will result in throwing following exception.
 ```
@@ -74,51 +78,94 @@ ContractError: init.timestamp must be a numer; got undefined
   at Time (example.js:9:24)
   at example.js:20:0
 ```
-Above example uses only [`.anObject`][object] and [`.aNumber`][number] assertions.
+
+Alternatively, above contract could be implemented using following
+single check statement (message in thrown error would stay the same).
+
+```js
+check(init, 'init')
+  .is.anObject
+  .and.has.propertyOfType('timestamp', 'number')
+;
+```
+
+Above examples use only [`.anObject`][object], [`.aNumber`][number]
+and [`.propertyOfType`][property-of-type] assertions.
 [See full list of offensive.js built-in assertions][assertions].
 
 ### Defensive Programming
 
 Offensive programming is not applicable when collaborating with
-external components. We don't want our program to crash in&nbsp;response
+external components. A program should not crash in&nbsp;response
 to a bug in another program. Logging an error and trying to correct
-it or simply ignoring erroneus input would be a&nbsp;better way of
-handling such situation.
+it by using default value or simply ignoring erroneus input
+would be a&nbsp;better way of handling such cases.
+
+Following example shows how to use defensive prograggming to implement
+error handling in a service using [express.js][express] and
+[offensive.js][offensive].
+
+[express]: https://github.com/expressjs/express
+[offensive]: https://github.com/mchalapuk/offensive.js
+
 ```js
-// Now, let's create a function that fetches time data
-// from a time server and returns instance of Time.
-function fetchTime(url, callback) {
-  check(url, 'url').is.anInstanceOf(URL);
-  check(callback, 'callback').is.aFunction();
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 
-  var json = "";
+import check from 'offensive';
 
-  http.get(url.toString(), (res) => {
-    res.on('data', (chunk) => { json += chunk; });
-    res.on('end', parseAndReturn);
-    res.resume();
-  });
+const app = express();
+app.use(bodyParser.json());
 
-  function parseAndReturn() {
-    var init = JSON.parse(json);
+// A simple ping service which reflects messages sent to it.
+app.post('/ping', function (req, res, next) {
+  try {
+    // Contract is satisfied if body has a message which is a string
+    check(req.body, 'req.body')
+      .is.anObject
+      .and.contains.propertyOfType('message', 'string')
+    ;
+    const { message } = body;
+    res.json({ message });
 
-    // JSON received from the server may not fulfill our contract.
-    // In order to prevent crashing, we need to validate this
-    // external input before constructing an instance of Time.
-    var context = check.defensive(init, 'init from '+ url).is.anObject;
-    if (context._result) {
-      context = check.defensive(init.timestamp, 'init.timestamp from '+ url).is.aNumber;
-    }
-    if (!context._result) {
-      log(context._message);
-      callback(context._message);
-      return
-    }
+  } catch (e) {
+    // In case contract is not satisfied, an instance
+    // of ContractError will be passed to next middleware.
+    next(e);
+  }
+});
 
-    callback(null, new Time(init));
-  });
-}
-```
+// Error handling middleware.
+app.use(function (err, req, res, next) {
+
+  // Failed offensive.js assertions can be easily differentiated
+  // from other errors by checking error name.
+  switch (err.name) {
+    case 'ContractError':
+      // In case its an assertion from offensive.js
+      // HTTP status which indicates a client error is apropriate.
+      res.status(400);
+      // Could also be HTTP 412 Precondition Failed
+      // in case there's a need of being more specific.
+
+      // It's safe to reveil error message in response
+      // as it doesn't contain information about the contract
+      // and not about the implementation.
+      const { name, message } = err;
+      res.json({ error: `${name}: ${message}` });
+
+      break;
+    default:
+      // Any other error will result in HTTP 500 Internal Server Error.
+      res.status(500);
+      res.json({ 'error': 'InternalServerError: ${err.name}' });
+      break;
+  }
+});
+
+Above exmple shows defensive programming on server side, but the same technique
+is applicable on client side. When useing defensive programming on client side
+contract should be tested after fetching data froma server.
 
 **Further Rading:**
  * [What is the difference between offensive and defensive
