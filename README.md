@@ -5,7 +5,6 @@
 [david-image]: https://david-dm.org/mchalapuk/offensive.js.svg
 
 [david-url-dev]: https://david-dm.org/mchalapuk/offensive.js?type=dev
-[david-image-dev]: 
 
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
