@@ -80,7 +80,7 @@ ContractError: init.timestamp must be a numer; got undefined
 ```
 
 Alternatively, above contract could be implemented using following
-single check statement (message in thrown error would stay the same).
+single-statement check.
 
 ```js
 check(init, 'init')
@@ -91,6 +91,7 @@ check(init, 'init')
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
 and [`.propertyOfType`][property-of-type] assertions.
+
 [See full list of offensive.js built-in assertions][assertions].
 
 ### Defensive Programming
@@ -162,9 +163,10 @@ app.use(function (err, req, res, next) {
       break;
   }
 });
+```
 
 Above exmple shows defensive programming on server side, but the same technique
-is applicable on client side. When useing defensive programming on client side
+is applicable on client side. When&nbsp;using defensive programming on client side
 contract should be tested after fetching data froma server.
 
 **Further Rading:**
