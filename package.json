@@ -36,12 +36,12 @@
   "homepage": "https://github.com/webfront-toolkit/offensive.js",
   "devDependencies": {
     "coffee-script": "^1.11.0",
-    "eslint": "^3.0.1",
+    "eslint": "^4.19.1",
     "mocha": "*",
-    "should": "^11.1.0",
-    "should-sinon": "0.0.5",
-    "sinon": "^1.17.6",
-    "typescript": "^2.0.7"
+    "should": "^13.2.1",
+    "should-sinon": "0.0.6",
+    "sinon": "^5.1.0",
+    "typescript": "^2.9.1"
   },
   "dependencies": {}
 }
