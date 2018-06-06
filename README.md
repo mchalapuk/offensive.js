@@ -5,18 +5,19 @@
 [david-image]: https://david-dm.org/mchalapuk/offensive.js.svg
 
 [david-url-dev]: https://david-dm.org/mchalapuk/offensive.js?type=dev
-[david-image-dev]: https://david-dm.org/mchalapuk/offensive.js/dev-status.svg
+[david-image-dev]: 
 
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
 
 # offensive :facepunch: js
+
 [![Build Status][travis-image]][travis-url]
 [![Dependency Status][david-image]][david-url]
-[![devDependency Status][david-image-dev]][david-url-dev]
 [![NPM version][npm-image]][npm-url]
+[<img align=right alt="devDependency Status" src="https://david-dm.org/mchalapuk/offensive.js/dev-status.svg">][david-url-dev]
 
-A human-readable, fast and boilerplate-free contract programming library
+> A human-readable, fast and boilerplate-free contract programming library
 for JavaScript.
 
 **Why would I want it?**
@@ -44,7 +45,7 @@ const check = require('offensive');
 import check from 'offensive';
 ```
 
-### Offensive Programming
+### Precondition Checks A.K.A. Offensive Programming
 
 Programming offensively is about throwing exceptions a lot. As soon
 as corrupted state or illegal parameter is detected, program is crashed
@@ -102,9 +103,11 @@ to a bug in another program. Logging an error and trying to correct
 it by using default value or simply ignoring erroneus input
 would be a&nbsp;better way of handling such cases.
 
-Following example shows how to use defensive prograggming to implement
-error handling in a service using [express.js][express] and
-[offensive.js][offensive].
+#### Ping Server
+
+Following example is a fully functional HTTP-based ping server
+implemented using [express.js][express] with defensive checks
+on HTTP request implemented using [offensive.js][offensive].
 
 [express]: https://github.com/expressjs/express
 [offensive]: https://github.com/mchalapuk/offensive.js
@@ -165,9 +168,9 @@ app.use(function (err, req, res, next) {
 });
 ```
 
-Above exmple shows defensive programming on server side, but the same technique
-is applicable on client side. When&nbsp;using defensive programming on client side
-contract should be tested after fetching data froma server.
+Above code shows defensive programming on server side, but the same technique
+is applicable in the client. When&nbsp;using defensive programming on client side
+contract should be tested after fetching data from a server.
 
 **Further Rading:**
  * [What is the difference between offensive and defensive
@@ -619,6 +622,6 @@ file.
 
 ## License
 
-Copyright &copy; 2016 Maciej Chałapuk.
+Copyright &copy; 2018 Maciej Chałapuk.
 Released under [MIT license](LICENSE).
 
