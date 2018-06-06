@@ -92,7 +92,7 @@ check(init, 'init')
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
 and [`.propertyOfType`][property-of-type] assertions.
 
-[See full list of offensive.js built-in assertions][assertions].
+**[See full list of offensive.js built-in assertions][assertions]**.
 
 ### Defensive Programming
 
@@ -106,7 +106,7 @@ would be a&nbsp;better way of handling such cases.
 
 Following example is a fully functional HTTP-based ping server
 implemented using [express.js][express] with defensive checks
-on HTTP request implemented using [offensive.js][offensive].
+on&nbsp;HTTP request implemented using [offensive.js][offensive].
 
 [express]: https://github.com/expressjs/express
 [offensive]: https://github.com/mchalapuk/offensive.js
