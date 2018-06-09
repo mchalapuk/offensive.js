@@ -478,11 +478,12 @@ check(arg, 'arg').has.length(0);
 
 [one-of]: #one-of-assertion
 <a id=one-of-assertion></a>
-#### `.oneOf(set, name)` aliases: `.elementOf`, `.containedIn`
+#### `.oneOf(set, ?name)` aliases: `.elementOf`, `.containedIn`
 Asserts that checked value is contained in given **set**. Given **name** (if
 present) is used as a name of set in produced error message.
 ```js
 check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ]);
+check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ], 'valid status');
 ```
 
 [element]: #elementthatis-assertion

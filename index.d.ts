@@ -98,9 +98,9 @@ interface Assertions<T> {
   fieldGT: (fieldName: string, leftBounds: number) => OperatorContext<T>;
   length: (requiredLength: number) => OperatorContext<T>;
   len: (requiredLength: number) => OperatorContext<T>;
-  oneOf: (collection: any[], name: string) => OperatorContext<T>;
-  elementOf: (collection: any[], name: string) => OperatorContext<T>;
-  containedIn: (collection: any[], name: string) => OperatorContext<T>;
+  oneOf: (collection: any[], name?: string) => OperatorContext<T>;
+  elementOf: (collection: any[], name?: string) => OperatorContext<T>;
+  containedIn: (collection: any[], name?: string) => OperatorContext<T>;
   elementThatIs: (index: number, assertName: string, condition: Condition<T>) => OperatorContext<T>;
   elementWhichIs: (index: number, assertName: string, condition: Condition<T>) => OperatorContext<T>;
   eachElementIs: (assertName: string, condition: Condition<T>) => OperatorContext<T>;
