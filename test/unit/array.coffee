@@ -18,9 +18,9 @@ describe "check(0, 'arg')", ->
     it "should throw new Error('#{expectedMessage}')" , ->
       shouldThrow expectedMessage, -> testedCheck.oneOf errorSet
 
-  errorSetName = "super numbers"
-  describe ".oneOf([1, 2, 3], 'super numbers')", ->
-    expectedMessage = "arg must be one of #{errorSetName}; got 0"
+  errorSetName = "a super number"
+  describe ".oneOf([1, 2, 3], 'a super number')", ->
+    expectedMessage = "arg must be #{errorSetName}; got 0"
     it "should throw new Error('#{expectedMessage}')" , ->
       shouldThrow expectedMessage, -> testedCheck.oneOf errorSet, errorSetName
 
