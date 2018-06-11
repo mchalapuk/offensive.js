@@ -1,6 +1,6 @@
 {
   "name": "offensive",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "offensive.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "mocha": "*",
     "should": "^13.2.1",
     "should-sinon": "0.0.6",
-    "sinon": "^5.1.0",
+    "sinon": "^6.0.0",
     "typescript": "^2.9.1"
   },
   "dependencies": {}
