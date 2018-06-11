@@ -24,7 +24,8 @@ for JavaScript.
  1. It reduces the boilerplate of writing error messsages to zero,
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
- 4. Has zero runtime dependencies.
+ 4. Has zero runtime dependencies,
+ 5. Contains its own `.d.ts` file.
 
 ## Installation
 
@@ -184,7 +185,7 @@ contract should be tested after fetching data from a server.
 1. [Check Function][check]
 1. [Assertions][assertions]
 2. [Boolean Operators][operators]
-3. [Interfaces][interfaces]
+3. [Type Definitions][type-definitions]
 
 [check]: #check-function
 <a id=check-function></a>
@@ -603,12 +604,13 @@ Logical negation of a value after `.not` operator.
 check(arg, 'arg').is.not.Undefined();
 ```
 
-[interfaces]: #interfaces
-### Interfaces
+[type-definitions]: #type-definitions
+<a id=type-definitions></a>
+### Type Definitions
 
-See [index.d.ts][interfaces].
+See [index.d.ts][typedefs].
 
-[interfaces]: index.d.ts
+[typedefs]: index.d.ts
 
 ## Extension API
 
