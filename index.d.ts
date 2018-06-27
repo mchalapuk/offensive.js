@@ -71,6 +71,9 @@ interface Assertions<T> {
   matchesRegexp: (regexp : string | RegExp) => OperatorContext<T>;
   matchesRegExp: (regexp : string | RegExp) => OperatorContext<T>;
   match: (regexp : string | RegExp) => OperatorContext<T>;
+  anEmail: () => OperatorContext<T>;
+  Email: () => OperatorContext<T>;
+  email: () => OperatorContext<T>;
   equalTo: (another: any) => OperatorContext<T>;
   EqualTo: (another: any) => OperatorContext<T>;
   equal: (another: any) => OperatorContext<T>;
