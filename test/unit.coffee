@@ -10,4 +10,5 @@ require './unit/property.coffee'
 require './unit/either.coffee'
 require './unit/array.coffee'
 require './unit/equal.coffee'
+require './unit/regexp.coffee'
 
