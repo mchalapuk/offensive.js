@@ -52,6 +52,9 @@ interface Assertions<T> {
   array: OperatorContext<T>;
   anInstanceOf: <U>(requiredClass: Newable<U>) => OperatorContext<T>;
   instanceOf: <U>(requiredClass: Newable<U>) => OperatorContext<T>;
+  aDate: OperatorContext<T>;
+  Date: OperatorContext<T>;
+  date: OperatorContext<T>;
   True: OperatorContext<T>;
   'true': OperatorContext<T>;
   False: OperatorContext<T>;
@@ -64,6 +67,10 @@ interface Assertions<T> {
   Falsy: OperatorContext<T>;
   falsey: OperatorContext<T>;
   Falsey: OperatorContext<T>;
+  matches: (regexp : string | RegExp) => OperatorContext<T>;
+  matchesRegexp: (regexp : string | RegExp) => OperatorContext<T>;
+  matchesRegExp: (regexp : string | RegExp) => OperatorContext<T>;
+  match: (regexp : string | RegExp) => OperatorContext<T>;
   equalTo: (another: any) => OperatorContext<T>;
   EqualTo: (another: any) => OperatorContext<T>;
   equal: (another: any) => OperatorContext<T>;

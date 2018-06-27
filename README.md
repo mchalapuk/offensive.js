@@ -222,10 +222,13 @@ offensive.js contains following built-in assertions.
  1. [`.aFunction()`][function]
  1. [`.anArray()`][array]
  1. [`.anInstanceOf(RequiredClass)`][instance-of]
+ 1. [`.aDate()`][date]
  1. [`.True()`][true]
  1. [`.False()`][false]
  1. [`.truthy()`][truthy]
  1. [`.falsy()`][falsy]
+ 1. [`.matches(regexp)`][matches]
+ 1. [`.anEmail()`][email]
  1. [`.equalTo()`][equal-to]
  1. [`.exactly()`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
@@ -343,6 +346,15 @@ using `instanceof` operator.
 check(arg, 'arg').is.anInstanceOf(RegExp);
 ```
 
+[date]: #date-assertion
+<a id=date-assertion></a>
+#### `.aDate()` aliases: `.Date`, `.date`
+Asserts that checked value is a instance of `Date`, by
+using `instanceof` operator.
+```js
+check(arg, 'arg').is.aDate();
+```
+
 [true]: #true-assertion
 <a id=true-assertion></a>
 #### `.True()` aliases: `.true`
@@ -373,6 +385,22 @@ check(arg, 'arg').is.truthy();
 Asserts that checked value is falsy (converts to `false`).
 ```js
 check(arg, 'arg').is.falsy();
+```
+
+[matches]: #matches-assertion
+<a id=matches-assertion></a>
+#### `.matches(regexp)` aliases: `.matchesRegexp`, `.matchesRegExp`, `.match`
+Asserts that checked value fully matches given **regexp**.
+```js
+check(arg, 'arg').matches(/[a-z]+/);
+```
+
+[email]: #email-assertion
+<a id=email-assertion></a>
+#### `.anEmail()` aliases: `.Email`, `.email`
+Asserts that checked value fully email given **regexp**.
+```js
+check(arg, 'arg').email(/[a-z]+/);
 ```
 
 [equal-to]: #equal-to-assertion
