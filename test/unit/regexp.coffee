@@ -22,3 +22,18 @@ describe "check('maciej@github.com', 'arg')", ->
       should -> testedCheck.matches "aaa"
         .throw "arg must be matching /aaa/; got 'maciej@github.com'"
 
+  describe ".anEmail()", ->
+    it "doesn't throw", ->
+      testedCheck.anEmail()
+
+describe "check('arg', 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check "arg", "arg"
+
+  describe ".anEmail()", ->
+    it "throws", ->
+      should -> testedCheck.anEmail()
+        .throw "arg must be an email; got 'arg'"
+
