@@ -400,7 +400,7 @@ check(arg, 'arg').matches(/[a-z]+/);
 #### `.anEmail()` aliases: `.Email`, `.email`
 Asserts that checked value fully email given **regexp**.
 ```js
-check(arg, 'arg').email(/[a-z]+/);
+check(arg, 'arg').is.anEmail();
 ```
 
 [equal-to]: #equal-to-assertion
