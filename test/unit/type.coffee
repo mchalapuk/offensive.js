@@ -68,7 +68,13 @@ describe "check([], 'arg')", ->
     testedCheck = check [], "arg"
 
   describe ".anArray()", ->
-    it "should not throw", -> testedCheck.anArray()
+    it "should not throw", ->
+      testedCheck.anArray()
+
+  describe ".aDate()", ->
+    it "should throw", ->
+      should -> testedCheck.aDate()
+        .throw "arg must be a Date; got []"
 
 describe "check(new String(), 'arg')", ->
   testedCheck = null
@@ -85,4 +91,19 @@ describe "check(new String(), 'arg')", ->
     expectedMessage = "arg must be an instance of Number; got {}"
     it "should throw #{expectedMessage}", ->
       shouldThrow expectedMessage, -> testedCheck.anInstanceOf Number
+
+describe "check(new Date(), 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check new Date(), "arg"
+
+  describe ".aDate()", ->
+    it "should not throw", ->
+      testedCheck.aDate()
+
+  describe ".anArray()", ->
+    it "should throw", ->
+      should -> testedCheck.anArray()
+        .throw "arg must be an array; got {}"
 
