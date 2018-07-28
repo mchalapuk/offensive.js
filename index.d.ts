@@ -36,6 +36,11 @@ interface Assertions<T> {
   aNumber: OperatorContext<T>;
   'Number': OperatorContext<T>;
   'number': OperatorContext<T>;
+  anInteger: OperatorContext<T>;
+  Integer: OperatorContext<T>;
+  integer: OperatorContext<T>;
+  anInt: OperatorContext<T>;
+  'int': OperatorContext<T>;
   aBoolean: OperatorContext<T>;
   'Boolean': OperatorContext<T>;
   'boolean': OperatorContext<T>;

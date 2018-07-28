@@ -107,3 +107,18 @@ describe "check(new Date(), 'arg')", ->
       should -> testedCheck.anArray()
         .throw "arg must be an array; got {}"
 
+  describe ".anInteger()", ->
+    it "should throw", ->
+      should -> testedCheck.anInteger()
+        .throw "arg must be an integer; got {}"
+
+describe "check(111, 'arg')", ->
+  testedCheck = null
+
+  beforeEach ->
+    testedCheck = check 111, "arg"
+
+  describe ".anInteger()", ->
+    it "should not throw", ->
+      testedCheck.anInteger()
+

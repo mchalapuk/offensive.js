@@ -217,6 +217,7 @@ offensive.js contains following built-in assertions.
  1. [`.ofType(requiredType)`][of-type]
  1. [`.aBoolean()`][boolean]
  1. [`.aNumber()`][number]
+ 1. [`.anInteger()`][integer]
  1. [`.aString()`][string]
  1. [`.anObject()`][object]
  1. [`.aFunction()`][function]
@@ -298,6 +299,14 @@ check(arg, 'arg').is.aBoolean();
 Asserts that checked value is a number by ivoking `typeof` operator.
 ```js
 check(arg, 'arg').is.aNumber();
+```
+
+[integer]: #integer-assertion
+<a id=integer-assertion></a>
+#### `.anInteger()` aliases: `.Integer`, `.anInt`, `.int`
+Asserts that checked value is an integer by ivoking `Number.isInteger`.
+```js
+check(arg, 'arg').is.anInteger();
 ```
 
 [string]: #string-assertion
