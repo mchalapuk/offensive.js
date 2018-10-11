@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "declaration": true,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [ "ES5", "ES6", "ES7", "DOM" ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "newLine": "lf",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "outDir": "../lib/",
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "target": "es5",
+    "types": [
+    ],
+    "baseUrl": ".",
+    "paths": {
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
+
