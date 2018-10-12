@@ -5,8 +5,8 @@ import Result from './Result';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface UnaryOperator {
-  apply(result : Result);
+  apply(result : Result) : Result;
 }
 
-export UnaryOperator;
+export default UnaryOperator;
 

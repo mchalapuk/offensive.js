@@ -1,4 +1,6 @@
 
+import Result from './Result';
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
