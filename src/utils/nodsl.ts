@@ -4,7 +4,7 @@ import ObjectSerializer from './ObjectSerializer';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class NoDSL {
+export class NoDsl {
   private serializer : ObjectSerializer;
 
   constructor(
@@ -27,7 +27,7 @@ export class NoDSL {
   }
 }
 
-export const nodsl = new NoDSL();
+export const nodsl = new NoDsl();
 export default nodsl;
 
 export const check = nodsl.check.bind(nodsl);
