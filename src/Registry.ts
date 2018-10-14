@@ -7,7 +7,7 @@ export class Registry {
   private Registry() {
   }
 
-  addOperator(name : string, operator : Operator) {
+  addOperatorFactory(factory : Operator.Factory) {
   }
 }
 

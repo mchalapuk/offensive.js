@@ -3,9 +3,8 @@
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface Result {
-  subject : string;
   success : boolean;
-  message : string;
+  message : Message;
 }
 
 export default Result;
@@ -13,12 +12,9 @@ export default Result;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class LeafResult implements Result {
-  constructor(
-    public subject : string,
-    public success : boolean,
-    public message : string,
-  ) {
-  }
+export interface Message {
+  object : string;
+  requirement : string;
+  toString() : string;
 }
 

@@ -1,42 +1,91 @@
 
 import Operator from './Operator';
-import Result from './Result';
+import { Result, Message } from './Result';
 import { nodsl } from '../utils';
 
-export type BinaryVisitor = (lhs : Result, rhs : Result) => Result;
+export type SuccessCalculator = (lhs : Result, rhs : Result) => boolean;
+
+let objectNumber = 0;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class BinaryOperator implements Operator {
-  static subject(lhs : Result, rhs : Result) {
-    if (lhs.subject === lhs.subject) {
-      return lhs.subject;
-    }
-    return `[ ${lhs.subject}, ${rhs.subject} ]`;
-  }
-
-  static message(lhs : Result, separator : string, rhs : Result) {
-    if (lhs.subject === lhs.subject) {
-      return `${lhs.subject} must be ${lhs.message} ${separator} ${rhs.message}`;
-    }
-    return `${lhs.message} ${separator} ${rhs.message}`;
-  }
-
-  private _results : Result[] = [];
+  private results : Result[] = [];
 
   constructor(
-    private _visit : BinaryVisitor,
+    private separator : string,
+    private calculateSuccess : SuccessCalculator,
   ) {
+    this.getMessage = this.getMessage.bind(this);
   }
 
   add(result : Result) {
-    nodsl.check(this._results.length !== 2, 'trying to add third result to a binary operator');
-    this._results.push(result);
+    nodsl.check(this.results.length !== 2, 'trying to add third result to a binary operator');
+    this.results.push(result);
   }
   apply() {
-    nodsl.check(this._results.length === 2, 'trying to apply unary operator without both results');
-    return this._visit(this._results[0] as Result, this._results[1] as Result);
+    nodsl.check(this.results.length === 2, 'trying to apply unary operator without both results');
+
+    const lhs = this.results[0] as Result;
+    const rhs = this.results[1] as Result;
+
+    const { calculateSuccess, getMessage } = this;
+
+    return {
+      get success() {
+        return calculateSuccess(lhs, rhs);
+      },
+      get message() {
+        return getMessage(lhs.message, rhs.message);
+      },
+    };
+  }
+
+  private getMessage(lhs : Message, rhs : Message) {
+    const { separator } = this;
+
+    if (lhs.object === lhs.object) {
+      return {
+        get object() {
+          return lhs.object;
+        },
+        get requirement() {
+          return `${lhs.requirement} ${separator} ${rhs.requirement}`;
+        },
+        toString() {
+          return `${this.object} must be ${this.requirement}`;
+        },
+      };
+    }
+    return {
+      get object() {
+        return `[${lhs.object},${rhs.object}]_binary_${objectNumber++}}`;
+      },
+      get requirement() {
+        return `${lhs.toString()} ${separator} ${rhs.toString()}`;
+      },
+      toString() {
+        return `${this.requirement}`;
+      },
+    };
+  }
+}
+
+export namespace BinaryOperator {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  export class Factory implements Operator.Factory {
+    constructor(
+      public operatorName : string,
+      private calculateSuccess : SuccessCalculator,
+    ) {
+    }
+
+    create() {
+      return new BinaryOperator(this.operatorName, this.calculateSuccess);
+    }
   }
 }
 
