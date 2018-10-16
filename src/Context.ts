@@ -1,19 +1,23 @@
 
+import { Message } from './model/Result';
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export interface ConnectorContext {
+export interface Context {
+  success : boolean;
+  message : Message;
 }
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export interface AssertionContext extends ConnectorContext {
+export interface AssertionContext extends Context {
 }
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export interface OperatorContext extends ConnectorContext {
+export interface OperatorContext extends Context {
 }
 

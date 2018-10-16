@@ -10,6 +10,9 @@ export class Registry {
   private Registry() {
   }
 
+  addAssertion(assertion : NamedAssertion) : this {
+    return this;
+  }
   addAssertionFactory(factory : Assertion.Factory) : this {
     return this;
   }
@@ -19,7 +22,18 @@ export class Registry {
   addOperatorFactory(factory : Operator.Factory) : this {
     return this;
   }
+  addConnector(connector : string) : this {
+    return this;
+  }
 }
 
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
 export default Registry;
+
+export interface NamedAssertion {
+  name : string;
+  assertion : Assertion;
+}
 
