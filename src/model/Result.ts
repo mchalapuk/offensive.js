@@ -18,3 +18,18 @@ export interface Message {
   toString() : string;
 }
 
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class StandardMessage implements Message {
+  constructor(
+    public object : string,
+    public requirement : string,
+  ) {
+  }
+
+  toString() {
+    return `${this.object} must be ${this.requirement}`;
+  }
+}
+
