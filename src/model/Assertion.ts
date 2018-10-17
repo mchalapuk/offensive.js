@@ -12,18 +12,7 @@ export namespace Assertion {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  export interface Factory {
-    assertionName : string;
-    create(args : any[]) : Assertion;
-  }
-
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  export interface Alias {
-    alias : string;
-    for : string;
-  }
+  export type Factory = (args : any[]) => Assertion;
 }
 
 export default Assertion;

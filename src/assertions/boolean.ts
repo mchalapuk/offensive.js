@@ -53,28 +53,8 @@ export default BooleanAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aBoolean',
+    names: [ 'aBoolean', 'Boolean', 'boolean', 'aBool', 'Bool', 'bool' ],
     assertion: new BooleanAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Boolean',
-    for: 'aBoolean',
-  })
-  .addAssertionAlias({
-    alias: 'boolean',
-    for: 'aBoolean',
-  })
-  .addAssertionAlias({
-    alias: 'aBool',
-    for: 'aBoolean',
-  })
-  .addAssertionAlias({
-    alias: 'Bool',
-    for: 'aBoolean',
-  })
-  .addAssertionAlias({
-    alias: 'bool',
-    for: 'aBoolean',
   })
 ;
 
@@ -102,20 +82,12 @@ export class BooleanValueAssertion implements Assertion {
 
 Registry.instance
   .addAssertion({
-    name: 'True',
+    names: [ 'True', 'true' ],
     assertion: new BooleanValueAssertion(true),
   })
-  .addAssertionAlias({
-    alias: 'true',
-    for: 'True',
-  })
   .addAssertion({
-    name: 'False',
+    names: [ 'False', 'false' ],
     assertion: new BooleanValueAssertion(false),
-  })
-  .addAssertionAlias({
-    alias: 'false',
-    for: 'False',
   })
 ;
 
@@ -143,36 +115,12 @@ export class ConvertsToBooleanAssertion implements Assertion {
 
 Registry.instance
   .addAssertion({
-    name: 'truthy',
+    names: [ 'truthy', 'Truthy', 'truethy', 'Truethy' ],
     assertion: new ConvertsToBooleanAssertion(true),
   })
-  .addAssertionAlias({
-    alias: 'Truthy',
-    for: 'truthy',
-  })
-  .addAssertionAlias({
-    alias: 'truethy',
-    for: 'truthy',
-  })
-  .addAssertionAlias({
-    alias: 'Truethy',
-    for: 'truthy',
-  })
   .addAssertion({
-    name: 'falsy',
+    names: [ 'falsy', 'Falsy', 'falsey', 'Falsey' ],
     assertion: new ConvertsToBooleanAssertion(false),
-  })
-  .addAssertionAlias({
-    alias: 'Falsy',
-    for: 'falsy',
-  })
-  .addAssertionAlias({
-    alias: 'falsey',
-    for: 'falsy',
-  })
-  .addAssertionAlias({
-    alias: 'Falsey',
-    for: 'falsy',
   })
 ;
 

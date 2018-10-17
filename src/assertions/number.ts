@@ -39,16 +39,8 @@ export default NumberAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aNumber',
+    names: [ 'aNumber', 'Number', 'number' ],
     assertion: new NumberAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Number',
-    for: 'aNumber',
-  })
-  .addAssertionAlias({
-    alias: 'number',
-    for: 'aNumber',
   })
 ;
 

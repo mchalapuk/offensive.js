@@ -9,14 +9,11 @@ export interface Operator {
   apply() : Result;
 }
 
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
 export namespace Operator {
-  export interface Factory {
-    operatorName : string;
-    create() : Operator;
-  }
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  export type Factory = () => Operator;
 }
 
 export default Operator;

@@ -13,27 +13,40 @@ export class Registry {
   addAssertion(assertion : NamedAssertion) : this {
     return this;
   }
-  addAssertionFactory(factory : Assertion.Factory) : this {
+  addAssertionFactory(factory : NamedAssertionFactory) : this {
     return this;
   }
-  addAssertionAlias(alias : Assertion.Alias) : this {
+  addOperatorFactory(factory : NamedOperatorFactory) : this {
     return this;
   }
-  addOperatorFactory(factory : Operator.Factory) : this {
+  addConnectors(connectors : string[]) : this {
     return this;
   }
-  addConnector(connector : string) : this {
-    return this;
-  }
+}
+
+export default Registry;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface NamedAssertion {
+  names : string[];
+  assertion : Assertion;
 }
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export default Registry;
+export interface NamedAssertionFactory {
+  names : string[];
+  factory : Assertion.Factory;
+}
 
-export interface NamedAssertion {
-  name : string;
-  assertion : Assertion;
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface NamedOperatorFactory {
+  names : string[];
+  factory : Operator.Factory;
 }
 

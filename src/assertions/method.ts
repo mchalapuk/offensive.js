@@ -26,7 +26,6 @@ export class MethodAssertion implements Assertion {
     private methodName : string,
   ) {
   }
-
   assert(value : any, object : string) {
     const { methodName } = this;
 
@@ -45,18 +44,14 @@ export default MethodAssertion;
 
 Registry.instance
   .addAssertionFactory({
-    assertionName: 'aMethod',
+    names: [ 'aMethod', 'method' ],
 
-    create: (args : any[]) => {
+    factory: (args : any[]) => {
       nodsl.check(args.length === 1, 'method assertion requires one argument; got ', args.length);
       nodsl.check(typeof args[0] === 'string', 'methodName must be a string; got ', typeof args[0]);
 
       return new MethodAssertion(args[0] as string);
     },
-  })
-  .addAssertionAlias({
-    alias: 'method',
-    for: 'aMethod',
   })
 ;
 

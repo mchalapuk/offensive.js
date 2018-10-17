@@ -19,7 +19,6 @@ declare module "./Context" {
 }
 
 Registry.instance
-  .addConnector('is')
-  .addConnector('has')
+  .addConnectors(['is', 'has'])
 ;
 

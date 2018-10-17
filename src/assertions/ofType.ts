@@ -5,8 +5,6 @@ import { nodsl } from '../utils';
 
 import { AssertionContext, OperatorContext } from '../Context';
 
-export type Type = 'function' | 'object' | 'string' | 'number' | 'boolean' | 'undefined';
-
 declare module "../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -26,6 +24,8 @@ declare module "../Context" {
     type(type : 'undefined') : OperatorContext<undefined>;
   }
 }
+
+export type Type = 'function' | 'object' | 'string' | 'number' | 'boolean' | 'undefined';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -56,18 +56,14 @@ const VALID_TYPES = /function|object|string|number|boolean|undefined/
 
 Registry.instance
   .addAssertionFactory({
-    assertionName: 'ofType',
+    names: [ 'ofType', 'type' ],
 
-    create: (args : any[]) => {
+    factory: (args : any[]) => {
       nodsl.check(args.length === 1, '');
       nodsl.check(args[0].match(VALID_TYPES), '');
 
       return new OfTypeAssertion(args[0]);
     },
-  })
-  .addAssertionAlias({
-    alias: 'type',
-    for: 'ofType',
   })
 ;
 

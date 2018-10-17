@@ -37,12 +37,8 @@ export default UndefinedAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'Undefined',
+    names: [ 'Undefined', 'undefined' ],
     assertion: new UndefinedAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'undefined',
-    for: 'Undefined',
   })
 ;
 

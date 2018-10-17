@@ -38,28 +38,8 @@ export default IntegerAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'anInteger',
+    names: [ 'anInteger', 'Integer', 'integer', 'anInt', 'Int', 'int' ],
     assertion: new IntegerAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Integer',
-    for: 'anInteger',
-  })
-  .addAssertionAlias({
-    alias: 'integer',
-    for: 'anInteger',
-  })
-  .addAssertionAlias({
-    alias: 'anInt',
-    for: 'anInteger',
-  })
-  .addAssertionAlias({
-    alias: 'Int',
-    for: 'anInteger',
-  })
-  .addAssertionAlias({
-    alias: 'int',
-    for: 'anInteger',
   })
 ;
 

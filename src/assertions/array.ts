@@ -44,16 +44,8 @@ export default ArrayAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'anArray',
+    names: [ 'anArray', 'Array', 'array' ],
     assertion: new ArrayAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Array',
-    for: 'anArray',
-  })
-  .addAssertionAlias({
-    alias: 'array',
-    for: 'anArray',
   })
 ;
 

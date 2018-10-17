@@ -41,28 +41,8 @@ export default FunctionAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aFunction',
+    names: [ 'aFunction', 'Function', 'function', 'aFunc', 'Func', 'func' ],
     assertion: new FunctionAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Function',
-    for: 'aFunction',
-  })
-  .addAssertionAlias({
-    alias: 'function',
-    for: 'aFunction',
-  })
-  .addAssertionAlias({
-    alias: 'aFunc',
-    for: 'aFunction',
-  })
-  .addAssertionAlias({
-    alias: 'Func',
-    for: 'aFunction',
-  })
-  .addAssertionAlias({
-    alias: 'func',
-    for: 'aFunction',
   })
 ;
 

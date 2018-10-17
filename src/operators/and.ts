@@ -15,6 +15,9 @@ declare module "../Context" {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 Registry.instance
-  .addOperatorFactory(new BinaryOperator.Factory('and', (lhs, rhs) => lhs.success && rhs.success))
+  .addOperatorFactory({
+    names: [ 'and' ],
+    factory: BinaryOperator.factory('and', (lhs, rhs) => lhs.success && rhs.success),
+  })
 ;
 

@@ -39,20 +39,8 @@ export default ObjectAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'anObject',
+    names: [ 'anObject', 'Object', 'object', 'anObject', 'obj' ],
     assertion: new ObjectAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'Object',
-    for: 'anObject',
-  })
-  .addAssertionAlias({
-    alias: 'object',
-    for: 'anObject',
-  })
-  .addAssertionAlias({
-    alias: 'obj',
-    for: 'aObject',
   })
 ;
 

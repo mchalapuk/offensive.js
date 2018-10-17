@@ -76,16 +76,8 @@ export namespace BinaryOperator {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  export class Factory implements Operator.Factory {
-    constructor(
-      public operatorName : string,
-      private calculateSuccess : SuccessCalculator,
-    ) {
-    }
-
-    create() {
-      return new BinaryOperator(this.operatorName, this.calculateSuccess);
-    }
+  export function factory(name : string, calculateSuccess : SuccessCalculator) : Operator.Factory {
+    return () => new BinaryOperator(name, calculateSuccess);
   }
 }
 

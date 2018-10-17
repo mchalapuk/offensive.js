@@ -39,20 +39,8 @@ export default StringAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aString',
+    names: [ 'aString', 'String', 'string', 'str' ],
     assertion: new StringAssertion(),
-  })
-  .addAssertionAlias({
-    alias: 'String',
-    for: 'aString',
-  })
-  .addAssertionAlias({
-    alias: 'string',
-    for: 'aString',
-  })
-  .addAssertionAlias({
-    alias: 'str',
-    for: 'aString',
   })
 ;
 

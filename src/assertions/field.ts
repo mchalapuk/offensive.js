@@ -24,7 +24,6 @@ export class FieldAssertion implements Assertion {
     private fieldName : string,
   ) {
   }
-
   assert(value : any, object : string) {
     const { fieldName } = this;
 
@@ -43,18 +42,14 @@ export default FieldAssertion;
 
 Registry.instance
   .addAssertionFactory({
-    assertionName: 'field',
+    names: [ 'field', 'property' ],
 
-    create: (args : any[]) => {
+    factory: (args : any[]) => {
       nodsl.check(args.length === 1, 'field assertion requires one argument; got ', args.length);
       nodsl.check(typeof args[0] === 'string', 'fieldName must be a string; got ', typeof args[0]);
 
       return new FieldAssertion(args[0] as string);
     },
-  })
-  .addAssertionAlias({
-    alias: 'property',
-    for: 'field',
   })
 ;
 
