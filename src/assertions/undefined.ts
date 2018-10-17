@@ -9,10 +9,8 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aString : OperatorContext<string>;
-    String : OperatorContext<string>;
-    string : OperatorContext<string>;
-    str : OperatorContext<string>;
+    Undefined : OperatorContext<undefined>;
+    undefined : OperatorContext<undefined>;
   }
 }
 
@@ -22,37 +20,29 @@ import check from '..';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class StringAssertion implements Assertion {
+export class UndefinedAssertion implements Assertion {
   assert(value : any, object : string) {
     return {
       get success() {
-        return check(value, object).is.ofType('string').success;
+        return check(value, object).is.ofType('undefined').success;
       },
       get message() {
-        return new StandardMessage(object, 'a string');
+        return new StandardMessage(object, 'undefined');
       },
     };
   }
 }
 
-export default StringAssertion;
+export default UndefinedAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aString',
-    assertion: new StringAssertion(),
+    name: 'Undefined',
+    assertion: new UndefinedAssertion(),
   })
   .addAssertionAlias({
-    alias: 'String',
-    for: 'aString',
-  })
-  .addAssertionAlias({
-    alias: 'string',
-    for: 'aString',
-  })
-  .addAssertionAlias({
-    alias: 'str',
-    for: 'aString',
+    alias: 'undefined',
+    for: 'Undefined',
   })
 ;
 

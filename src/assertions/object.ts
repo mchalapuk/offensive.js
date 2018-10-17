@@ -9,10 +9,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aString : OperatorContext<string>;
-    String : OperatorContext<string>;
-    string : OperatorContext<string>;
-    str : OperatorContext<string>;
+    anObject : OperatorContext<T & object>;
+    Object : OperatorContext<T & object>;
+    object : OperatorContext<T & object>;
+    obj : OperatorContext<T & object>;
   }
 }
 
@@ -22,37 +22,37 @@ import check from '..';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class StringAssertion implements Assertion {
+export class ObjectAssertion implements Assertion {
   assert(value : any, object : string) {
     return {
       get success() {
-        return check(value, object).is.ofType('string').success;
+        return check(value, object).is.ofType('object').success;
       },
       get message() {
-        return new StandardMessage(object, 'a string');
+        return new StandardMessage(object, 'an object');
       },
     };
   }
 }
 
-export default StringAssertion;
+export default ObjectAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aString',
-    assertion: new StringAssertion(),
+    name: 'anObject',
+    assertion: new ObjectAssertion(),
   })
   .addAssertionAlias({
-    alias: 'String',
-    for: 'aString',
+    alias: 'Object',
+    for: 'anObject',
   })
   .addAssertionAlias({
-    alias: 'string',
-    for: 'aString',
+    alias: 'object',
+    for: 'anObject',
   })
   .addAssertionAlias({
-    alias: 'str',
-    for: 'aString',
+    alias: 'obj',
+    for: 'aObject',
   })
 ;
 

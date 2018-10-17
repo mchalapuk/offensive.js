@@ -9,50 +9,51 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aString : OperatorContext<string>;
-    String : OperatorContext<string>;
-    string : OperatorContext<string>;
-    str : OperatorContext<string>;
+    anArray : OperatorContext<any[]>;
+    Array : OperatorContext<any[]>;
+    array : OperatorContext<any[]>;
   }
 }
 
-import './ofType';
+import './property';
+import './method';
 import check from '..';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class StringAssertion implements Assertion {
+export class ArrayAssertion implements Assertion {
   assert(value : any, object : string) {
     return {
       get success() {
-        return check(value, object).is.ofType('string').success;
+        return check(value, object)
+          .has.field('length')
+          .and.method('splice')
+          .and.method('forEach')
+          .success
+        ;
       },
       get message() {
-        return new StandardMessage(object, 'a string');
+        return new StandardMessage(object, 'an array');
       },
     };
   }
 }
 
-export default StringAssertion;
+export default ArrayAssertion;
 
 Registry.instance
   .addAssertion({
-    name: 'aString',
-    assertion: new StringAssertion(),
+    name: 'anArray',
+    assertion: new ArrayAssertion(),
   })
   .addAssertionAlias({
-    alias: 'String',
-    for: 'aString',
+    alias: 'Array',
+    for: 'anArray',
   })
   .addAssertionAlias({
-    alias: 'string',
-    for: 'aString',
-  })
-  .addAssertionAlias({
-    alias: 'str',
-    for: 'aString',
+    alias: 'array',
+    for: 'anArray',
   })
 ;
 
