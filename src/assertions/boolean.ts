@@ -15,6 +15,18 @@ declare module "../Context" {
     aBool : OperatorContext<boolean>;
     Bool : OperatorContext<boolean>;
     bool : OperatorContext<boolean>;
+    True : OperatorContext<boolean>;
+    true : OperatorContext<boolean>;
+    False : OperatorContext<boolean>;
+    false : OperatorContext<boolean>;
+    truthy : OperatorContext<T>;
+    Truthy : OperatorContext<T>;
+    truethy : OperatorContext<T>;
+    Truethy : OperatorContext<T>;
+    falsy : OperatorContext<T>;
+    Falsy : OperatorContext<T>;
+    falsey : OperatorContext<T>;
+    Falsey : OperatorContext<T>;
   }
 }
 
@@ -63,6 +75,104 @@ Registry.instance
   .addAssertionAlias({
     alias: 'bool',
     for: 'aBoolean',
+  })
+;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class BooleanValueAssertion implements Assertion {
+  constructor(
+    private expectedValue : boolean,
+  ) {
+  }
+  assert(value : any, object : string) {
+    const { expectedValue } = this;
+
+    return {
+      get success() {
+        return value === expectedValue;
+      },
+      get message() {
+        return new StandardMessage(object, `${expectedValue}`);
+      },
+    };
+  }
+}
+
+Registry.instance
+  .addAssertion({
+    name: 'True',
+    assertion: new BooleanValueAssertion(true),
+  })
+  .addAssertionAlias({
+    alias: 'true',
+    for: 'True',
+  })
+  .addAssertion({
+    name: 'False',
+    assertion: new BooleanValueAssertion(false),
+  })
+  .addAssertionAlias({
+    alias: 'false',
+    for: 'False',
+  })
+;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class ConvertsToBooleanAssertion implements Assertion {
+  constructor(
+    private expectedValue : boolean,
+  ) {
+  }
+  assert(value : any, object : string) {
+    const { expectedValue } = this;
+
+    return {
+      get success() {
+        return value == expectedValue;
+      },
+      get message() {
+        return new StandardMessage(object, expectedValue ? 'truthy' : 'falsy');
+      },
+    };
+  }
+}
+
+Registry.instance
+  .addAssertion({
+    name: 'truthy',
+    assertion: new ConvertsToBooleanAssertion(true),
+  })
+  .addAssertionAlias({
+    alias: 'Truthy',
+    for: 'truthy',
+  })
+  .addAssertionAlias({
+    alias: 'truethy',
+    for: 'truthy',
+  })
+  .addAssertionAlias({
+    alias: 'Truethy',
+    for: 'truthy',
+  })
+  .addAssertion({
+    name: 'falsy',
+    assertion: new ConvertsToBooleanAssertion(false),
+  })
+  .addAssertionAlias({
+    alias: 'Falsy',
+    for: 'falsy',
+  })
+  .addAssertionAlias({
+    alias: 'falsey',
+    for: 'falsy',
+  })
+  .addAssertionAlias({
+    alias: 'Falsey',
+    for: 'falsy',
   })
 ;
 
