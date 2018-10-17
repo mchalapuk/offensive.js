@@ -1,20 +1,20 @@
 
-import { AssertionContext, OperatorContext } from './Context';
+import { AssertionContext } from './Context';
 import { Registry } from './Registry';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function check(value : any, name : string) {
-  return {} as AssertionContext;
+export function check<T>(value : T, name : string) {
+  return {} as AssertionContext<T>;
 }
 
 export default check;
 
-declare global {
-  interface AssertionContext {
-    is : AssertionContext;
-    has : AssertionContext;
+declare module "./Context" {
+  interface AssertionContext<T> {
+    is : AssertionContext<T>;
+    has : AssertionContext<T>;
   }
 }
 

@@ -7,10 +7,23 @@ import { AssertionContext, OperatorContext } from '../Context';
 
 export type Type = 'function' | 'object' | 'string' | 'number' | 'boolean' | 'undefined';
 
-declare global {
-  interface AssertionContext {
-    ofType(type : Type) : OperatorContext;
-    type(type : Type) : OperatorContext;
+declare module "../Context" {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  interface AssertionContext<T> {
+    ofType(type : 'function') : OperatorContext<T & Function>;
+    ofType(type : 'object') : OperatorContext<T & object>;
+    ofType(type : 'string') : OperatorContext<string>;
+    ofType(type : 'number') : OperatorContext<number>;
+    ofType(type : 'boolean') : OperatorContext<boolean>;
+    ofType(type : 'undefined') : OperatorContext<undefined>;
+    type(type : 'function') : OperatorContext<T & Function>;
+    type(type : 'object') : OperatorContext<T & object>;
+    type(type : 'string') : OperatorContext<string>;
+    type(type : 'number') : OperatorContext<number>;
+    type(type : 'boolean') : OperatorContext<boolean>;
+    type(type : 'undefined') : OperatorContext<undefined>;
   }
 }
 

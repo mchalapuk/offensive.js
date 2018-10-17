@@ -5,18 +5,19 @@ import { nodsl } from '../utils';
 
 import { AssertionContext, OperatorContext } from '../Context';
 
-import './ofType';
-import check from '../';
-
-export type Type = 'function' | 'object' | 'string' | 'number' | 'boolean' | 'undefined';
-
-declare global {
-  interface AssertionContext {
-    aNumber : OperatorContext;
-    Number : OperatorContext;
-    number : OperatorContext;
+declare module "../Context" {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  interface AssertionContext<T> {
+    aNumber : OperatorContext<T & number>;
+    Number : OperatorContext<T & number>;
+    number : OperatorContext<T & number>;
   }
 }
+
+import './ofType';
+import check from '..';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
