@@ -7,21 +7,21 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface OperatorContext<T> {
-    and : AssertionContext<T>;
-    with : AssertionContext<T>;
-    of : AssertionContext<T>;
+    or : AssertionContext<T>;
   }
 }
 
-export const AndOperatorFactory = BinaryOperator.factory(
-  'and',
-  (lhs, rhs) => lhs.success && rhs.success,
+export const OrOperatorFactory = BinaryOperator.factory(
+  'or',
+  (lhs, rhs) => lhs.success || rhs.success,
 );
+
+export default OrOperatorFactory;
 
 Registry.instance
   .addOperatorFactory({
-    names: [ 'and', 'with', 'of' ],
-    factory: AndOperatorFactory,
+    names: [ 'or' ],
+    factory: OrOperatorFactory,
   })
 ;
 
