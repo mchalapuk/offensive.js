@@ -7,23 +7,23 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aNumber : OperatorContext<T & number>;
-    Number : OperatorContext<T & number>;
-    number : OperatorContext<T & number>;
+    aDate : OperatorContext<T & Date>;
+    Date : OperatorContext<T & Date>;
+    date : OperatorContext<T & Date>;
   }
 }
 
-import './ofType';
+import './instanceOf';
 import check from '..';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class NumberAssertion implements Assertion {
+export class DateAssertion implements Assertion {
   assert(value : any, object : string) {
     return {
       get success() {
-        return check(value, object).is.ofType('number').success;
+        return check(value, object).is.anInstanceOf(Date).success;
       },
       get message() {
         return new StandardMessage(object, 'a number');
@@ -32,12 +32,12 @@ export class NumberAssertion implements Assertion {
   }
 }
 
-export default NumberAssertion;
+export default DateAssertion;
 
 Registry.instance
   .addAssertion({
-    names: [ 'aNumber', 'Number', 'number' ],
-    assertion: new NumberAssertion(),
+    names: [ 'aDate', 'Date', 'date' ],
+    assertion: new DateAssertion(),
   })
 ;
 

@@ -10,18 +10,18 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    ofType(type : 'function') : OperatorContext<T & Function>;
-    ofType(type : 'object') : OperatorContext<T & object>;
-    ofType(type : 'string') : OperatorContext<string>;
-    ofType(type : 'number') : OperatorContext<number>;
-    ofType(type : 'boolean') : OperatorContext<boolean>;
-    ofType(type : 'undefined') : OperatorContext<undefined>;
-    type(type : 'function') : OperatorContext<T & Function>;
-    type(type : 'object') : OperatorContext<T & object>;
-    type(type : 'string') : OperatorContext<string>;
-    type(type : 'number') : OperatorContext<number>;
-    type(type : 'boolean') : OperatorContext<boolean>;
-    type(type : 'undefined') : OperatorContext<undefined>;
+    ofType(requiredType : 'function') : OperatorContext<T & Function>;
+    ofType(requiredType : 'object') : OperatorContext<T & object>;
+    ofType(requiredType : 'string') : OperatorContext<string>;
+    ofType(requiredType : 'number') : OperatorContext<number>;
+    ofType(requiredType : 'boolean') : OperatorContext<boolean>;
+    ofType(requiredType : 'undefined') : OperatorContext<undefined>;
+    type(requiredType : 'function') : OperatorContext<T & Function>;
+    type(requiredType : 'object') : OperatorContext<T & object>;
+    type(requiredType : 'string') : OperatorContext<string>;
+    type(requiredType : 'number') : OperatorContext<number>;
+    type(requiredType : 'boolean') : OperatorContext<boolean>;
+    type(requiredType : 'undefined') : OperatorContext<undefined>;
   }
 }
 
@@ -59,8 +59,14 @@ Registry.instance
     names: [ 'ofType', 'type' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, '');
-      nodsl.check(args[0].match(VALID_TYPES), '');
+      nodsl.check(
+        args.length === 1,
+        `.ofType requires 1 argument; got ${args.length}`,
+      );
+      nodsl.check(
+        args[0].match(VALID_TYPES),
+        `requiredType must match ${VALID_TYPES}; got ${args[0]}`,
+      );
 
       return new OfTypeAssertion(args[0]);
     },
