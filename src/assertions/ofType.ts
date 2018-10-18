@@ -3,8 +3,6 @@ import Registry from '../Registry';
 import { Assertion, Result, StandardMessage } from '../model';
 import { nodsl } from '../utils';
 
-import { AssertionContext, OperatorContext } from '../Context';
-
 declare module "../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
