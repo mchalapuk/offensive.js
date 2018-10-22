@@ -1,28 +1,50 @@
 
 import Operator from './Operator';
-import Result from './Result';
+import { Result, StandardMessage } from './Result';
 import { nodsl } from '../utils';
 
-export type UnaryVisitor = (arg : Result) => Result;
+export type SuccessCalculator = (result : Result) => boolean;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class UnaryOperator implements Operator {
-  private _result : Result | null = null;
+  private result : Result | null = null;
 
   constructor(
-    private _visit : UnaryVisitor,
+    private prefix : string,
+    private calculateSuccess : SuccessCalculator,
   ) {
   }
 
   add(result : Result) {
-    nodsl.check(this._result === null, 'trying to add second result to an unary operator');
-    this._result = result;
+    nodsl.check(this.result === null, 'trying to add second result to an unary operator');
+    this.result = result;
   }
   apply() {
-    nodsl.check(this._result !== null, 'trying to apply unary operator without result');
-    return this._visit(this._result as Result);
+    nodsl.check(this.result === null, 'trying to apply unary operator without operand');
+
+    const { calculateSuccess, prefix } = this;
+    const raw = this.result as Result;
+    const { message } = raw;
+
+    return {
+      get success() {
+        return calculateSuccess(raw);
+      },
+      get message() {
+        return new StandardMessage(message.object, `${prefix} ${message.requirement}`);
+      },
+    };
+  }
+}
+
+export namespace UnaryOperator {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  export function factory(name : string, calculateSuccess : SuccessCalculator) : Operator.Factory {
+    return () => new UnaryOperator(name, calculateSuccess);
   }
 }
 

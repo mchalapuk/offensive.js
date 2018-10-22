@@ -25,7 +25,7 @@ export class BinaryOperator implements Operator {
     this.results.push(result);
   }
   apply() {
-    nodsl.check(this.results.length === 2, 'trying to apply unary operator without both results');
+    nodsl.check(this.results.length === 2, 'trying to apply binary operator without both operands');
 
     const lhs = this.results[0] as Result;
     const rhs = this.results[1] as Result;
