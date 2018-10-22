@@ -1,6 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
+import { Assertion, StandardMessage } from '../model';
 import { nodsl } from '../utils';
 
 declare module "../Context" {
