@@ -1,9 +1,7 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
+import { Assertion, StandardMessage } from '../model';
 import { nodsl } from '../utils';
-
-import { AssertionContext, OperatorContext } from '../Context';
 
 declare module "../Context" {
   /**
@@ -27,16 +25,7 @@ export class MethodAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const { methodName } = this;
-
-    return {
-      get success() {
-        return check(value[methodName], `${object}.${methodName}`).is.aFunction.success;
-      },
-      get message() {
-        return new StandardMessage(`${object}.${methodName}`, 'a function');
-      },
-    };
+    return check(value[this.methodName], `${object}.${this.methodName}`).is.aFunction;
   }
 }
 
@@ -47,7 +36,7 @@ Registry.instance
     names: [ 'aMethod', 'method' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, 'method assertion requires one argument; got ', args.length);
+      nodsl.check(args.length === 1, '.method assertion requires one argument; got ', args.length);
       nodsl.check(typeof args[0] === 'string', 'methodName must be a string; got ', typeof args[0]);
 
       return new MethodAssertion(args[0] as string);

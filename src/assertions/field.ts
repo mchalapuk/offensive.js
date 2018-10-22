@@ -1,10 +1,7 @@
 
-
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
+import { Assertion, StandardMessage } from '../model';
 import { nodsl } from '../utils';
-
-import { AssertionContext, OperatorContext } from '../Context';
 
 declare module "../Context" {
   /**
@@ -32,7 +29,7 @@ export class FieldAssertion implements Assertion {
         return fieldName in value;
       },
       get message() {
-        return new StandardMessage(object, 'an array');
+        return new StandardMessage(object, `have field \'${fieldName}\'`);
       },
     };
   }
@@ -45,7 +42,7 @@ Registry.instance
     names: [ 'field', 'property' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, 'field assertion requires one argument; got ', args.length);
+      nodsl.check(args.length === 1, '.field requires one argument; got ', args.length);
       nodsl.check(typeof args[0] === 'string', 'fieldName must be a string; got ', typeof args[0]);
 
       return new FieldAssertion(args[0] as string);

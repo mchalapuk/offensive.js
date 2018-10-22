@@ -7,9 +7,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aDate : OperatorContext<T & Date>;
-    Date : OperatorContext<T & Date>;
-    date : OperatorContext<T & Date>;
+    aRegExp : OperatorContext<T & RegExp>;
+    RegExp : OperatorContext<T & RegExp>;
+    aRegexp : OperatorContext<T & RegExp>;
+    regexp : OperatorContext<T & RegExp>;
   }
 }
 
@@ -19,18 +20,18 @@ import check from '..';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class DateAssertion implements Assertion {
+export class RegExpAssertion implements Assertion {
   assert(value : any, object : string) {
-    return check(value, object).is.anInstanceOf(Date);
+    return check(value, object).is.anInstanceOf(RegExp as any);
   }
 }
 
-export default DateAssertion;
+export default RegExpAssertion;
 
 Registry.instance
   .addAssertion({
-    names: [ 'aDate', 'Date', 'date' ],
-    assertion: new DateAssertion(),
+    names: [ 'aRegExp', 'RegExp', 'aRegexp', 'regexp' ],
+    assertion: new RegExpAssertion(),
   })
 ;
 

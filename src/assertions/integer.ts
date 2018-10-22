@@ -1,8 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
-
-import { AssertionContext, OperatorContext } from '../Context';
+import { Assertion, StandardMessage } from '../model';
 
 declare module "../Context" {
   /**
@@ -28,7 +26,7 @@ export class IntegerAssertion implements Assertion {
         return Number.isInteger(value);
       },
       get message() {
-        return new StandardMessage(object, 'an integer');
+        return new StandardMessage(object, 'be an integer');
       },
     };
   }

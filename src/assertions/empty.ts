@@ -1,5 +1,4 @@
 
-
 import Registry from '../Registry';
 import { Assertion, StandardMessage } from '../model';
 
@@ -23,7 +22,7 @@ export class EmptyAssertion implements Assertion {
         return value === null || value === undefined;
       },
       get message() {
-        return new StandardMessage(object, 'empty');
+        return new StandardMessage(object, 'be empty');
       },
     };
   }

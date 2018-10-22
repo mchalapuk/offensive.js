@@ -30,25 +30,9 @@ export class FieldThatAssertion<F> implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const { fieldName, callback } = this;
+    const newContext = check(value[this.fieldName], `${object}.${this.fieldName}`);
 
-    let result : Result | null = null;
-
-    return {
-      get success() {
-        return this.lazy.success;
-      },
-      get message() {
-        return this.lazy.message;
-      },
-      get lazy() {
-        if (result === null) {
-          const newContext = check(value[fieldName], `${object}.${fieldName}`);
-          result = callback(newContext);
-        }
-        return result;
-      }
-    };
+    return this.callback(newContext);
   }
 }
 

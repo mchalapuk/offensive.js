@@ -1,6 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
+import { Assertion, StandardMessage } from '../model';
 import { nodsl, ObjectSerializer } from '../utils';
 
 declare module "../Context" {
@@ -38,7 +38,7 @@ export class ExactlyAssertion implements Assertion {
       get message() {
         return new StandardMessage(
           object,
-          `exactly equal to ${serializer.serializeAny(comparedValue)}`,
+          `be exactly equal to ${serializer.serializeAny(comparedValue)}`,
         );
       },
     };
@@ -59,10 +59,7 @@ Registry.instance
     ],
 
     factory: (args : any[]) => {
-      nodsl.check(
-        args.length === 1,
-        `.ofType requires 1 argument; got ${args.length}`,
-      );
+      nodsl.check(args.length === 1, `.exactly requires 1 argument; got ${args.length}`);
 
       return new ExactlyAssertion(args[0]);
     },

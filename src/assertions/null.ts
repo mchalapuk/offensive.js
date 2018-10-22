@@ -24,7 +24,7 @@ export class NullAssertion implements Assertion {
         return value === null;
       },
       get message() {
-        return new StandardMessage(object, 'null');
+        return new StandardMessage(object, 'be null');
       },
     };
   }

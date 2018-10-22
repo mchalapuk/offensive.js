@@ -24,14 +24,7 @@ import check from '..';
  */
 export class StringAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return check(value, object).is.ofType('string').success;
-      },
-      get message() {
-        return new StandardMessage(object, 'a string');
-      },
-    };
+    return check(value, object).is.ofType('string');
   }
 }
 

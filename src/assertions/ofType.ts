@@ -42,7 +42,17 @@ export class OfTypeAssertion implements Assertion {
         return typeof value === requiredType;
       },
       get message() {
-        return new StandardMessage(object, `of type ${requiredType}`);
+        switch (requiredType) {
+          case 'boolean':
+          case 'number':
+          case 'string':
+          case 'function':
+            return new StandardMessage(object, `be a ${requiredType}`);
+          case 'object':
+            return new StandardMessage(object, `be an ${requiredType}`);
+          case 'undefined':
+            return new StandardMessage(object, `be ${requiredType}`);
+        }
       },
     };
   }

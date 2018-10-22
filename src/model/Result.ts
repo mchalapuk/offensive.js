@@ -29,7 +29,7 @@ export class StandardMessage implements Message {
   }
 
   toString() {
-    return `${this.object} must be ${this.requirement}`;
+    return `${this.object} must ${this.requirement}`;
   }
 }
 

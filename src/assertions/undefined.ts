@@ -1,8 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
-
-import { AssertionContext, OperatorContext } from '../Context';
+import { Assertion, StandardMessage } from '../model';
 
 declare module "../Context" {
   /**
@@ -22,14 +20,7 @@ import check from '..';
  */
 export class UndefinedAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return check(value, object).is.ofType('undefined').success;
-      },
-      get message() {
-        return new StandardMessage(object, 'undefined');
-      },
-    };
+    return check(value, object).is.ofType('undefined');
   }
 }
 

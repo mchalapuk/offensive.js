@@ -1,9 +1,7 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
+import { Assertion, StandardMessage } from '../model';
 import { nodsl } from '../utils';
-
-import { AssertionContext, OperatorContext } from '../Context';
 
 declare module "../Context" {
   /**
@@ -32,7 +30,7 @@ export class InstanceOfAssertion<R> implements Assertion {
         return value instanceof requiredType;
       },
       get message() {
-        return new StandardMessage(object, `instance of ${requiredType}`);
+        return new StandardMessage(object, `be an instance of ${requiredType}`);
       },
     };
   }

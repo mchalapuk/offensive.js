@@ -1,8 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
-
-import { AssertionContext, OperatorContext } from '../Context';
+import { Assertion, StandardMessage } from '../model';
 
 declare module "../Context" {
   /**
@@ -38,14 +36,7 @@ import check from '..';
  */
 export class BooleanAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return check(value, object).is.ofType('boolean').success;
-      },
-      get message() {
-        return new StandardMessage(object, 'a boolean');
-      },
-    };
+    return check(value, object).is.ofType('boolean');
   }
 }
 
@@ -74,7 +65,7 @@ export class BooleanValueAssertion implements Assertion {
         return value === expectedValue;
       },
       get message() {
-        return new StandardMessage(object, `${expectedValue}`);
+        return new StandardMessage(object, `be ${expectedValue}`);
       },
     };
   }
@@ -107,7 +98,7 @@ export class ConvertsToBooleanAssertion implements Assertion {
         return value == expectedValue;
       },
       get message() {
-        return new StandardMessage(object, expectedValue ? 'truthy' : 'falsy');
+        return new StandardMessage(object, expectedValue ? 'be truthy' : 'be falsy');
       },
     };
   }

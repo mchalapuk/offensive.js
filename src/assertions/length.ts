@@ -31,17 +31,11 @@ export class LengthAssertion implements Assertion {
 
     return {
       get success() {
-        return this.lazy.success;
+        return check(value.length, `${object}.length`).is.equalTo(requiredLength).success;
       },
       get message() {
-        return this.lazy.message;
+        return new StandardMessage(object, `have length of ${requiredLength}`);
       },
-      get lazy() {
-        if (result === null) {
-          result = check(value.length, `${object}.length`).is.equalTo(requiredLength);
-        }
-        return result;
-      }
     };
   }
 }
@@ -53,7 +47,7 @@ Registry.instance
     names: [ 'length', 'len' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 2, 'field assertion requires two argument; got ', args.length);
+      nodsl.check(args.length === 1, '.length requires single argument; got ', args.length);
       nodsl.check(typeof args[0] === 'number', 'requiredLength must be a number; got ', typeof args[0]);
 
       return new LengthAssertion(args[0]);

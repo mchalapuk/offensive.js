@@ -21,14 +21,7 @@ import check from '..';
  */
 export class NumberAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return check(value, object).is.ofType('number').success;
-      },
-      get message() {
-        return new StandardMessage(object, 'a number');
-      },
-    };
+    return check(value, object).is.ofType('number');
   }
 }
 

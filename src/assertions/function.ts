@@ -1,8 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
-
-import { AssertionContext, OperatorContext } from '../Context';
+import { Assertion, StandardMessage } from '../model';
 
 declare module "../Context" {
   /**
@@ -26,14 +24,7 @@ import check from '..';
  */
 export class FunctionAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return check(value, object).is.ofType('function').success;
-      },
-      get message() {
-        return new StandardMessage(object, 'a function');
-      },
-    };
+    return check(value, object).is.ofType('function');
   }
 }
 
