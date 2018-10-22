@@ -1,8 +1,6 @@
 
 import Registry from '../Registry';
-import { Assertion, Result, StandardMessage } from '../model';
-
-import { AssertionContext, OperatorContext } from '../Context';
+import { Assertion } from '../model';
 
 declare module "../Context" {
   /**

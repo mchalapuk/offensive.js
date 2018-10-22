@@ -32,7 +32,7 @@ export class MatchesAssertion implements Assertion {
         return typeof value === 'string' && value.match(regexp) !== null;
       },
       get message() {
-        return new StandardMessage(object, `match ${regexp}`);
+        return new StandardMessage(object, `match /${regexp.source}/${regexp.flags}`);
       },
     };
   }
