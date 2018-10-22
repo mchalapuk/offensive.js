@@ -19,6 +19,13 @@ declare module "./Context" {
 }
 
 Registry.instance
-  .addConnectors(['is', 'has'])
+  .addConnectors([
+    'is', 'be', 'being',
+    'to', 'from', 'under', 'over',
+    'has', 'have',
+    'defines', 'define',
+    'contains', 'contain',
+    'precondition', 'postcondition', 'invariant',
+  ])
 ;
 
