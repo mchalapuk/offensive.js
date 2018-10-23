@@ -22,3 +22,9 @@ export interface AssertionContext<T> extends Context<T> {
 export interface OperatorContext<T> extends Context<T> {
 }
 
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class ContextPrototype {
+}
+

@@ -1,5 +1,7 @@
 
 import { Assertion, UnaryOperator, BinaryOperator } from './model';
+import { nodsl } from './utils';
+import { ContextPrototype } from './Context';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -7,23 +9,45 @@ import { Assertion, UnaryOperator, BinaryOperator } from './model';
 export class Registry {
   static readonly instance = new Registry();
 
+  private registrations : HashMap<string> = {};
+  private context = new ContextPrototype();
+
   private Registry() {
   }
 
-  addAssertion(assertion : NamedAssertion) : this {
-    return this;
+  addAssertion({ names, assertion } : NamedAssertion) : void {
+    this.registerNames(names);
   }
-  addAssertionFactory(factory : NamedAssertionFactory) : this {
-    return this;
+  addAssertionFactory({ names, factory } : NamedAssertionFactory) : void {
+    this.registerNames(names);
   }
-  addUnaryOperator(factory : NamedUnaryOperator) : this {
-    return this;
+  addUnaryOperator({ names, operator } : NamedUnaryOperator) : void {
+    this.registerNames(names);
   }
-  addBinaryOperator(factory : NamedBinaryOperator) : this {
-    return this;
+  addBinaryOperator({ names, operator } : NamedBinaryOperator) : void {
+    this.registerNames(names);
   }
-  addConnectors(connectors : string[]) : this {
-    return this;
+  addConnectors(names : string[]) : void {
+    this.registerNames(names);
+  }
+
+  private registerNames(names : string[]) {
+    names.forEach(name => {
+      const previousRegistration = this.registrations[name];
+      nodsl.check(
+        previousRegistration === undefined,
+        'Entity of name ', name, ' already registered.\n',
+        'PREVIOUS REGISTRATION STACK TRACE:\n', previousRegistration,
+        'CURRENT REGISTRATION STACK TRACE:\n'
+      );
+    });
+
+    const stack = new Error().stack as string;
+    const firstNewlineIndex = stack.indexOf('\n');
+    const secondNewlineIndex = stack.indexOf('\n', firstNewlineIndex + 1)
+    const registration = stack.substring(secondNewlineIndex + 1);
+
+    names.forEach(name => this.registrations[name] = registration);
   }
 }
 
@@ -59,5 +83,12 @@ export interface NamedUnaryOperator {
 export interface NamedBinaryOperator {
   names : string[];
   operator : BinaryOperator;
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface HashMap<T> {
+  [_ : string] : T | undefined;
 }
 
