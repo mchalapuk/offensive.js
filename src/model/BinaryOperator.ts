@@ -1,50 +1,40 @@
 
-import Operator from './Operator';
 import { Result, Message } from './Result';
-import { nodsl } from '../utils';
-
-export type SuccessCalculator = (lhs : Result, rhs : Result) => boolean;
-
-let objectNumber = 0;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class BinaryOperator implements Operator {
-  private results : Result[] = [];
+export interface BinaryOperator {
+  apply(operands : Result[]) : Result;
+}
 
-  constructor(
-    private separator : string,
-    private calculateSuccess : SuccessCalculator,
-  ) {
-    this.getMessage = this.getMessage.bind(this);
-  }
+export namespace BinaryOperator {
+  let objectNumber = 0;
 
-  add(result : Result) {
-    nodsl.check(this.results.length !== 2, 'trying to add third result to a binary operator');
-    this.results.push(result);
-  }
-  apply() {
-    nodsl.check(this.results.length === 2, 'trying to apply binary operator without both operands');
-
-    const lhs = this.results[0] as Result;
-    const rhs = this.results[1] as Result;
-
-    const { calculateSuccess, getMessage } = this;
-
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  export function message(separator : string, operands : Message[]) : Message {
+    const result = operands.slice(1)
+      .reduce(apply.bind(null, separator), operands[0])
+    ;
+    if (result.object.indexOf(` ${separator} `) === -1) {
+      return result;
+    }
     return {
-      get success() {
-        return calculateSuccess(lhs, rhs);
+      get object() {
+        return `bin-${objectNumber++}-{ ${result.object} }`;
       },
-      get message() {
-        return getMessage(lhs.message, rhs.message);
+      get requirement() {
+        return result.requirement;
+      },
+      toString() {
+        return result.toString();
       },
     };
   }
 
-  private getMessage(lhs : Message, rhs : Message) {
-    const { separator } = this;
-
+  function apply(separator : string, lhs : Message, rhs : Message) {
     if (lhs.object === lhs.object) {
       return {
         get object() {
@@ -54,13 +44,13 @@ export class BinaryOperator implements Operator {
           return `${lhs.requirement} ${separator} ${rhs.requirement}`;
         },
         toString() {
-          return `${this.object} must be ${this.requirement}`;
+          return `${this.object} must ${this.requirement}`;
         },
       };
     }
     return {
       get object() {
-        return `[${lhs.object},${rhs.object}]_binary_${objectNumber++}}`;
+        return `${lhs.object} ${separator} ${rhs.object}`;
       },
       get requirement() {
         return `${lhs.toString()} ${separator} ${rhs.toString()}`;
@@ -69,15 +59,6 @@ export class BinaryOperator implements Operator {
         return `${this.requirement}`;
       },
     };
-  }
-}
-
-export namespace BinaryOperator {
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  export function factory(name : string, calculateSuccess : SuccessCalculator) : Operator.Factory {
-    return () => new BinaryOperator(name, calculateSuccess);
   }
 }
 

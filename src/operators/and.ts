@@ -13,15 +13,34 @@ declare module "../Context" {
   }
 }
 
-export const AndOperatorFactory = BinaryOperator.factory(
-  'and',
-  (lhs, rhs) => lhs.success && rhs.success,
-);
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class AndOperator implements BinaryOperator {
+  apply(operands : Result[]) {
+    return {
+      get success() {
+        for (const operand of operands) {
+          if (!operand.success) {
+            // first failure means that whole expression is false
+            return false;
+          }
+        }
+        return true;
+      },
+      get message() {
+        return BinaryOperator.message('and', operands.map(o => o.message));
+      },
+    };
+  }
+}
+
+export default AndOperator;
 
 Registry.instance
-  .addOperatorFactory({
+  .addBinaryOperator({
     names: [ 'and', 'with', 'of' ],
-    factory: AndOperatorFactory,
+    operator: new AndOperator(),
   })
 ;
 

@@ -1,5 +1,5 @@
 
-import { Assertion, Operator } from './model';
+import { Assertion, UnaryOperator, BinaryOperator } from './model';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -16,7 +16,10 @@ export class Registry {
   addAssertionFactory(factory : NamedAssertionFactory) : this {
     return this;
   }
-  addOperatorFactory(factory : NamedOperatorFactory) : this {
+  addUnaryOperator(factory : NamedUnaryOperator) : this {
+    return this;
+  }
+  addBinaryOperator(factory : NamedBinaryOperator) : this {
     return this;
   }
   addConnectors(connectors : string[]) : this {
@@ -45,8 +48,16 @@ export interface NamedAssertionFactory {
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export interface NamedOperatorFactory {
+export interface NamedUnaryOperator {
   names : string[];
-  factory : Operator.Factory;
+  operator : UnaryOperator;
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface NamedBinaryOperator {
+  names : string[];
+  operator : BinaryOperator;
 }
 
