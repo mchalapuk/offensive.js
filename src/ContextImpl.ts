@@ -1,7 +1,7 @@
 
 import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
-import { Context } from './Context';
-import { NoDsl } from './utils';
+import { AssertionContext, OperatorContext } from './Context';
+import { NoDsl, ObjectSerializer } from './utils';
 
 const nodsl = new NoDsl('DslError');
 const NON_BUGS = ['ContractError', 'ArgumentError', 'DslError'];
@@ -12,45 +12,34 @@ const NON_BUGS = ['ContractError', 'ArgumentError', 'DslError'];
  *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ContextImpl implements Context<any> {
+export class ContextImpl {
+  // NOTE:
+  // Prototype of this class is being copied in `ContextFactory`.
+  // It's important that it doesn't have any property getters.
+
+  private __operatorContext : object;
+
   private __result : Result | null = null;
   private __unary : UnaryOperator | null = null;
   private __operands : Result[] = [];
   private __binary : BinaryOperator | null = null;
 
   constructor(
-    public _value : any,
-    public _object : string,
+    private _value : any,
+    private _object : string,
+    operatorProto : object,
   ) {
+    this.__operatorContext = this.__createOperatorContext(operatorProto);
   }
 
-  get success() {
-    const { success } = this.__evaluate();
-    return success;
-  }
-  get message() {
-    const { message } = this.__evaluate();
-    return message;
-  }
-
-  __createAssertion(factory : Assertion.Factory, args : any[]) {
-    try {
-      return factory(args);
-
-    } catch (e) {
-      if (NON_BUGS.indexOf(e.name) !== -1) {
-        // shortening the stacktrace in case of non-bug errors
-        throw new ErrorProxy(e);
-      }
-      // anything else is an internal bug
-      throw augumentBug(e);
-    }
+  __pushAssertionFactory(factory : Assertion.Factory, args : any[]) {
+    return this.__pushAssertion(createAssertion(factory, args));
   }
 
   __pushAssertion(assertion : Assertion) {
     try {
       this.__setResult(assertion.assert(this._value, this._object));
-      return this;
+      return this.__operatorContext;
     } catch (e) {
       if (NON_BUGS.indexOf(e.name) !== -1) {
         // shortening the stacktrace in case of non-bug errors
@@ -137,9 +126,57 @@ export class ContextImpl implements Context<any> {
     nodsl.check(this.__result !== null, 'No result found.');
     return this.__result as Result;
   }
+
+  private __createOperatorContext(operatorProto : object) {
+    const serializer = new ObjectSerializer();
+    const self = this;
+
+    // In order to have a call operator (() : T) on the `OperatorContext`,
+    // we need to create a function and set its prototype to `OperatorContext.prototype`.
+    function operatorContext<T>() : T {
+      const result = self.__evaluate();
+      if (!result.success) {
+        throw new ContractError(`${result.message}; got ${serializer.serializeAny(self._value)}`);
+      }
+      return self._value;
+    }
+    Object.setPrototypeOf(operatorContext, operatorProto);
+
+    const pushBinaryOperator = this.__pushBinaryOperator.bind(this);
+    const pushUnaryOperator = this.__pushUnaryOperator.bind(this);
+
+    // Object literal created for the purpose of proper minification of methods and properties.
+    const props = {
+      success: () => this.__evaluate().success,
+      message: () => this.__evaluate().message,
+      __pushBinaryOperator: () => pushBinaryOperator,
+      __pushUnaryOperator: () => pushUnaryOperator,
+    } as { [_: string] : () => any };
+
+    Object.keys(props)
+      .forEach((key : string) => {
+        Object.defineProperty(operatorContext, key, { get: props[key], enumerable: false });
+      })
+    ;
+    return operatorContext;
+  }
 }
 
 export default ContextImpl;
+
+function createAssertion(factory : Assertion.Factory, args : any[]) {
+  try {
+    return factory(args);
+
+  } catch (e) {
+    if (NON_BUGS.indexOf(e.name) !== -1) {
+      // shortening the stacktrace in case of non-bug errors
+      throw new ErrorProxy(e);
+    }
+    // anything else is an internal bug
+    throw augumentBug(e);
+  }
+}
 
 function augumentBug(e : Error & { offensiveAugmented ?: boolean }) {
   if (!e.offensiveAugmented) {
@@ -151,12 +188,26 @@ function augumentBug(e : Error & { offensiveAugmented ?: boolean }) {
   return e;
 }
 
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
 class ErrorProxy extends Error {
   constructor(
     public cause : Error,
   ) {
     super(cause.message);
     this.name = cause.name;
+  }
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+class ContractError extends Error {
+  name = 'ContractError';
+
+  constructor(message : string) {
+    super(message);
   }
 }
 

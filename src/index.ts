@@ -6,7 +6,8 @@ import { Registry } from './Registry';
 import './operators'
 import './connectors'
 
-const factory = new ContextFactory(Registry.instance.Context);
+const { assertions, operators } = Registry.instance.contextProto;
+const factory = new ContextFactory(assertions, operators);
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

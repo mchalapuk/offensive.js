@@ -8,7 +8,7 @@
     "declaration": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [ "ES5", "ES6", "ES7" ],
+    "lib": [ "ES2015", "ES2016", "ES2017", ],
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "lf",

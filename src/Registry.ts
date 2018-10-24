@@ -1,6 +1,7 @@
 
 import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
 import { nodsl } from './utils';
+import { AssertionContext, OperatorContext, ConnectorContext } from './Context';
 import ContextImpl from './ContextImpl';
 
 /**
@@ -8,23 +9,27 @@ import ContextImpl from './ContextImpl';
  */
 export class Registry {
   static readonly instance = new Registry();
-  Context : { new() : ContextImpl; };
+
+  contextProto = {
+    assertions: {},
+    operators: {},
+    connectors: {},
+  };
+
+  constructor() {
+    const { assertions, operators, connectors } = this.contextProto;
+
+    Object.setPrototypeOf(assertions, connectors);
+    Object.setPrototypeOf(operators, connectors)
+  }
 
   private registrations : HashMap<string> = {};
-
-  private constructor() {
-    function ContextConstructor<T>(this : ContextImpl, _value : any, _object : string) {
-      ContextImpl.call(this, _value, _object);
-    }
-    ContextConstructor.prototype = ContextImpl.prototype;
-
-    this.Context = ContextConstructor as any as { new() : ContextImpl; };
-  }
 
   addAssertion({ names, assertion } : NamedAssertion) {
     this.registerNames(names);
 
-    this.extendPrototype(names, function get(this : ContextImpl) {
+    const { assertions } = this.contextProto;
+    this.extendPrototype(assertions, names, function getAssertion(this : ContextImpl) {
       return this.__pushAssertion(assertion);
     });
     return this;
@@ -32,11 +37,9 @@ export class Registry {
   addAssertionFactory({ names, factory } : NamedAssertionFactory) {
     this.registerNames(names);
 
-    this.extendPrototype(names, function get(this : ContextImpl) {
-      return (...args : any[]) => {
-        const assertion = this.__createAssertion(factory, args);
-        return this.__pushAssertion(assertion);
-      };
+    const { assertions } = this.contextProto;
+    this.extendPrototype(assertions, names, function getAssertionFactory(this : ContextImpl) {
+      return (...args : any[]) => this.__pushAssertionFactory(factory, args);
     });
     return this;
   }
@@ -44,7 +47,8 @@ export class Registry {
   addUnaryOperator({ names, operator } : NamedUnaryOperator) {
     this.registerNames(names);
 
-    this.extendPrototype(names, function get(this : ContextImpl) {
+    const { operators } = this.contextProto;
+    this.extendPrototype(operators, names, function getUnaryOperator(this : ContextImpl) {
       return this.__pushUnaryOperator(operator);
     });
     return this;
@@ -52,7 +56,8 @@ export class Registry {
   addBinaryOperator({ names, operator } : NamedBinaryOperator) {
     this.registerNames(names);
 
-    this.extendPrototype(names, function get(this : ContextImpl) {
+    const { operators } = this.contextProto;
+    this.extendPrototype(operators, names, function getBinaryOperator(this : ContextImpl) {
       return this.__pushBinaryOperator(operator);
     });
     return this;
@@ -61,7 +66,8 @@ export class Registry {
   addConnectors(names : string[]) : void {
     this.registerNames(names);
 
-    this.extendPrototype(names, function get(this : ContextImpl) {
+    const { connectors } = this.contextProto;
+    this.extendPrototype(connectors, names, function getConnector(this : ContextImpl) {
       // noop
       return this;
     });
@@ -86,15 +92,14 @@ export class Registry {
     names.forEach(name => this.registrations[name] = registration);
   }
 
-  private extendPrototype(names : string[], get : () => any) {
-    const { prototype } = this.Context;
+  private extendPrototype(proto : object, names : string[], get : () => any) {
     const enumerable = true;
 
     names.forEach(name => {
       function set() {
         throw new Error(`.${name} is read-only`);
       }
-      Object.defineProperty(prototype, name, { get, set, enumerable });
+      Object.defineProperty(proto, name, { get, set, enumerable });
     });
   }
 }
