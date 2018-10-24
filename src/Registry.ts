@@ -8,9 +8,9 @@ import ContextImpl from './ContextImpl';
  */
 export class Registry {
   static readonly instance = new Registry();
+  Context : { new() : ContextImpl; };
 
   private registrations : HashMap<string> = {};
-  private Context : { new() : ContextImpl; };
 
   private constructor() {
     function ContextConstructor<T>(this : ContextImpl, _value : any, _object : string) {

@@ -13,7 +13,6 @@ export interface Context<T> extends Result {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface AssertionContext<T> extends Context<T> {
-  () : T;
 }
 
 /**
