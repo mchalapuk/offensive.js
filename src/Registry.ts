@@ -25,7 +25,7 @@ export class Registry {
     this.registerNames(names);
 
     this.extendPrototype(names, function get(this : ContextImpl) {
-      return this.pushAssertion(assertion);
+      return this.__pushAssertion(assertion);
     });
     return this;
   }
@@ -33,8 +33,8 @@ export class Registry {
     this.registerNames(names);
 
     this.extendPrototype(names, function get(this : ContextImpl) {
-      const assertion = this.createAssertion(factory, Array.from(arguments));
-      return this.pushAssertion(assertion);
+      const assertion = this.__createAssertion(factory, Array.from(arguments));
+      return this.__pushAssertion(assertion);
     });
     return this;
   }
@@ -43,7 +43,7 @@ export class Registry {
     this.registerNames(names);
 
     this.extendPrototype(names, function get(this : ContextImpl) {
-      return this.pushUnaryOperator(operator);
+      return this.__pushUnaryOperator(operator);
     });
     return this;
   }
@@ -51,7 +51,7 @@ export class Registry {
     this.registerNames(names);
 
     this.extendPrototype(names, function get(this : ContextImpl) {
-      return this.pushBinaryOperator(operator);
+      return this.__pushBinaryOperator(operator);
     });
     return this;
   }
