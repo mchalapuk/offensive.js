@@ -50,9 +50,9 @@ describe('check(arg, \'arg\')', () => {
     const message0 = 'arg.length must be 2 or 4; got';
 
     assertion(arg => arg.has.length(2).or.length(4)())
-      .withArg([]).throws("#{m} 0")
-      .withArg([1]).throws("#{m} 1")
-      .withArg([3, 3, 3]).throws("#{m} 3")
+      .withArg([]).throws(`${message0} 0`)
+      .withArg([1]).throws(`${message0} 1`)
+      .withArg([3, 3, 3]).throws(`${message0} 3`)
       .withArg([2, 2]).doesntThrow()
       .withArg([4, 4, 4, 4]).doesntThrow()
     ;

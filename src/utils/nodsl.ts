@@ -30,5 +30,5 @@ export class NoDsl {
 export const nodsl = new NoDsl();
 export default nodsl;
 
-export const check = nodsl.check.bind(nodsl);
+export const nodslArguments = new NoDsl('ArgumentError');
 

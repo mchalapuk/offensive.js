@@ -1,7 +1,7 @@
 
 import Registry from '../Registry';
 import { Assertion, StandardMessage } from '../model';
-import { nodsl } from '../utils';
+import { nodslArguments as nodsl } from '../utils';
 
 declare module "../Context" {
   /**
@@ -45,7 +45,7 @@ Registry.instance
       nodsl.check(args.length === 1, '.field requires one argument; got ', args.length);
       nodsl.check(typeof args[0] === 'string', 'fieldName must be a string; got ', typeof args[0]);
 
-      return new FieldAssertion(args[0] as string);
+      return new FieldAssertion(args[0]);
     },
   })
 ;

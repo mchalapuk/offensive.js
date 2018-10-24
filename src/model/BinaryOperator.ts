@@ -9,58 +9,89 @@ export interface BinaryOperator {
 }
 
 export namespace BinaryOperator {
-  let objectNumber = 0;
-
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   export function message(separator : string, operands : Message[]) : Message {
-    const result = operands.slice(1)
-      .reduce(apply.bind(null, separator), operands[0])
+    const grouped = operands.reduce(groupByObject(), [] as Message[][])
+      .map(messages => joinWithSameObject(separator, messages))
     ;
-    if (result.object.indexOf(` ${separator} `) === -1) {
-      return result;
+    if (grouped.length === 1) {
+      return grouped[0];
     }
-    return {
-      get object() {
-        return `bin-${objectNumber++}-{ ${result.object} }`;
-      },
-      get requirement() {
-        return result.requirement;
-      },
-      toString() {
-        return result.toString();
-      },
-    };
-  }
 
-  function apply(separator : string, lhs : Message, rhs : Message) {
-    if (lhs.object === lhs.object) {
-      return {
-        get object() {
-          return lhs.object;
-        },
-        get requirement() {
-          return `${lhs.requirement} ${separator} ${rhs.requirement}`;
-        },
-        toString() {
-          return `${this.object} must ${this.requirement}`;
-        },
-      };
-    }
-    return {
-      get object() {
-        return `${lhs.object} ${separator} ${rhs.object}`;
-      },
-      get requirement() {
-        return `${lhs.toString()} ${separator} ${rhs.toString()}`;
-      },
-      toString() {
-        return `${this.requirement}`;
-      },
-    };
+    return joinWithDifferentObjects(separator, grouped);
   }
 }
 
 export default BinaryOperator;
+
+let objectNumber = 0;
+
+function groupByObject() {
+  let previousObject = {} as any;
+
+  function newGroup(result : Message[][]) {
+    const group = [] as Message[];
+    result.push(group);
+    return group;
+  }
+
+  return (result : Message[][], message : Message) => {
+    const group = previousObject === message.object
+      ? result[result.length - 1]
+      : newGroup(result)
+    ;
+    group.push(message);
+    previousObject = message.object;
+    return result;
+  };
+}
+
+function joinWithSameObject(separator : string, messages : Message[]) {
+  const head = messages[0];
+  const tail = messages.slice(1);
+
+  if (tail.length === 0) {
+    return head;
+  }
+
+  return {
+    get object() {
+      return head.object;
+    },
+    get requirement() {
+      const shared = sharedStart.apply(null, messages.map(msg => msg.requirement));
+      const cut = shared.length > 3 && shared.endsWith(' a ') ? shared.length - 2 : shared.length;
+      const tailRequitements = tail.map(msg => msg.requirement.substring(cut));
+      return `${head.requirement} ${separator} ${tailRequitements.join(` ${separator} `)}`;
+    },
+    toString() {
+      return `${this.object} must ${this.requirement}`;
+    },
+  };
+}
+
+function joinWithDifferentObjects(separator : string, messages : Message[]) {
+  return {
+    get object() {
+      return `bin-${objectNumber++}-{ ${messages.map(msg => msg.object).join(` ${separator} `)} }`;
+    },
+    get requirement() {
+      return messages.join(` ${separator} `);
+    },
+    toString() {
+      return `${this.requirement}`;
+    },
+  };
+}
+
+function sharedStart(...strings : string[]){
+  const sorted = strings.concat().sort();
+  const first = sorted[0], last = sorted[sorted.length - 1];
+  let i = 0;
+
+  while (i < first.length && first.charAt(i) === last.charAt(i)) i++;
+  return first.substring(0, i);
+}
 

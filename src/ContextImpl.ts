@@ -1,7 +1,10 @@
 
 import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
 import { Context } from './Context';
-import { DslError } from './errors';
+import { NoDsl } from './utils';
+
+const nodsl = new NoDsl('DslError');
+const NON_BUGS = ['ContractError', 'ArgumentError', 'DslError'];
 
 /**
  * All implemnentation details are prefixed with double underscore (__)
@@ -22,10 +25,12 @@ export class ContextImpl implements Context<any> {
   }
 
   get success() {
-    return this.__evaluate().success;
+    const { success } = this.__evaluate();
+    return success;
   }
   get message() {
-    return this.__evaluate().message;
+    const { message } = this.__evaluate();
+    return message;
   }
 
   __createAssertion(factory : Assertion.Factory, args : any[]) {
@@ -33,8 +38,8 @@ export class ContextImpl implements Context<any> {
       return factory(args);
 
     } catch (e) {
-      if (e.name === 'ArgumentError') {
-        // shortening the stacktrace in case of ArgumentError or ArgumentError
+      if (NON_BUGS.indexOf(e.name) !== -1) {
+        // shortening the stacktrace in case of non-bug errors
         throw new ErrorProxy(e);
       }
       // anything else is an internal bug
@@ -47,17 +52,23 @@ export class ContextImpl implements Context<any> {
       this.__setResult(assertion.assert(this._value, this._object));
       return this;
     } catch (e) {
+      if (NON_BUGS.indexOf(e.name) !== -1) {
+        // shortening the stacktrace in case of non-bug errors
+        throw new ErrorProxy(e);
+      }
       throw augumentBug(e);
     }
   }
 
   __pushBinaryOperator(operator : BinaryOperator) {
-    if (this.__unary !== null) {
-      throw new DslError(`Calling binary operator after unary operator is forbidden.`);
-    }
-    if (this.__result === null && this.__operands.length === 0) {
-      throw new DslError('Calling binary operator without preceeding assertion is forbidden.');
-    }
+    nodsl.check(
+      this.__unary === null,
+      'Calling binary operator after unary operator is forbidden.',
+    );
+    nodsl.check(
+      this.__result !== null || this.__operands.length !== 0,
+      'Calling binary operator without preceeding assertion is forbidden.',
+    );
 
     switch (this.__binary) {
       case operator:
@@ -72,29 +83,29 @@ export class ContextImpl implements Context<any> {
         break;
     }
     this.__binary = operator;
+    this.__operands.push(this.__result as Result);
+    this.__result = null;
 
     return this;
   }
 
   __pushUnaryOperator(operator : UnaryOperator) {
-    if (this.__unary !== null) {
-      throw new DslError('Calling unary operator after unary operator is forbidden.');
-    }
-    if (this.__result !== null) {
-      throw new DslError('Calling unary operator after assertion is forbidden');
-    }
+    nodsl.check(this.__unary === null, 'Calling unary operator after unary operator is forbidden.');
+    nodsl.check(this.__result === null, 'Calling unary operator after assertion is forbidden.');
 
     this.__unary = operator;
     return this;
   }
 
   private __applyBinary() {
-    if (this.__operands.length < 2) {
-      throw new DslError('Trying to apply binary operator with less that two operands.');
-    }
-    if (this.__unary !== null) {
-      throw new DslError('Trying to apply binary operator with dangling unary operator.');
-    }
+    nodsl.check(
+      this.__operands.length >= 2,
+      'Trying to apply binary operator with less than two operands.',
+    );
+    nodsl.check(
+      this.__unary === null,
+      'Trying to apply binary operator with dangling unary operator.',
+    );
 
     this.__result = (this.__binary as BinaryOperator).apply(this.__operands);
     this.__binary = null;
@@ -122,10 +133,9 @@ export class ContextImpl implements Context<any> {
     if (this.__binary !== null) {
       this.__applyBinary();
     }
-    if (this.__result === null) {
-      throw new DslError('No result found.');
-    }
-    return this.__result;
+
+    nodsl.check(this.__result !== null, 'No result found.');
+    return this.__result as Result;
   }
 }
 

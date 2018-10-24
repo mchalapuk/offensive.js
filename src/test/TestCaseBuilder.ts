@@ -26,7 +26,7 @@ export class TestCaseBuilder<ReturnType> {
           runTestCase(context);
         } catch (e) {
           if (e.message !== expectedMessage) {
-            throw new Error(`expected error message '${expectedMessage}'; got ${e.message}`);
+            throw new Error(`expected error message '${expectedMessage}'; got ${e.stack}`);
           }
           // test passed
           return;

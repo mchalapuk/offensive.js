@@ -33,8 +33,10 @@ export class Registry {
     this.registerNames(names);
 
     this.extendPrototype(names, function get(this : ContextImpl) {
-      const assertion = this.__createAssertion(factory, Array.from(arguments));
-      return this.__pushAssertion(assertion);
+      return (...args : any[]) => {
+        const assertion = this.__createAssertion(factory, args);
+        return this.__pushAssertion(assertion);
+      };
     });
     return this;
   }
