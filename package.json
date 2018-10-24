@@ -4,7 +4,10 @@
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "offensive.js",
   "scripts": {
-    "test": "mocha && tsc test/types.spec.ts && node test/types.spec.js"
+    "clean": "rm -rf ./lib",
+    "build": "cd src && tsc",
+    "clean-build": "npm run clean && npm run build",
+    "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test-harness.ts $(find -name '*.spec.ts')"
   },
   "repository": {
     "type": "git",
@@ -35,12 +38,19 @@
   },
   "homepage": "https://github.com/mchalapuk/offensive.js",
   "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.0",
+    "@types/should": "^13.0.0",
+    "@types/should-sinon": "0.0.3",
+    "@types/sinon": "^5.0.5",
     "coffee-script": "^1.11.0",
     "mocha": "*",
-    "should": "^13.2.1",
+    "should": "^13.2.3",
     "should-sinon": "0.0.6",
-    "sinon": "^6.0.0",
-    "typescript": "^3.0.1"
+    "sinon": "^7.0.0",
+    "source-map-support": "^0.5.9",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.3"
   },
   "dependencies": {}
 }

@@ -5,7 +5,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "declaration": true,
+    "declaration": false,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [ "ES5", "ES6" ],
@@ -17,11 +17,16 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "outDir": "../lib/",
+    "outDir": "../test/",
     "strictNullChecks": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "es5",
     "types": [
+      "node",
+      "mocha",
+      "should",
+      "sinon",
+      "should-sinon"
     ],
     "baseUrl": ".",
     "paths": {
@@ -29,10 +34,6 @@
   },
   "include": [
     "**/*.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts",
-    "test-harness.ts"
   ]
 }
 
