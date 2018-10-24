@@ -135,7 +135,7 @@ function augumentBug(e : Error & { offensiveAugmented ?: boolean }) {
   if (!e.offensiveAugmented) {
     e.name = 'BUG! ('+ e.name +')';
     e.message += '\n\n> Unless it\'s caused by extension of yours, please submit an issue at\n'+
-      '>\n>  https://github.com/muroc/offensive.js/issues\n>\n> Thanks for your help!\n';
+      '>\n>  https://github.com/mchalapuk/offensive.js/issues\n>\n> Thanks for your help!\n';
     e.offensiveAugmented = true;
   }
   return e;

@@ -32,7 +32,7 @@
   ],
   "exclude": [
     "**/*.spec.ts",
-    "test-harness.ts"
+    "test/**/*"
   ]
 }
 

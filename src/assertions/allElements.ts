@@ -10,12 +10,12 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    allElementsThat<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
-    allElementsWhich<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
-    onlyElementsThat<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
-    onlyElementsWhich<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
-    eachElementIs<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
-    everyElementIs<E>(callback : ElementThatCallback<E>) : OperatorContext<T & E[]>;
+    allElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    allElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    onlyElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    onlyElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    eachElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    everyElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
   }
 }
 
@@ -38,7 +38,7 @@ export class AllElementsThatAssertion<E> implements Assertion {
 
     function checkElements() {
       array()
-        .forEach((elem, i) => {
+        .forEach((elem : any, i : number) => {
           const newContext = check(elem, `${object}[${i}]`);
 
           const result = callback(newContext);
