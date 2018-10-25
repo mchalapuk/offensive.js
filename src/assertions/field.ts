@@ -29,7 +29,7 @@ export class FieldAssertion implements Assertion {
         return fieldName in value;
       },
       get message() {
-        return new StandardMessage(object, `have field \'${fieldName}\'`);
+        return new StandardMessage(object, `have field \'${fieldName}\'`, value);
       },
     };
   }

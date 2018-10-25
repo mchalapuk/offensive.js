@@ -38,7 +38,8 @@ export class ExactlyAssertion implements Assertion {
       get message() {
         return new StandardMessage(
           object,
-          `be exactly equal to ${serializer.serializeAny(comparedValue)}`,
+          `be ${serializer.serializeAny(comparedValue)}`,
+          value,
         );
       },
     };

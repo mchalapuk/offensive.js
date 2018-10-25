@@ -35,7 +35,7 @@ export class GreaterThanEqualAssertion implements Assertion {
         return value >= comparedNumber;
       },
       get message() {
-        return new StandardMessage(object, `be ≥ ${comparedNumber}`);
+        return new StandardMessage(object, `be ≥ ${comparedNumber}`, value);
       },
     };
   }

@@ -1,5 +1,8 @@
 
 import { Result, Message } from './Result';
+import { ObjectSerializer } from '../utils';
+
+const serializer = new ObjectSerializer();
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -66,8 +69,12 @@ function joinWithSameObject(separator : string, messages : Message[]) {
       const tailRequitements = tail.map(msg => msg.requirement.substring(cut));
       return `${head.requirement} ${separator} ${tailRequitements.join(` ${separator} `)}`;
     },
+    value() {
+      return head.value;
+    },
     toString() {
-      return `${this.object} must ${this.requirement}`;
+      const got = serializer.serializeAny(head.value);
+      return `${this.object} must ${this.requirement}; got ${got}`;
     },
   };
 }
@@ -75,10 +82,14 @@ function joinWithSameObject(separator : string, messages : Message[]) {
 function joinWithDifferentObjects(separator : string, messages : Message[]) {
   return {
     get object() {
-      return `bin-${objectNumber++}-{ ${messages.map(msg => msg.object).join(` ${separator} `)} }`;
+      // just unique object
+      return `»BinaryOperator-[${messages.map(msg => msg.object).join(', ')}]`;
     },
     get requirement() {
       return messages.join(` ${separator} `);
+    },
+    get value() {
+      return undefined;
     },
     toString() {
       return `${this.requirement}`;

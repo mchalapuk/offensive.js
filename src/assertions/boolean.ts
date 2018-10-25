@@ -65,7 +65,7 @@ export class BooleanValueAssertion implements Assertion {
         return value === expectedValue;
       },
       get message() {
-        return new StandardMessage(object, `be ${expectedValue}`);
+        return new StandardMessage(object, `be ${expectedValue}`, value);
       },
     };
   }
@@ -98,7 +98,7 @@ export class ConvertsToBooleanAssertion implements Assertion {
         return value == expectedValue;
       },
       get message() {
-        return new StandardMessage(object, expectedValue ? 'be truthy' : 'be falsy');
+        return new StandardMessage(object, expectedValue ? 'be truthy' : 'be falsy', value);
       },
     };
   }

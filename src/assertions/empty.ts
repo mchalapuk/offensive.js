@@ -22,7 +22,7 @@ export class EmptyAssertion implements Assertion {
         return value === null || value === undefined;
       },
       get message() {
-        return new StandardMessage(object, 'be empty');
+        return new StandardMessage(object, 'be empty', value);
       },
     };
   }

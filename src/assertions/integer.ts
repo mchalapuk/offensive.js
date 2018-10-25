@@ -26,7 +26,7 @@ export class IntegerAssertion implements Assertion {
         return Number.isInteger(value);
       },
       get message() {
-        return new StandardMessage(object, 'be an integer');
+        return new StandardMessage(object, 'be an integer', value);
       },
     };
   }

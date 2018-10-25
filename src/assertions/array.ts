@@ -34,7 +34,7 @@ export class ArrayAssertion implements Assertion {
         ;
       },
       get message() {
-        return new StandardMessage(object, 'be an array');
+        return new StandardMessage(object, 'be an array', value);
       },
     };
   }

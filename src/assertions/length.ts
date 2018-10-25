@@ -13,7 +13,7 @@ declare module "../Context" {
   }
 }
 
-import './equals';
+import './exactly';
 import check from '..';
 
 /**
@@ -25,7 +25,7 @@ export class LengthAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    return check(value.length, `${object}.length`).is.equalTo(this.requiredLength);
+    return check(value.length, `${object}.length`).is.exactly(this.requiredLength);
   }
 }
 

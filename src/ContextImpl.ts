@@ -133,7 +133,7 @@ export class ContextImpl {
     function operatorContext<T>() : T {
       const result = self.__evaluate();
       if (!result.success) {
-        throw new ContractError(`${result.message}; got ${serializer.serializeAny(self._value)}`);
+        throw new ContractError(result.message.toString());
       }
       return self._value;
     }

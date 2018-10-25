@@ -47,11 +47,11 @@ export class OfTypeAssertion implements Assertion {
           case 'number':
           case 'string':
           case 'function':
-            return new StandardMessage(object, `be a ${requiredType}`);
+            return new StandardMessage(object, `be a ${requiredType}`, value);
           case 'object':
-            return new StandardMessage(object, `be an ${requiredType}`);
+            return new StandardMessage(object, `be an ${requiredType}`, value);
           case 'undefined':
-            return new StandardMessage(object, `be ${requiredType}`);
+            return new StandardMessage(object, `be ${requiredType}`, value);
         }
       },
     };

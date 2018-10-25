@@ -52,10 +52,14 @@ export class AllElementsThatAssertion<E> implements Assertion {
     function buildMessage() {
       return {
         get object() {
-          return `[${errorMessages.map(message => message.object).join(', ')}]`;
+          // unique object
+          return `»allElementsThat-[${errorMessages.map(msg => msg.object).join(', ')}]`;
         },
         get requirement() {
           return errorMessages.join(' and ');
+        },
+        get value() {
+          return undefined;
         },
         toString() {
           return this.requirement;

@@ -30,7 +30,7 @@ export class InstanceOfAssertion<R> implements Assertion {
         return value instanceof requiredType;
       },
       get message() {
-        return new StandardMessage(object, `be an instance of ${requiredType}`);
+        return new StandardMessage(object, `be an instance of ${requiredType}`, value);
       },
     };
   }

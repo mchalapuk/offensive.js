@@ -35,11 +35,12 @@ export class OneOfAssertion<E> implements Assertion {
       },
       get message() {
         if (message !== undefined) {
-          return new StandardMessage(object, `be ${message}`);
+          return new StandardMessage(object, `be ${message}`, value);
         }
         return new StandardMessage(
           object,
           `be one of ${serializer.serializeObject(searchedSet)}`,
+          value,
         );
       },
     };
