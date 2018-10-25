@@ -1,6 +1,6 @@
 
 import { Result, Message } from './Result';
-import { ObjectSerializer } from '../utils';
+import { ObjectSerializer } from '../ObjectSerializer';
 
 const serializer = new ObjectSerializer();
 

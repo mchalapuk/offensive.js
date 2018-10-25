@@ -1,7 +1,8 @@
 
 import Registry from '../Registry';
 import { Assertion, StandardMessage } from '../model';
-import { nodslArguments as nodsl, ObjectSerializer } from '../utils';
+import { ObjectSerializer } from '../ObjectSerializer';
+import { nodslArguments as nodsl } from '../NoDsl';
 
 declare module "../Context" {
   /**

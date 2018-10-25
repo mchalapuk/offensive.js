@@ -1,7 +1,8 @@
 
 import Registry from '../Registry';
 import { Assertion, Result, StandardMessage } from '../model';
-import { nodslArguments as nodsl, NoField } from '../utils';
+import { nodslArguments as nodsl } from '../NoDsl';
+import { NoField } from '../NoField';
 
 declare module "../Context" {
   export type FieldThatCallback<F> = (context : AssertionContext<F>) => Result;

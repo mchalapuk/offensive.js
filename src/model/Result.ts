@@ -1,5 +1,5 @@
 
-import { ObjectSerializer } from '../utils';
+import { ObjectSerializer } from '../ObjectSerializer';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

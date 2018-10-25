@@ -1,7 +1,7 @@
 
 import Registry from '../Registry';
 import { Assertion, Result, Message } from '../model';
-import { nodslArguments as nodsl } from '../utils';
+import { nodslArguments as nodsl } from '../NoDsl';
 
 declare module "../Context" {
   export type AllElementsCallback<E> = (context : AssertionContext<E>) => Result;

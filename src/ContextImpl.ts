@@ -1,7 +1,8 @@
 
 import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
 import { AssertionContext, OperatorContext } from './Context';
-import { NoDsl, ObjectSerializer } from './utils';
+import { ObjectSerializer } from './ObjectSerializer';
+import { NoDsl } from './NoDsl';
 
 const nodsl = new NoDsl('DslError');
 const NON_BUGS = ['ContractError', 'ArgumentError', 'DslError'];

@@ -1,8 +1,8 @@
 
 import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
-import { nodsl } from './utils';
 import { AssertionContext, OperatorContext, ConnectorContext } from './Context';
 import ContextImpl from './ContextImpl';
+import nodsl from './NoDsl';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
