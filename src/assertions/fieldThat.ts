@@ -17,6 +17,7 @@ declare module "../Context" {
   }
 }
 
+import './empty';
 import { FieldThatCallback } from '../Context';
 import check from '..';
 
@@ -30,8 +31,12 @@ export class FieldThatAssertion<F> implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const newContext = check(value[this.fieldName], `${object}.${this.fieldName}`);
+    const isNotEmpty = check(value, object).is.not.Empty;
+    if (!isNotEmpty.success) {
+      return isNotEmpty;
+    }
 
+    const newContext = check(value[this.fieldName], `${object}.${this.fieldName}`);
     return this.callback(newContext);
   }
 }

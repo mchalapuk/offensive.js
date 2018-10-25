@@ -13,6 +13,9 @@ declare module "../Context" {
   }
 }
 
+import './empty';
+import check from '..';
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -22,16 +25,12 @@ export class FieldAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const { fieldName } = this;
+    const isNotEmpty = check(value, object).is.not.Empty;
+    if (!isNotEmpty.success) {
+      return isNotEmpty;
+    }
 
-    return {
-      get success() {
-        return fieldName in value;
-      },
-      get message() {
-        return new StandardMessage(object, `have field \'${fieldName}\'`, value);
-      },
-    };
+    return check(value[this.fieldName], `${object}.${this.fieldName}`).is.not.Undefined;
   }
 }
 

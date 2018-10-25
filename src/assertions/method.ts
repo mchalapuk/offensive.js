@@ -13,6 +13,7 @@ declare module "../Context" {
   }
 }
 
+import './fieldThat';
 import './function';
 import check from '..';
 
@@ -25,7 +26,7 @@ export class MethodAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    return check(value[this.methodName], `${object}.${this.methodName}`).is.aFunction;
+    return check(value, object).has.fieldThat(this.methodName, field => field.is.aFunction);
   }
 }
 

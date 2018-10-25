@@ -13,6 +13,7 @@ declare module "../Context" {
   }
 }
 
+import './fieldThat';
 import './exactly';
 import check from '..';
 
@@ -25,7 +26,7 @@ export class LengthAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    return check(value.length, `${object}.length`).is.exactly(this.requiredLength);
+    return check(value, object).has.fieldThat('length', len => len.is.exactly(this.requiredLength));
   }
 }
 
