@@ -7,7 +7,7 @@
     "clean": "rm -rf ./lib",
     "build": "cd src && tsc",
     "clean-build": "npm run clean && npm run build",
-    "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test/harness.ts $(find -name $PATTERN)",
+    "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test/harness.ts $(find -name \"${PATTERN}\")",
     "all-tests": "PATTERN='*.spec.ts' npm run test"
   },
   "repository": {
