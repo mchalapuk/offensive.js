@@ -36,7 +36,7 @@ export class EqualToAssertion implements Assertion {
         return value == comparedValue;
       },
       get message() {
-        return new StandardMessage(object, `be equal to ${serializer.serializeAny(comparedValue)}`);
+        return new StandardMessage(object, `be ${serializer.serializeAny(comparedValue)}`);
       },
     };
   }

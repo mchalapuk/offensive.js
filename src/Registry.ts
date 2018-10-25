@@ -47,8 +47,9 @@ export class Registry {
   addUnaryOperator({ names, operator } : NamedUnaryOperator) {
     this.registerNames(names);
 
-    const { operators } = this.contextProto;
-    this.extendPrototype(operators, names, function getUnaryOperator(this : ContextImpl) {
+    // Unary operators must be added on prototype of `AssertionContext`.
+    const { assertions } = this.contextProto;
+    this.extendPrototype(assertions, names, function getUnaryOperator(this : ContextImpl) {
       return this.__pushUnaryOperator(operator);
     });
     return this;

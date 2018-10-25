@@ -6,7 +6,7 @@ declare module "../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface OperatorContext<T> {
+  interface AssertionContext<T> {
     not : AssertionContext<T>;
     no : AssertionContext<T>;
     doesnt : AssertionContext<T>;

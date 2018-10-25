@@ -13,7 +13,7 @@ declare module "../Context" {
   }
 }
 
-import './fieldThat';
+import './equals';
 import check from '..';
 
 /**
@@ -25,18 +25,7 @@ export class LengthAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const { requiredLength } = this;
-
-    let result : Result | null = null;
-
-    return {
-      get success() {
-        return check(value.length, `${object}.length`).is.equalTo(requiredLength).success;
-      },
-      get message() {
-        return new StandardMessage(object, `have length of ${requiredLength}`);
-      },
-    };
+    return check(value.length, `${object}.length`).is.equalTo(this.requiredLength);
   }
 }
 

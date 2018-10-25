@@ -7,6 +7,7 @@ import './assertions/function';
 import './assertions/array';
 import './assertions/length';
 import './assertions/field';
+import './assertions/fieldThat';
 import './assertions/equals';
 import './assertions/allElements';
 
@@ -116,7 +117,7 @@ describe('check(arg, \'arg\')', () => {
     },
   );
 
-  describe('.contains.onlyStrings().or.is.Undefined', () => {
+  describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined', () => {
     const message0 = 'arg must be an array or undefined; got';
     const message1 = 'arg[0] must be a string; got'
 

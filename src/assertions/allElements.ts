@@ -32,12 +32,12 @@ export class AllElementsThatAssertion<E> implements Assertion {
   }
   assert(value : any, object : string) {
     const { callback } = this;
-    const array = check(value, object).is.anArray;
+    const isArray = check(value, object).is.anArray;
 
     const errorMessages : Message[] = [];
 
     function checkElements() {
-      array()
+      isArray()
         .forEach((elem : any, i : number) => {
           const newContext = check(elem, `${object}[${i}]`);
 
@@ -65,10 +65,10 @@ export class AllElementsThatAssertion<E> implements Assertion {
 
     return {
       get success() {
-        return array.success && checkElements();
+        return isArray.success && checkElements();
       },
       get message() {
-        return array.success ? buildMessage() : array.message;
+        return isArray.success ? buildMessage() : isArray.message;
       },
     };
   }

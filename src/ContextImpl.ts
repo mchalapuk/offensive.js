@@ -101,21 +101,18 @@ export class ContextImpl {
     this.__operands = [];
   }
 
-  private __applyUnary(operand : Result) {
-    if (this.__unary === null) {
-      throw new Error('Trying to apply non-existent unary operator.');
-    }
-
-    this.__setResult(this.__unary.apply(operand));
-    this.__unary = null;
-  }
-
   private __setResult(result : Result) {
+    if (this.__unary !== null) {
+      const nextResult = this.__unary.apply(result);
+      this.__unary = null;
+      this.__setResult(nextResult);
+      return;
+    }
     if (this.__binary !== null) {
       this.__operands.push(result);
-    } else {
-      this.__result = result;
+      return;
     }
+    this.__result = result;
   }
 
   private __evaluate() {
@@ -150,7 +147,6 @@ export class ContextImpl {
       success: () => this.__evaluate().success,
       message: () => this.__evaluate().message,
       __pushBinaryOperator: () => pushBinaryOperator,
-      __pushUnaryOperator: () => pushUnaryOperator,
     } as { [_: string] : () => any };
 
     Object.keys(props)

@@ -13,6 +13,7 @@ declare module "../Context" {
   }
 }
 
+import './empty';
 import './field';
 import './method';
 import check from '..';
@@ -25,7 +26,8 @@ export class ArrayAssertion implements Assertion {
     return {
       get success() {
         return check(value, object)
-          .has.field('length')
+          .is.not.Empty
+          .and.has.field('length')
           .and.method('splice')
           .and.method('forEach')
           .success
