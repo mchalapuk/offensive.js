@@ -99,13 +99,13 @@ describe('check(arg, \'arg\')', () => {
     '.has.length(2).or.property(\'hi\').or.fieldThat(\'there\', field => field.equals(\'Jane\')',
     () => {
       const message0 = 'arg.length must be 2; got';
-      const message1 = 'or arg.hi must be not undefined; got';
-      const message2 = 'or arg.there must be \'Jane\'; got';
+      const message1 = 'or arg.hi not be undefined; got';
+      const message2 = 'or arg.there be \'Jane\'; got';
 
       assertion(arg => {
         return arg.has.length(2)
           .or.property('hi')
-          .or.fieldThat('there', field => field.is.equalTo('Jane'))
+          .or.fieldThat('there', field => field.is.equalTo('Jane'))()
         ;
       })
         .withArg([]).throws(`${message0} 0 ${message1} undefined ${message2} undefined`)
