@@ -5,7 +5,7 @@ declare module "../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface ConnectorContext<T> {
+  interface ConnectorContext {
     is : this;
     be : this;
     being : this;

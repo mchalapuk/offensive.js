@@ -36,12 +36,12 @@ describe('check(arg, \'arg\')', () => {
     const message1 = 'arg.length must be 2; got';
 
     assertion(arg => arg.is.anArray.with.length(2)())
-      .withArg(null).throws(`${message0} null`)
-      .withArg(undefined).throws(`${message0} undefined`)
-      .withArg('invalid').throws(`${message0} 'invalid'`)
-      .withArg({}).throws(`${message0} {}`)
+      .withArg(null).throws(`${message0} null and ${message1} no field`)
+      .withArg(undefined).throws(`${message0} undefined and ${message1} no field`)
+      .withArg('invalid').throws(`${message0} 'invalid' and ${message1} 7`)
+      .withArg({}).throws(`${message0} {} and ${message1} undefined`)
       .withArg([]).throws(`${message1} 0`)
-      .withArg(new Array(3)).throws(`${message0} 3`)
+      .withArg(new Array(3)).throws(`${message1} 3`)
       .withArg([0, 0]).doesntThrow()
       .withArg(new Array(2)).doesntThrow()
     ;

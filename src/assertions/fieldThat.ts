@@ -1,7 +1,7 @@
 
 import Registry from '../Registry';
 import { Assertion, Result, StandardMessage } from '../model';
-import { nodslArguments as nodsl } from '../utils';
+import { nodslArguments as nodsl, NoField } from '../utils';
 
 declare module "../Context" {
   export type FieldThatCallback<F> = (context : AssertionContext<F>) => Result;
@@ -31,13 +31,22 @@ export class FieldThatAssertion<F> implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
+    const { fieldName, callback } = this;
+
     const isNotEmpty = check(value, object).is.not.Empty;
     if (!isNotEmpty.success) {
-      return isNotEmpty;
+      return {
+        get success() {
+          return false;
+        },
+        get message() {
+          const newContext = check(NoField as F, `${object}.${fieldName}`);
+          return callback(newContext).message;
+        },
+      };
     }
-
-    const newContext = check(value[this.fieldName], `${object}.${this.fieldName}`);
-    return this.callback(newContext);
+    const newContext = check(value[fieldName], `${object}.${fieldName}`);
+    return callback(newContext);
   }
 }
 

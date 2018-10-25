@@ -1,4 +1,6 @@
 
+import NoField from './NoField';
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -21,10 +23,13 @@ export class ObjectSerializer {
   }
 
   serializeFunction(func : Function) {
-    return func.name? `function ${func.name}` : 'unnamed function';
+    return (func as any).name? `function ${(func as any).name}` : 'unnamed function';
   }
 
   serializeObject(arg : any) {
+    if (arg === NoField) {
+      return 'no field';
+    }
     if (arg === null) {
       return 'null';
     }

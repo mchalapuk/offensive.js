@@ -22,14 +22,16 @@ export class AndOperator implements BinaryOperator {
       get success() {
         for (const operand of operands) {
           if (!operand.success) {
-            // first failure means that whole expression is false
+            // First failure means that whole expression is false.
             return false;
           }
         }
         return true;
       },
       get message() {
-        return BinaryOperator.message('and', operands.map(o => o.message));
+        // We want to report only on failures.
+        const failures = operands.filter(result => !result.success);
+        return BinaryOperator.message('and', failures.map(o => o.message));
       },
     };
   }
