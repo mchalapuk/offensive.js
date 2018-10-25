@@ -86,7 +86,12 @@ function joinWithDifferentObjects(separator : string, messages : Message[]) {
       return `»BinaryOperator-[${messages.map(msg => msg.object).join(', ')}]`;
     },
     get requirement() {
-      return messages.join(` ${separator} `);
+      const head = messages[0];
+      // simple 'must' for a message is enough
+      const tail = messages.slice(1)
+        .map(msg => `${msg}`.replace(/ must/, ''))
+      ;
+      return `${head} ${separator} ${tail.join(` ${separator} `)}`;
     },
     get value() {
       return undefined;

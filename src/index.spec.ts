@@ -33,15 +33,16 @@ describe('check(arg, \'arg\')', () => {
 
   describe('.is.anArray.with.length(2)', () => {
     const message0 = 'arg must be an array; got';
-    const message1 = 'arg.length must be 2; got';
+    const message1a = 'arg.length must be 2; got';
+    const message1b = 'arg.length be 2; got';
 
     assertion(arg => arg.is.anArray.with.length(2)())
-      .withArg(null).throws(`${message0} null and ${message1} no field`)
-      .withArg(undefined).throws(`${message0} undefined and ${message1} no field`)
-      .withArg('invalid').throws(`${message0} 'invalid' and ${message1} 7`)
-      .withArg({}).throws(`${message0} {} and ${message1} undefined`)
-      .withArg([]).throws(`${message1} 0`)
-      .withArg(new Array(3)).throws(`${message1} 3`)
+      .withArg(null).throws(`${message0} null and ${message1b} no field`)
+      .withArg(undefined).throws(`${message0} undefined and ${message1b} no field`)
+      .withArg('invalid').throws(`${message0} 'invalid' and ${message1b} 7`)
+      .withArg({}).throws(`${message0} {} and ${message1b} undefined`)
+      .withArg([]).throws(`${message1a} 0`)
+      .withArg(new Array(3)).throws(`${message1a} 3`)
       .withArg([0, 0]).doesntThrow()
       .withArg(new Array(2)).doesntThrow()
     ;
@@ -68,7 +69,7 @@ describe('check(arg, \'arg\')', () => {
 
   describe('.has.length(2).or.property(\'hello\')', () => {
     const message0 = 'arg.length must be 2; got';
-    const message1 = 'or arg.hello must be not undefined; got';
+    const message1 = 'or arg.hello not be undefined; got';
 
     assertion(arg => arg.has.length(2).or.property('hello')())
       .withArg([]).throws(`${message0} 0 ${message1} undefined`)
@@ -120,6 +121,7 @@ describe('check(arg, \'arg\')', () => {
   describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined', () => {
     const message0 = 'arg must be an array or undefined; got';
     const message1 = 'arg[0] must be a string; got'
+    const message2 = 'arg be undefined; got'
 
     assertion(arg => {
       return arg.contains.allElementsWhich(elem => elem.is.aString)
@@ -127,7 +129,7 @@ describe('check(arg, \'arg\')', () => {
       ;
     })
       .withArg({}).throws(`${message0} {}`)
-      .withArg([undefined]).throws(`${message1} undefined`)
+      .withArg([undefined]).throws(`${message1} undefined or ${message2} [undefined]`)
       .withArg(undefined).doesntThrow()
       .withArg(['hi']).doesntThrow()
     ;
