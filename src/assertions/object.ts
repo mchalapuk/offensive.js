@@ -30,7 +30,7 @@ export default ObjectAssertion;
 
 Registry.instance
   .addAssertion({
-    names: [ 'anObject', 'Object', 'object', 'anObject', 'obj' ],
+    names: [ 'anObject', 'Object', 'object', 'obj' ],
     assertion: new ObjectAssertion(),
   })
 ;

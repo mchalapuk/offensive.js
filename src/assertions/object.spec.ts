@@ -1,5 +1,5 @@
 
-import './regexp';
+import './object';
 import check from '..';
 
 import { TestCaseBuilder, RunFunction } from '../test/TestCaseBuilder';
@@ -12,14 +12,14 @@ const instance = {};
 
 describe('check(arg, \'arg\')', () => {
   describe('.is.aRegExp()', () => {
-    const message0 = 'arg must be a RegExp; got';
+    const message0 = 'arg must be an object; got';
 
-    assertion(arg => arg.is.aRegExp())
+    assertion(arg => arg.is.anObject())
       .withArg(undefined).throws(`${message0} undefined`)
-      .withArg(null).throws(`${message0} null`)
       .withArg(RegExp).throws(`${message0} function RegExp`)
+      .withArg(null).doesntThrow()
+      .withArg({}).doesntThrow()
       .withArg(new RegExp('a')).doesntThrow()
-      .withArg(/regexp/g).doesntThrow()
     ;
   });
 });

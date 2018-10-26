@@ -13,7 +13,6 @@ import './assertions/length';
 // method
 import './assertions/null';
 import './assertions/number';
-// object
 // ofType
 // oneOf
 import './assertions/string';
