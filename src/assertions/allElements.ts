@@ -10,17 +10,18 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    allElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
-    allElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
-    onlyElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
-    onlyElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
-    eachElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
-    everyElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T & E[]>;
+    allElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
+    allElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
+    onlyElementsThat<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
+    onlyElementsWhich<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
+    eachElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
+    everyElementIs<E>(callback : AllElementsCallback<E>) : OperatorContext<T>;
   }
 }
 
 import { AllElementsCallback } from '../Context';
 import check from '..';
+import './array';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

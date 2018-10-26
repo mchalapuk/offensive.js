@@ -8,10 +8,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    matches(exp : RegExp) : OperatorContext<string>;
-    matchesRegExp(exp : RegExp) : OperatorContext<string>;
-    matchesRegexp(exp : RegExp) : OperatorContext<string>;
-    match(exp : RegExp) : OperatorContext<string>;
+    matches(exp : RegExp) : OperatorContext<T>;
+    matchesRegExp(exp : RegExp) : OperatorContext<T>;
+    matchesRegexp(exp : RegExp) : OperatorContext<T>;
+    match(exp : RegExp) : OperatorContext<T>;
   }
 }
 
@@ -27,12 +27,15 @@ export class MatchesAssertion implements Assertion {
   assert(value : any, object : string) {
     const { regexp } = this;
 
+    function flags() {
+      return `${regexp.global ? 'g': ''}${regexp.ignoreCase ? 'i': ''}${regexp.multiline ? 'm': ''}`;
+    }
     return {
       get success() {
         return typeof value === 'string' && value.match(regexp) !== null;
       },
       get message() {
-        return new StandardMessage(object, `match /${regexp.source}/${regexp.flags}`, value);
+        return new StandardMessage(object, `match /${regexp.source}/${flags()}`, value);
       },
     };
   }

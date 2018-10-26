@@ -7,10 +7,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    Null : OperatorContext<null>;
-    null : OperatorContext<null>;
-    Nil : OperatorContext<null>;
-    nil : OperatorContext<null>;
+    Null : OperatorContext<T>;
+    null : OperatorContext<T>;
+    Nil : OperatorContext<T>;
+    nil : OperatorContext<T>;
   }
 }
 

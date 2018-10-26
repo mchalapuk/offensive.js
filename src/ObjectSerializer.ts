@@ -5,10 +5,6 @@ import NoField from './NoField';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ObjectSerializer {
-  constructor(
-  ) {
-  }
-
   serializeAny(arg : any) {
     switch (typeof arg) {
       default:

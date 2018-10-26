@@ -2,18 +2,18 @@
 import { AssertionContext } from '../Context';
 import check from '..';
 
-export type RunFunction<ReturnType> = (context : AssertionContext<any>) => ReturnType;
+export type RunFunction<T> = (context : AssertionContext<T>) => T;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class TestCaseBuilder<ReturnType> {
+export class TestCaseBuilder<T> {
   constructor(
-    private runTestCase : RunFunction<ReturnType>,
+    private runTestCase : RunFunction<T>,
   ) {
   }
 
-  withArg(arg : any) : ExpectationBuilder<ReturnType> {
+  withArg(arg : any) : ExpectationBuilder<T> {
     const { runTestCase } = this;
     const builder = this;
 
@@ -38,7 +38,7 @@ export class TestCaseBuilder<ReturnType> {
     }
     function doesntThrow() {
       it(`should not throw when called on ${got}`, () => {
-        const retVal : ReturnType = runTestCase(context);
+        const retVal = runTestCase(context);
 
         if (retVal !== arg) {
           throw new Error(`expression should return ${got}; got ${JSON.stringify(retVal)}`);
@@ -57,8 +57,11 @@ export class TestCaseBuilder<ReturnType> {
 
 export default TestCaseBuilder;
 
-export interface ExpectationBuilder<ReturnType> {
-  throws(expectedMessage : string) : TestCaseBuilder<ReturnType>;
-  doesntThrow() : TestCaseBuilder<ReturnType>;
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface ExpectationBuilder<T> {
+  throws(expectedMessage : string) : TestCaseBuilder<T>;
+  doesntThrow() : TestCaseBuilder<T>;
 }
 

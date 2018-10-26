@@ -8,18 +8,18 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    ofType(requiredType : 'function') : OperatorContext<T & Function>;
-    ofType(requiredType : 'object') : OperatorContext<T & object>;
-    ofType(requiredType : 'string') : OperatorContext<string>;
-    ofType(requiredType : 'number') : OperatorContext<number>;
-    ofType(requiredType : 'boolean') : OperatorContext<boolean>;
-    ofType(requiredType : 'undefined') : OperatorContext<undefined>;
-    type(requiredType : 'function') : OperatorContext<T & Function>;
-    type(requiredType : 'object') : OperatorContext<T & object>;
-    type(requiredType : 'string') : OperatorContext<string>;
-    type(requiredType : 'number') : OperatorContext<number>;
-    type(requiredType : 'boolean') : OperatorContext<boolean>;
-    type(requiredType : 'undefined') : OperatorContext<undefined>;
+    ofType(requiredType : 'function') : OperatorContext<T>;
+    ofType(requiredType : 'object') : OperatorContext<T>;
+    ofType(requiredType : 'string') : OperatorContext<T>;
+    ofType(requiredType : 'number') : OperatorContext<T>;
+    ofType(requiredType : 'boolean') : OperatorContext<T>;
+    ofType(requiredType : 'undefined') : OperatorContext<T>;
+    type(requiredType : 'function') : OperatorContext<T>;
+    type(requiredType : 'object') : OperatorContext<T>;
+    type(requiredType : 'string') : OperatorContext<T>;
+    type(requiredType : 'number') : OperatorContext<T>;
+    type(requiredType : 'boolean') : OperatorContext<T>;
+    type(requiredType : 'undefined') : OperatorContext<T>;
   }
 }
 

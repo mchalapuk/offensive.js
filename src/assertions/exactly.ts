@@ -9,28 +9,28 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    exactly<R>(comparedValue : R) : OperatorContext<T & R>;
-    Exactly<R>(comparedValue : R) : OperatorContext<T & R>;
-    exactlyEqualTo<R>(comparedValue : R) : OperatorContext<T & R>;
-    ExactlyEqualTo<R>(comparedValue : R) : OperatorContext<T & R>;
-    exactlyEquals<R>(comparedValue : R) : OperatorContext<T & R>;
-    ExactlyEquals<R>(comparedValue : R) : OperatorContext<T & R>;
+    exactly(comparedValue : any) : OperatorContext<T>;
+    Exactly(comparedValue : any) : OperatorContext<T>;
+    exactlyEqualTo(comparedValue : any) : OperatorContext<T>;
+    ExactlyEqualTo(comparedValue : any) : OperatorContext<T>;
+    exactlyEquals(comparedValue : any) : OperatorContext<T>;
+    ExactlyEquals(comparedValue : any) : OperatorContext<T>;
   }
 }
+
+const serializer = new ObjectSerializer();
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ExactlyAssertion implements Assertion {
-  private serializer = new ObjectSerializer();
-
   constructor(
     private comparedValue : any,
   ) {
   }
 
   assert(value : any, object : string) {
-    const { comparedValue, serializer } = this;
+    const { comparedValue } = this;
 
     return {
       get success() {

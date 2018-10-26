@@ -7,12 +7,12 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    anInteger : OperatorContext<number>;
-    Integer : OperatorContext<number>;
-    integer : OperatorContext<number>;
-    anInt : OperatorContext<number>;
-    Int : OperatorContext<number>;
-    int : OperatorContext<number>;
+    anInteger : OperatorContext<T>;
+    Integer : OperatorContext<T>;
+    integer : OperatorContext<T>;
+    anInt : OperatorContext<T>;
+    Int : OperatorContext<T>;
+    int : OperatorContext<T>;
   }
 }
 

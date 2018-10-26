@@ -8,8 +8,8 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    anInstanceOf<R>(requiredType : { new() : R }) : OperatorContext<T & R>;
-    instanceOf<R>(requiredType : { new() : R }) : OperatorContext<T & R>;
+    anInstanceOf<R>(requiredType : { new() : R }) : OperatorContext<T>;
+    instanceOf<R>(requiredType : { new() : R }) : OperatorContext<T>;
   }
 }
 

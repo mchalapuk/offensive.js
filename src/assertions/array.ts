@@ -7,9 +7,9 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    anArray : OperatorContext<T & any[]>;
-    Array : OperatorContext<T & any[]>;
-    array : OperatorContext<T & any[]>;
+    anArray : OperatorContext<T>;
+    Array : OperatorContext<T>;
+    array : OperatorContext<T>;
   }
 }
 

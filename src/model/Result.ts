@@ -1,6 +1,8 @@
 
 import { ObjectSerializer } from '../ObjectSerializer';
 
+const serializer = new ObjectSerializer();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -25,8 +27,6 @@ export interface Message {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class StandardMessage implements Message {
-  private serializer = new ObjectSerializer();
-
   constructor(
     public object : string,
     public requirement : string,
@@ -35,7 +35,7 @@ export class StandardMessage implements Message {
   }
 
   toString() {
-    const got = this.serializer.serializeAny(this.value);
+    const got = serializer.serializeAny(this.value);
     return `${this.object} must ${this.requirement}; got ${got}`;
   }
 }

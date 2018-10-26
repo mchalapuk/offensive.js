@@ -7,9 +7,9 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    anEmail : OperatorContext<string>;
-    Email : OperatorContext<string>;
-    email : OperatorContext<string>;
+    anEmail : OperatorContext<T>;
+    Email : OperatorContext<T>;
+    email : OperatorContext<T>;
   }
 }
 

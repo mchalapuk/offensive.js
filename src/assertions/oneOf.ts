@@ -9,10 +9,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    oneOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T & E>;
-    elementOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T & E>;
-    containedIn<E>(searchedSet : E[], message ?: string) : OperatorContext<T & E>;
-    inSet<E>(searchedSet : E[], message ?: string) : OperatorContext<T & E>;
+    oneOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
+    elementOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
+    containedIn<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
+    inSet<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
   }
 }
 

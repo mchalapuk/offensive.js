@@ -7,10 +7,10 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aRegExp : OperatorContext<T & RegExp>;
-    RegExp : OperatorContext<T & RegExp>;
-    aRegexp : OperatorContext<T & RegExp>;
-    regexp : OperatorContext<T & RegExp>;
+    aRegExp : OperatorContext<T>;
+    RegExp : OperatorContext<T>;
+    aRegexp : OperatorContext<T>;
+    regexp : OperatorContext<T>;
   }
 }
 

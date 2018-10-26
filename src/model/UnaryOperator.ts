@@ -12,6 +12,9 @@ export interface UnaryOperator {
 }
 
 export namespace UnaryOperator {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
   export function message(prefix : string, message : Message) {
     return {
       get object() {

@@ -7,8 +7,8 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    Empty : OperatorContext<null | undefined>;
-    empty : OperatorContext<null | undefined>;
+    Empty : OperatorContext<T>;
+    empty : OperatorContext<T>;
   }
 }
 

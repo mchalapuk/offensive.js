@@ -7,16 +7,16 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aBoolean : OperatorContext<boolean>;
-    Boolean : OperatorContext<boolean>;
-    boolean : OperatorContext<boolean>;
-    aBool : OperatorContext<boolean>;
-    Bool : OperatorContext<boolean>;
-    bool : OperatorContext<boolean>;
-    True : OperatorContext<boolean>;
-    true : OperatorContext<boolean>;
-    False : OperatorContext<boolean>;
-    false : OperatorContext<boolean>;
+    aBoolean : OperatorContext<T>;
+    Boolean : OperatorContext<T>;
+    boolean : OperatorContext<T>;
+    aBool : OperatorContext<T>;
+    Bool : OperatorContext<T>;
+    bool : OperatorContext<T>;
+    True : OperatorContext<T>;
+    true : OperatorContext<T>;
+    False : OperatorContext<T>;
+    false : OperatorContext<T>;
     truthy : OperatorContext<T>;
     Truthy : OperatorContext<T>;
     truethy : OperatorContext<T>;

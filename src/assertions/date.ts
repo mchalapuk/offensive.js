@@ -7,9 +7,9 @@ declare module "../Context" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
-    aDate : OperatorContext<T & Date>;
-    Date : OperatorContext<T & Date>;
-    date : OperatorContext<T & Date>;
+    aDate : OperatorContext<T>;
+    Date : OperatorContext<T>;
+    date : OperatorContext<T>;
   }
 }
 
