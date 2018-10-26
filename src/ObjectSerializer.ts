@@ -1,11 +1,20 @@
 
 import NoField from './NoField';
 
+export class NoArrayOperator<T> {
+  constructor(public value : T) {
+  }
+
+  cast() {
+    return this as any as T;
+  }
+}
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ObjectSerializer {
-  serializeAny(arg : any) {
+  serializeAny(arg : any) : string {
     switch (typeof arg) {
       default:
         return String(arg);
@@ -25,6 +34,9 @@ export class ObjectSerializer {
   serializeObject(arg : any) {
     if (arg === NoField) {
       return 'no field';
+    }
+    if (arg instanceof NoArrayOperator) {
+      return `no array operator (${this.serializeAny((arg as NoArrayOperator<any>).value)})`;
     }
     if (arg === null) {
       return 'null';

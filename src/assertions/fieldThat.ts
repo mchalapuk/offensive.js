@@ -34,8 +34,7 @@ export class FieldThatAssertion<F> implements Assertion {
   assert(value : any, object : string) {
     const { fieldName, callback } = this;
 
-    const isNotEmpty = check(value, object).is.not.Empty;
-    if (!isNotEmpty.success) {
+    if (!check(value, object).is.not.Empty.success) {
       return {
         get success() {
           return false;
@@ -46,6 +45,7 @@ export class FieldThatAssertion<F> implements Assertion {
         },
       };
     }
+
     const newContext = check(value[fieldName], `${object}.${fieldName}`);
     return callback(newContext);
   }

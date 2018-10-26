@@ -13,11 +13,6 @@ declare module "../Context" {
   }
 }
 
-import './empty';
-import './field';
-import './method';
-import check from '..';
-
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -25,13 +20,7 @@ export class ArrayAssertion implements Assertion {
   assert(value : any, object : string) {
     return {
       get success() {
-        return check(value, object)
-          .is.not.Empty
-          .and.has.field('length')
-          .and.method('splice')
-          .and.method('forEach')
-          .success
-        ;
+        return Array.isArray(value);
       },
       get message() {
         return new StandardMessage(object, 'be an array', value);

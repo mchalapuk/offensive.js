@@ -2,6 +2,7 @@
 import Registry from '../Registry';
 import { Assertion, Result, StandardMessage } from '../model';
 import { nodslArguments as nodsl } from '../NoDsl';
+import { NoArrayOperator } from '../ObjectSerializer';
 
 declare module "../Context" {
   export type ElementThatCallback<F> = (context : AssertionContext<F>) => Result;
@@ -17,6 +18,7 @@ declare module "../Context" {
 
 import { ElementThatCallback } from '../Context';
 import check from '..';
+import './array';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -28,8 +30,22 @@ export class ElementThatAssertion<E> implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const newContext = check(value[this.elementIndex], `${object}.${this.elementIndex}`);
+    const { elementIndex, callback } = this;
 
+    if (!check(value, object).is.anArray.success) {
+      return {
+        get success() {
+          return false;
+        },
+        get message() {
+          const wrapper = new NoArrayOperator<E>(value);
+          const newContext = check(wrapper.cast(), `${object}[${elementIndex}]`);
+          return callback(newContext).message;
+        },
+      };
+    }
+
+    const newContext = check(value[elementIndex], `${object}[${elementIndex}]`);
     return this.callback(newContext);
   }
 }

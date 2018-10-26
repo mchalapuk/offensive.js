@@ -1,9 +1,6 @@
 
 import './assertions/allElements';
 import './assertions/array';
-// boolean
-// date
-// elementThat
 // email
 // empty
 import './assertions/equals';
