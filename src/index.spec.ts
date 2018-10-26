@@ -1,9 +1,7 @@
 
 import './assertions/allElements';
 import './assertions/array';
-// empty
 import './assertions/equals';
-// exactly
 import './assertions/fieldThat';
 import './assertions/field';
 import './assertions/function';

@@ -51,7 +51,7 @@ function groupByObject() {
   };
 }
 
-function joinWithSameObject(separator : string, messages : Message[]) {
+function joinWithSameObject(separator : string, messages : Message[]) : Message {
   const head = messages[0];
   const tail = messages.slice(1);
 
@@ -70,7 +70,7 @@ function joinWithSameObject(separator : string, messages : Message[]) {
       const tailRequitements = tail.map(msg => msg.requirement.substring(cut));
       return `${head.requirement} ${separator} ${tailRequitements.join(` ${separator} `)}`;
     },
-    value() {
+    get value() {
       return head.value;
     },
     toString() {
@@ -80,7 +80,7 @@ function joinWithSameObject(separator : string, messages : Message[]) {
   };
 }
 
-function joinWithDifferentObjects(separator : string, messages : Message[]) {
+function joinWithDifferentObjects(separator : string, messages : Message[]) : Message {
   return {
     get object() {
       // just unique object

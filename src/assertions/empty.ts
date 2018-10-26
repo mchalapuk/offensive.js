@@ -12,19 +12,16 @@ declare module "../Context" {
   }
 }
 
+import check from '..';
+import './null';
+import './undefined';
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class EmptyAssertion implements Assertion {
   assert(value : any, object : string) {
-    return {
-      get success() {
-        return value === null || value === undefined;
-      },
-      get message() {
-        return new StandardMessage(object, 'be empty', value);
-      },
-    };
+    return check(value, object).is.Null.or.Undefined;
   }
 }
 
