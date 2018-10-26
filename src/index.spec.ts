@@ -1,7 +1,6 @@
 
 import './assertions/allElements';
 import './assertions/array';
-// email
 // empty
 import './assertions/equals';
 // exactly

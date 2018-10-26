@@ -26,7 +26,7 @@ export class NumberAssertion implements Assertion {
         return check(value, object).matches(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i).success;
       },
       get message() {
-        return new StandardMessage(object, 'an email', value);
+        return new StandardMessage(object, 'be an email', value);
       },
     };
   }
