@@ -16,7 +16,6 @@ import './assertions/number';
 // object
 // ofType
 // oneOf
-// regexp
 import './assertions/string';
 import './assertions/undefined';
 
