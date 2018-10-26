@@ -21,7 +21,14 @@ import check from '..';
  */
 export class DateAssertion implements Assertion {
   assert(value : any, object : string) {
-    return check(value, object).is.anInstanceOf(Date);
+    return {
+      get success() {
+        return check(value, object).is.anInstanceOf(Date).success;
+      },
+      get message() {
+        return new StandardMessage(object, 'be a date', value);
+      },
+    };
   }
 }
 

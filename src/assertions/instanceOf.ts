@@ -30,7 +30,11 @@ export class InstanceOfAssertion<R> implements Assertion {
         return value instanceof requiredType;
       },
       get message() {
-        return new StandardMessage(object, `be an instance of ${requiredType}`, value);
+        return new StandardMessage(
+          object,
+          `be an instance of ${serializeType(requiredType)}`,
+          value,
+        );
       },
     };
   }
@@ -56,4 +60,8 @@ Registry.instance
     },
   })
 ;
+
+function serializeType(type : any) {
+  return type.name || 'unknown type';
+}
 
