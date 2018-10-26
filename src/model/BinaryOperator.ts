@@ -65,7 +65,8 @@ function joinWithSameObject(separator : string, messages : Message[]) {
     },
     get requirement() {
       const shared = sharedStart.apply(null, messages.map(msg => msg.requirement));
-      const cut = shared.length > 3 && shared.endsWith(' a ') ? shared.length - 2 : shared.length;
+      const article = / an? ?$/.exec(shared);
+      const cut = shared.length - (article ? article[0].length - 1 : 0);
       const tailRequitements = tail.map(msg => msg.requirement.substring(cut));
       return `${head.requirement} ${separator} ${tailRequitements.join(` ${separator} `)}`;
     },

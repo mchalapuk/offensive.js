@@ -11,6 +11,8 @@ declare module "../Context" {
     no : AssertionContext<T>;
     doesnt : AssertionContext<T>;
     dont : AssertionContext<T>;
+    isnt : AssertionContext<T>;
+    arent : AssertionContext<T>;
   }
 }
 
@@ -34,7 +36,7 @@ export default NotOperator;
 
 Registry.instance
   .addUnaryOperator({
-    names: [ 'not', 'no', 'doesnt', 'dont' ],
+    names: [ 'not', 'no', 'doesnt', 'dont', 'isnt', 'arent' ],
     operator: new NotOperator(),
   })
 ;

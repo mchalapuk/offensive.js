@@ -1,15 +1,34 @@
 
-import './assertions/undefined';
+import './assertions/allElements';
+import './assertions/array';
+// boolean
+// date
+// elementThat
+// email
+// empty
+import './assertions/equals';
+// exactly
+import './assertions/fieldThat';
+import './assertions/field';
+import './assertions/function';
+// greaterThanEqual
+// greaterThan
+// inRange
+// instanceOf
+// integer
+import './assertions/length';
+// lessThanEqual
+// lessThan
+// matches
+// method
 import './assertions/null';
 import './assertions/number';
+// object
+// ofType
+// oneOf
+// regexp
 import './assertions/string';
-import './assertions/function';
-import './assertions/array';
-import './assertions/length';
-import './assertions/field';
-import './assertions/fieldThat';
-import './assertions/equals';
-import './assertions/allElements';
+import './assertions/undefined';
 
 import { TestCaseBuilder, RunFunction } from './test/TestCaseBuilder';
 

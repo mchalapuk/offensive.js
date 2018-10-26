@@ -95,7 +95,7 @@ export class ConvertsToBooleanAssertion implements Assertion {
 
     return {
       get success() {
-        return value == expectedValue;
+        return Boolean(value) === expectedValue;
       },
       get message() {
         return new StandardMessage(object, expectedValue ? 'be truthy' : 'be falsy', value);
