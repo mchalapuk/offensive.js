@@ -5,14 +5,10 @@ import './assertions/equals';
 import './assertions/fieldThat';
 import './assertions/field';
 import './assertions/function';
-// greaterThanEqual
-// greaterThan
 // inRange
 // instanceOf
 // integer
 import './assertions/length';
-// lessThanEqual
-// lessThan
 // matches
 // method
 import './assertions/null';
