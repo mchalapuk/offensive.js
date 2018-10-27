@@ -8,5 +8,6 @@ matrix:
 install:
   - 'npm install'
 script:
-  - 'npm test'
+  - 'npm run clean-build'
+  - 'npm run all-tests'
 
