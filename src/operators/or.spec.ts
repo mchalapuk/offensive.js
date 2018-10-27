@@ -32,9 +32,7 @@ describe('OrOperator', () => {
     },
   ];
 
-  messageTests.forEach(params => {
-    const { testName, operandMessages, resultMessage } = params;
-
+  messageTests.forEach(({ testName, operandMessages, resultMessage }) => {
     describe(`.apply(${testName})`, () => {
       it(`returns message \'${resultMessage}\'`, () => {
         const success = false;
@@ -43,6 +41,36 @@ describe('OrOperator', () => {
         const result = testedOperator.apply(operands);
         const msgString = result.message.toString();
         msgString.should.equal(resultMessage);
+      });
+    });
+  });
+
+  const successTests = [
+    {
+      testName: 'two failured results',
+      operandSuccesses: [false, false],
+      resultSuccess: false,
+    },
+    {
+      testName: 'two succeses results',
+      operandSuccesses: [true, true],
+      resultSuccess: true,
+    },
+    {
+      testName: 'two failured, one succes',
+      operandSuccesses: [false, false, true],
+      resultSuccess: true,
+    },
+  ];
+
+  successTests.forEach(({ testName, operandSuccesses, resultSuccess }) => {
+    describe(`.apply(${testName})`, () => {
+      it(`results in ${resultSuccess ? 'success' : 'failure'}`, () => {
+        const message = msg('', '');
+        const operands = operandSuccesses.map(success => ({ success, message } as Result));
+
+        const result = testedOperator.apply(operands);
+        result.success.should.equal(resultSuccess);
       });
     });
   });
