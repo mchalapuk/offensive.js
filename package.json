@@ -46,7 +46,6 @@
     "@types/should": "^13.0.0",
     "@types/should-sinon": "0.0.3",
     "@types/sinon": "^5.0.5",
-    "coffee-script": "^1.11.0",
     "mocha": "*",
     "should": "^13.2.3",
     "should-sinon": "0.0.6",
