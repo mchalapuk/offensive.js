@@ -1,15 +1,4 @@
 
-import NoField from './NoField';
-
-export class NoArrayOperator<T> {
-  constructor(public value : T) {
-  }
-
-  cast() {
-    return this as any as T;
-  }
-}
-
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -32,8 +21,8 @@ export class ObjectSerializer {
   }
 
   serializeObject(arg : any) {
-    if (arg === NoField) {
-      return 'no field';
+    if (arg instanceof NoObject) {
+      return `no object (${this.serializeAny((arg as NoObject<any>).value)})`;
     }
     if (arg instanceof NoArrayOperator) {
       return `no array operator (${this.serializeAny((arg as NoArrayOperator<any>).value)})`;
@@ -82,4 +71,28 @@ export class ObjectSerializer {
 }
 
 export default ObjectSerializer;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class NoArrayOperator<T> {
+  constructor(public value : T) {
+  }
+
+  cast() {
+    return this as any as T;
+  }
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class NoObject<T> {
+  constructor(public value : T) {
+  }
+
+  cast() {
+    return this as any as T;
+  }
+}
 

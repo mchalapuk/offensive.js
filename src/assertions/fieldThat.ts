@@ -2,7 +2,7 @@
 import Registry from '../Registry';
 import { Assertion, Result, StandardMessage } from '../model';
 import { nodslArguments as nodsl } from '../NoDsl';
-import { NoField } from '../NoField';
+import { NoObject } from '../ObjectSerializer';
 
 declare module "../Context" {
   export type FieldThatCallback<F> = (context : AssertionContext<F>) => Result;
@@ -40,7 +40,8 @@ export class FieldThatAssertion<F> implements Assertion {
           return false;
         },
         get message() {
-          const newContext = check(NoField as F, `${object}.${fieldName}`);
+          const wrapper = new NoObject<F>(value);
+          const newContext = check(wrapper.cast(), `${object}.${fieldName}`);
           return callback(newContext).message;
         },
       };

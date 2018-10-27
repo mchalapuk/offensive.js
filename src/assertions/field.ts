@@ -2,6 +2,7 @@
 import Registry from '../Registry';
 import { Assertion, StandardMessage } from '../model';
 import { nodslArguments as nodsl } from '../NoDsl';
+import { NoObject } from '../ObjectSerializer';
 
 declare module "../Context" {
   /**
@@ -25,12 +26,21 @@ export class FieldAssertion implements Assertion {
   ) {
   }
   assert(value : any, object : string) {
-    const isNotEmpty = check(value, object).is.not.Empty;
-    if (!isNotEmpty.success) {
-      return isNotEmpty;
+    const { fieldName } = this;
+
+    if (!check(value, object).is.not.Empty.success) {
+      return {
+        get success() {
+          return false;
+        },
+        get message() {
+          const wrapper = new NoObject<any>(value);
+          return check(wrapper, `${object}.${fieldName}`).is.not.Undefined.message;
+        },
+      };
     }
 
-    return check(value[this.fieldName], `${object}.${this.fieldName}`).is.not.Undefined;
+    return check(value[fieldName], `${object}.${fieldName}`).is.not.Undefined;
   }
 }
 

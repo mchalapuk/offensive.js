@@ -9,7 +9,6 @@ import './assertions/function';
 // instanceOf
 import './assertions/length';
 // matches
-// method
 import './assertions/null';
 import './assertions/number';
 // ofType
@@ -43,8 +42,8 @@ describe('check(arg, \'arg\')', () => {
     const message1b = 'arg.length be 2; got';
 
     assertion(arg => arg.is.anArray.with.length(2)())
-      .withArg(null).throws(`${message0} null and ${message1b} no field`)
-      .withArg(undefined).throws(`${message0} undefined and ${message1b} no field`)
+      .withArg(null).throws(`${message0} null and ${message1b} no object (null)`)
+      .withArg(undefined).throws(`${message0} undefined and ${message1b} no object (undefined)`)
       .withArg('invalid').throws(`${message0} 'invalid' and ${message1b} 7`)
       .withArg({}).throws(`${message0} {} and ${message1b} undefined`)
       .withArg([]).throws(`${message1a} 0`)
