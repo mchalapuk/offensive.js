@@ -1,14 +1,16 @@
 {
   "name": "offensive",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Fast and boilerplate-free precondition checks for javascript.",
-  "main": "offensive.js",
+  "main": "index.js",
   "scripts": {
     "clean": "rm -rf ./lib",
     "build": "cd src && tsc",
-    "clean-build": "npm run clean && npm run build",
+    "copy-config": "cp package* ./lib && cp *.md ./lib && cd lib && npm shrinkwrap --production",
+    "clean-build": "npm run clean && npm run build && npm run copy-config",
     "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test/harness.ts $(find -name \"${PATTERN}\")",
-    "all-tests": "PATTERN='*.spec.ts' npm run test"
+    "all-tests": "PATTERN='*.spec.ts' npm run test",
+    "deploy": "npm run clean-build && cd lib && npm run publish"
   },
   "repository": {
     "type": "git",
