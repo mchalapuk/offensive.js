@@ -119,17 +119,16 @@ describe('check(arg, \'arg\')', () => {
   );
 
   describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined', () => {
-    const message0 = 'arg must be an array or undefined; got';
-    const message1 = 'arg[0] must be a string; got'
-    const message2 = 'arg be undefined; got'
+    const message0 = 'arg[0] must be a string; got'
+    const message1 = 'or arg be undefined; got'
 
     assertion(arg => {
       return arg.contains.allElementsWhich(elem => elem.is.aString)
         .or.is.Undefined()
       ;
     })
-      .withArg({}).throws(`${message0} {}`)
-      .withArg([undefined]).throws(`${message1} undefined or ${message2} [undefined]`)
+      .withArg({}).throws(`${message0} no array operator ({}) ${message1} {}`)
+      .withArg([undefined]).throws(`${message0} undefined ${message1} [undefined]`)
       .withArg(undefined).doesntThrow()
       .withArg(['hi']).doesntThrow()
     ;
