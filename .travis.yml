@@ -6,6 +6,7 @@ matrix:
     - node_js: '6'
     - node_js: '4'
 install:
+  - 'npm i -g npm@latest'
   - 'npm install'
 script:
   - 'npm run clean-build'
