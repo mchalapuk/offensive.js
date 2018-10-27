@@ -8,7 +8,6 @@ import './assertions/function';
 import './assertions/length';
 import './assertions/null';
 import './assertions/number';
-// oneOf
 import './assertions/string';
 import './assertions/undefined';
 

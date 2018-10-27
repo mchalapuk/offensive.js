@@ -36,7 +36,7 @@ export class OneOfAssertion<E> implements Assertion {
       },
       get message() {
         if (message !== undefined) {
-          return new StandardMessage(object, `be ${message}`, value);
+          return new StandardMessage(object, message, value);
         }
         return new StandardMessage(
           object,
