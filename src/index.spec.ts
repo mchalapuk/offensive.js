@@ -7,7 +7,6 @@ import './assertions/field';
 import './assertions/function';
 // inRange
 // instanceOf
-// integer
 import './assertions/length';
 // matches
 // method
