@@ -96,7 +96,7 @@ describe('check(arg, \'arg\')', () => {
   });
 
   describe(
-    '.has.length(2).or.property(\'hi\').or.fieldThat(\'there\', field => field.equals(\'Jane\')',
+    '.has.length(2).or.property(\'hi\').or.fieldThat(\'there\', field => field.exactly(\'Jane\')',
     () => {
       const message0 = 'arg.length must be 2; got';
       const message1 = 'or arg.hi not be undefined; got';
@@ -105,7 +105,7 @@ describe('check(arg, \'arg\')', () => {
       assertion(arg => {
         return arg.has.length(2)
           .or.property('hi')
-          .or.fieldThat('there', field => field.is.equalTo('Jane'))()
+          .or.fieldThat('there', field => field.is.exactly('Jane'))()
         ;
       })
         .withArg([]).throws(`${message0} 0 ${message1} undefined ${message2} undefined`)
