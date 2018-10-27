@@ -50,11 +50,11 @@ Registry.instance
     factory: (args : any[]) => {
       nodsl.check(
         args.length === 1,
-        `.matches requires 1 argument; got ${args.length}`,
+        '.matches requires 1 argument (got ', args.length, ')',
       );
       nodsl.check(
         args[0] instanceof RegExp,
-        `regexp must be isntance of RegExp; got ${typeof args[0]}`,
+        'regexp must be isntance of RegExp (got ', (typeof args[0]), ')',
       );
 
       return new MatchesAssertion(args[0]);

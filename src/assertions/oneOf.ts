@@ -59,16 +59,16 @@ Registry.instance
 
       nodsl.check(
         args.length === 1 || args.length === 2,
-        `.oneOf requires 1 or 2 arguments; got ${args.length}`,
+        '.oneOf requires 1 or 2 arguments (got ', args.length, ')',
       );
       nodsl.check(
         typeof args[0] === 'object' && typeof args[0].indexOf === 'function',
-        `searchedSet must be an array; got ${serializer.serializeAny(args[0])}`,
+        'searchedSet must be an array (got ', serializer.serializeAny(args[0]), ')',
       );
       if (args.length === 2) {
         nodsl.check(
           typeof args[1] === 'string',
-          `message must be a string; got ${typeof args[1]}`,
+          'message must be a string (got ', (typeof args[1]), ')',
         );
       }
 

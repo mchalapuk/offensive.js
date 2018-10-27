@@ -58,11 +58,11 @@ Registry.instance
     factory: (args : any[]) => {
       nodsl.check(
         args.length === 1,
-        `.lessThanEqual requires 1 argument; got ${args.length}`,
+        '.lessThanEqual requires 1 argument (got ', args.length, ')',
       );
       nodsl.check(
         typeof args[0] === 'number',
-        `comparedNumber must be a number; got ${typeof args[0]}`,
+        'comparedNumber must be a number (got ', typeof args[0], ')',
       );
 
       return new LessThanEqualAssertion(args[0]);

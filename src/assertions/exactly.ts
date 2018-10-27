@@ -61,7 +61,7 @@ Registry.instance
     ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, `.exactly requires 1 argument; got ${args.length}`);
+      nodsl.check(args.length === 1, `.exactly requires 1 argument (got ${args.length})`);
 
       return new ExactlyAssertion(args[0]);
     },

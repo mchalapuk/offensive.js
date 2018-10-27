@@ -37,8 +37,14 @@ Registry.instance
     names: [ 'aMethod', 'method' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, '.method assertion requires 1 argument; got ', args.length);
-      nodsl.check(typeof args[0] === 'string', 'methodName must be a string; got ', typeof args[0]);
+      nodsl.check(
+        args.length === 1,
+        '.method assertion requires 1 argument got (', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'string',
+        'methodName must be a string (got ', (typeof args[0]), ')',
+      );
 
       return new MethodAssertion(args[0] as string);
     },

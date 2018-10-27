@@ -36,7 +36,7 @@ export class StandardMessage implements Message {
 
   toString() {
     const got = serializer.serializeAny(this.value);
-    return `${this.object} must ${this.requirement}; got ${got}`;
+    return `${this.object} must ${this.requirement} (got ${got})`;
   }
 }
 

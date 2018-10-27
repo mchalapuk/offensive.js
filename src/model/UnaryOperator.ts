@@ -1,5 +1,5 @@
 
-import { Result, Message } from './Result';
+import { Result, Message, StandardMessage } from './Result';
 import { ObjectSerializer } from '../ObjectSerializer';
 
 const serializer = new ObjectSerializer();
@@ -16,21 +16,7 @@ export namespace UnaryOperator {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   export function message(prefix : string, message : Message) {
-    return {
-      get object() {
-        return message.object;
-      },
-      get requirement() {
-        return `${prefix} ${message.requirement}`;
-      },
-      get value() {
-        return message.value;
-      },
-      toString() {
-        const got = serializer.serializeAny(message.value);
-        return `${this.object} must ${this.requirement}; got ${got}`;
-      },
-    };
+    return new StandardMessage(message.object, `${prefix} ${message.requirement}`, message.value);
   }
 }
 

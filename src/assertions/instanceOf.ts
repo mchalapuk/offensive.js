@@ -49,11 +49,11 @@ Registry.instance
     factory: (args : any[]) => {
       nodsl.check(
         args.length === 1,
-        `.instanceOf requires 1 argument; got ${args.length}`,
+        '.instanceOf requires 1 argument (got ', args.length, ')',
       );
       nodsl.check(
         typeof args[0] === 'function',
-        `requiredType must be a function; got ${typeof args[0]}`,
+        'requiredType must be a function (got ', (typeof args[0]), ')',
       );
 
       return new InstanceOfAssertion(args[0]);

@@ -20,17 +20,17 @@ describe('AndOperator', () => {
     {
       testName: '4 failures, 2 per object',
       operandSuccesses: [false, false, false, false],
-      resultMessage: 'obj0 must be 0 and 1; got {} and obj1 be 2 and 3; got {}',
+      resultMessage: 'obj0 must be 0 and 1 (got {}) and obj1 be 2 and 3 (got {})',
     },
     {
       testName: '2 failures, 1 per object',
       operandSuccesses: [true, false, true, false],
-      resultMessage: 'obj0 must be 1; got {} and obj1 be 3; got {}',
+      resultMessage: 'obj0 must be 1 (got {}) and obj1 be 3 (got {})',
     },
     {
       testName: '2 failures, both in same object',
       operandSuccesses: [false, false, true, true],
-      resultMessage: 'obj0 must be 0 and 1; got {}',
+      resultMessage: 'obj0 must be 0 and 1 (got {})',
     },
   ];
 

@@ -75,7 +75,7 @@ function joinWithSameObject(separator : string, messages : Message[]) : Message 
     },
     toString() {
       const got = serializer.serializeAny(head.value);
-      return `${this.object} must ${this.requirement}; got ${got}`;
+      return `${this.object} must ${this.requirement} (got ${got})`;
     },
   };
 }

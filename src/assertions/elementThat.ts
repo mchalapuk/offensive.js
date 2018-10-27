@@ -57,9 +57,18 @@ Registry.instance
     names: [ 'elementThat', 'elementWhich' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 2, '.elementThat requires 2 arguments; got ', args.length);
-      nodsl.check(typeof args[0] === 'number', 'elementIndex must be a number; got ', typeof args[0]);
-      nodsl.check(typeof args[1] === 'function', 'callback must be a function; got ', typeof args[1]);
+      nodsl.check(
+        args.length === 2,
+        '.elementThat requires 2 arguments (got ', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'number',
+        'elementIndex must be a number (got ', (typeof args[0]), ')',
+      );
+      nodsl.check(
+        typeof args[1] === 'function',
+        'callback must be a function (got ', (typeof args[1]), ')',
+      );
 
       return new ElementThatAssertion(args[0], args[1]);
     },

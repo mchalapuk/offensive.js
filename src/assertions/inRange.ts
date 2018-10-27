@@ -44,15 +44,15 @@ Registry.instance
     factory: (args : any[]) => {
       nodsl.check(
         args.length === 2,
-        `.inRange requires 2 arguments; got ${args.length}`,
+        '.inRange requires 2 arguments (got ', args.length, ')',
       );
       nodsl.check(
         typeof args[0] === 'number',
-        `lowerBounds must be a number; got ${typeof args[0]}`,
+        'lowerBounds must be a number (got ', typeof args[0], ')',
       );
       nodsl.check(
         typeof args[1] === 'number',
-        `upperBounds must be a number; got ${typeof args[1]}`,
+        'upperBounds must be a number (got ', typeof args[1], ')',
       );
 
       return new InRangeAssertion(args[0], args[1]);

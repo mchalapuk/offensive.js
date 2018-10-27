@@ -2,6 +2,7 @@
 import Registry from '../Registry';
 import { Assertion, StandardMessage } from '../model';
 import { nodslArguments as nodsl } from '../NoDsl';
+import { ObjectSerializer } from '../ObjectSerializer';
 
 declare module "../Context" {
   /**
@@ -61,6 +62,7 @@ export class OfTypeAssertion implements Assertion {
 export default OfTypeAssertion;
 
 const VALID_TYPES = /function|object|string|number|boolean|undefined/
+const serializer = new ObjectSerializer();
 
 Registry.instance
   .addAssertionFactory({
@@ -69,11 +71,12 @@ Registry.instance
     factory: (args : any[]) => {
       nodsl.check(
         args.length === 1,
-        `.ofType requires 1 argument; got ${args.length}`,
+        '.ofType requires 1 argument (got ', args.length, ')',
       );
       nodsl.check(
         args[0].match(VALID_TYPES),
-        `requiredType must match ${VALID_TYPES}; got ${args[0]}`,
+        'requiredType must match /', VALID_TYPES.source, '/',
+        ' (got ', serializer.serializeAny(args[0]), ')',
       );
 
       return new OfTypeAssertion(args[0]);

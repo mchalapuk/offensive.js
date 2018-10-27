@@ -10,11 +10,11 @@ function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
 
 describe('check(arg, \'arg\')', () => {
   describe('.has.method(\'toString\')', () => {
-    const message0 = 'arg.toString must be a function; got';
+    const message0 = 'arg.toString must be a function (got';
 
     assertion(arg => arg.has.method('toString')())
-      .withArg(undefined).throws(`${message0} no object (undefined)`)
-      .withArg(null).throws(`${message0} no object (null)`)
+      .withArg(undefined).throws(`${message0} no object (undefined))`)
+      .withArg(null).throws(`${message0} no object (null))`)
       .withArg({ toString() {} }).doesntThrow()
     ;
   });

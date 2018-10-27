@@ -24,24 +24,46 @@ export class TestCaseBuilder<T> {
       it(`should throw Error('${expectedMessage}')`, () => {
         try {
           runTestCase(context);
+
         } catch (e) {
           if (e.message !== expectedMessage) {
-            throw new Error(`expected error message '${expectedMessage}'; got ${e.stack}`);
+            const stack = e.stack
+              .split('\n')
+              .map((line : string) => `    ${line}`)
+              .join('\n')
+            ;
+            throw new Error(
+              `Expected error message:\n    '${expectedMessage}'\n  Thrown:\n${stack}\n`
+            );
           }
           // test passed
           return;
         }
-        throw new Error('expected error to be thrown');
+
+        throw new Error('Expected error to be thrown but it was not.');
       });
 
       return builder;
     }
+
     function doesntThrow() {
       it(`should not throw when called on ${got}`, () => {
         const retVal = runTestCase(context);
 
         if (retVal !== arg) {
-          throw new Error(`expression should return ${got}; got ${JSON.stringify(retVal)}`);
+          const expected = JSON.stringify(arg, null, '  ')
+            .split('\n')
+            .map((line : string) => `    ${line}`)
+            .join('\n')
+          ;
+          const actual = JSON.stringify(retVal, null, '')
+            .split('\n')
+            .map((line : string) => `    ${line}`)
+            .join('\n')
+          ;
+          throw new Error(
+            `Expression should return:\n     ${expected}\n  Actually returned:\n   ${actual}`
+          );
         }
       });
 

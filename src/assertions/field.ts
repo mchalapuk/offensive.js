@@ -51,8 +51,14 @@ Registry.instance
     names: [ 'field', 'property' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, '.field requires one argument; got ', args.length);
-      nodsl.check(typeof args[0] === 'string', 'fieldName must be a string; got ', typeof args[0]);
+      nodsl.check(
+        args.length === 1,
+        '.field requires one argument (got ', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'string',
+        'fieldName must be a string (got ', typeof args[0], ')',
+      );
 
       return new FieldAssertion(args[0]);
     },

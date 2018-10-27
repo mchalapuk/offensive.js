@@ -37,8 +37,14 @@ Registry.instance
     names: [ 'length', 'len' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, '.length requires single argument; got ', args.length);
-      nodsl.check(typeof args[0] === 'number', 'requiredLength must be a number; got ', typeof args[0]);
+      nodsl.check(
+        args.length === 1,
+        '.length requires single argument (got ', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'number',
+        'requiredLength must be a number (got ', typeof args[0], ')',
+      );
 
       return new LengthAssertion(args[0]);
     },

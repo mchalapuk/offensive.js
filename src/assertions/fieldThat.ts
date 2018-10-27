@@ -59,9 +59,18 @@ Registry.instance
     names: [ 'fieldThat', 'fieldWhich', 'propertyThat', 'propertyWhich' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 2, '.fieldThat requires 2 arguments; got ', args.length);
-      nodsl.check(typeof args[0] === 'string', 'fieldName must be a string; got ', typeof args[0]);
-      nodsl.check(typeof args[1] === 'function', 'callback must be a function; got ', typeof args[0]);
+      nodsl.check(
+        args.length === 2,
+        '.fieldThat requires 2 arguments (got ', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'string',
+        'fieldName must be a string (got ', typeof args[0], ')',
+      );
+      nodsl.check(
+        typeof args[1] === 'function',
+        'callback must be a function (got ', typeof args[1], ')',
+      );
 
       return new FieldThatAssertion(args[0], args[1]);
     },

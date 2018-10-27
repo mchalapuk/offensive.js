@@ -8,6 +8,25 @@ declare module "../Context" {
   export type AllElemsCallback<E> = (context : AssertionContext<E>) => Result;
 
   /**
+   * ```
+   * .allElementsThat<E>(callback : (context : AssertionContext<E>) => Result);
+   * ```
+   * Checks if all elements of an array satisfy an assertion
+   * implemented in provided `callback`.
+   *
+   * Message produced by this assertion contains only the information on elements
+   * which did not satisfy the assertion. This is unusual but it makes no sense
+   * to list 100 elements in error message when only one did not satisfy the assertion.
+   *
+   * ## Example
+   *
+   * ```
+   * // Checks if arg is an array and contains only boolean values.
+   * check(arg, 'arg')
+   *   .has.allElementsThat(elem => elem.is.aBoolean)
+   * ;
+   * ```
+   *
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionContext<T> {
@@ -33,13 +52,6 @@ import './array';
 let objectNumber = 0;
 
 /**
- * Checks if all elements of an array satisfy an assertion
- * implemented in provided `callback`.
- *
- * Message produced by this assertion contains only the information on elements
- * which did not satisfy the assertion. This is unusual but it makes no sense
- * to list 100 elements in error message when only one did not satisfy the assertion.
- *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class AllElementsThatAssertion<E> implements Assertion {
@@ -80,16 +92,6 @@ export class AllElementsThatAssertion<E> implements Assertion {
       ;
     }
 
-    /**
-     * @return array containing messages only from unsuccesful results.
-     */
-    function getErrorMessages() {
-      return getResults()
-        .filter(result => !result.success)
-        .map(result => result.message)
-      ;
-    }
-
     return {
       get success() {
         for (const result of getResults()) {
@@ -102,12 +104,16 @@ export class AllElementsThatAssertion<E> implements Assertion {
       },
       get message() {
         // Successful results are not contained in the message.
-        const message = BinaryOperator.message('and', getErrorMessages());
+        const errorMessages = getResults()
+          .filter(result => !result.success)
+          .map(result => result.message)
+        ;
+        const message = BinaryOperator.message('and', errorMessages);
 
         return {
           get object() {
             // unique object
-            const objects = getErrorMessages().map(msg => msg.object);
+            const objects = errorMessages.map(msg => msg.object);
             return `»allElementsThat-[${objects.join(', ')}]-${objectNumber++}`;
           },
           get requirement() {
@@ -145,8 +151,14 @@ Registry.instance
     ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, '.allElementsThat requires 1 argument; got ', args.length);
-      nodsl.check(typeof args[0] === 'function', 'callback must be a function; got ', typeof args[0]);
+      nodsl.check(
+        args.length === 1,
+        '.allElementsThat requires 1 argument (got ', args.length, ')',
+      );
+      nodsl.check(
+        typeof args[0] === 'function',
+        'callback must be a function (got ', (typeof args[0]), ')',
+      );
 
       return new AllElementsThatAssertion(args[0]);
     },
