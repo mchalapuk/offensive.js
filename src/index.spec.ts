@@ -5,7 +5,6 @@ import './assertions/equals';
 import './assertions/fieldThat';
 import './assertions/field';
 import './assertions/function';
-// inRange
 // instanceOf
 import './assertions/length';
 // matches
