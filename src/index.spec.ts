@@ -6,7 +6,6 @@ import './assertions/fieldThat';
 import './assertions/field';
 import './assertions/function';
 import './assertions/length';
-// matches
 import './assertions/null';
 import './assertions/number';
 // ofType
