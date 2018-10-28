@@ -1,8 +1,6 @@
 
-import './exactly';
-import check from '..';
-
-import { TestCaseBuilder, RunFunction } from '../test/TestCaseBuilder';
+import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
+import '.';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);

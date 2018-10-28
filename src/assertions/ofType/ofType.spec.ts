@@ -1,6 +1,6 @@
 
-import './ofType';
-import check from '..';
+import './register';
+import check from '../..';
 
 import { TestCaseBuilder, RunFunction } from '../test/TestCaseBuilder';
 
