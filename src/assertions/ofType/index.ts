@@ -1,11 +1,9 @@
 
-import Registry from '../Registry';
-import { nodslArguments as nodsl } from '../NoDsl';
-import { ObjectSerializer } from '../ObjectSerializer';
+import Registry from '../../Registry';
 
 import OfTypeAssertion from './OfTypeAssertion';
 
-declare module "../Context" {
+declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
@@ -25,30 +23,17 @@ declare module "../Context" {
   }
 }
 
-const VALID_TYPES = /function|object|string|number|boolean|undefined/
-const serializer = new ObjectSerializer();
-
-export namespace OfTypeAssertion {
-  function register(registry : Registry) {
-    registry.addAssertionFactory({
-      names: [ 'ofType', 'type' ],
-
-      factory: (args : any[]) => {
-        nodsl.check(
-          args.length === 1,
-          '.ofType requires 1 argument (got ', args.length, ')',
-        );
-        nodsl.check(
-          args[0].match(VALID_TYPES),
-          'requiredType must match /', VALID_TYPES.source, '/',
-          ' (got ', serializer.serializeAny(args[0]), ')',
-        );
-
-        return new OfTypeAssertion(args[0]);
-      },
-    });
-  }
-}
-
+export { OfTypeAssertion };
 export default OfTypeAssertion;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function register(registry : Registry) {
+  registry.addAssertionFactory({
+    names: [ 'ofType', 'type' ],
+
+    factory: OfTypeAssertion.factory,
+  });
+}
 

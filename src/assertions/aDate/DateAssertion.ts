@@ -2,7 +2,7 @@
 import { Assertion, StandardMessage } from '../../model';
 import check from '../..';
 
-import '../instanceOf';
+import '../anInstanceOf';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

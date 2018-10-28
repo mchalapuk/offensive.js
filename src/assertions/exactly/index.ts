@@ -1,10 +1,8 @@
 
-import Registry from '../Registry';
-import { nodslArguments as nodsl } from '../NoDsl';
-
+import Registry from '../../Registry';
 import ExactlyAssertion from './ExactlyAssertion';
 
-declare module "../Context" {
+declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
@@ -18,26 +16,24 @@ declare module "../Context" {
   }
 }
 
-export namespace ExactlyAssertion {
-  function register(registry : Registry) {
-    registry.addAssertionFactory({
-      names: [
-        'exactly',
-        'Exactly',
-        'exactlyEqualTo',
-        'ExactlyEqualTo',
-        'exactlyEquals',
-        'ExactlyEquals',
-      ],
-
-      factory: (args : any[]) => {
-        nodsl.check(args.length === 1, '.exactly requires 1 argument (got ', args.length, ')');
-
-        return new ExactlyAssertion(args[0]);
-      },
-    });
-  }
-}
-
+export { ExactlyAssertion };
 export default ExactlyAssertion;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function registerIn(registry : Registry) {
+  registry.addAssertionFactory({
+    names: [
+      'exactly',
+      'Exactly',
+      'exactlyEqualTo',
+      'ExactlyEqualTo',
+      'exactlyEquals',
+      'ExactlyEquals',
+    ],
+
+    factory: ExactlyAssertion.factory,
+  });
+}
 

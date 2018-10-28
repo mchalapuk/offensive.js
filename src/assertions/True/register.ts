@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import TrueAssertion from '.';
+import * as True from '.';
 
-TrueAssertion.register(Registry.instance);
+/**
+ * Register `.True` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+True.registerIn(Registry.instance);
 

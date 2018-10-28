@@ -1,15 +1,15 @@
 
-import './assertions/allElements';
-import './assertions/array';
-import './assertions/equals';
-import './assertions/fieldThat';
-import './assertions/field';
-import './assertions/function';
-import './assertions/length';
-import './assertions/null';
-import './assertions/number';
-import './assertions/string';
-import './assertions/undefined';
+import './assertions/allElementsThat/register';
+import './assertions/anArray/register';
+import './assertions/equalTo/register';
+import './assertions/fieldThat/register';
+import './assertions/field/register';
+import './assertions/aFunction/register';
+import './assertions/length/register';
+import './assertions/Null/register';
+import './assertions/aNumber/register';
+import './assertions/aString/register';
+import './assertions/Undefined/register';
 
 import { TestCaseBuilder, RunFunction } from './test/TestCaseBuilder';
 

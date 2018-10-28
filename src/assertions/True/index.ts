@@ -2,7 +2,7 @@
 import Registry from '../../Registry';
 import ExactlyAssertion from '../exactly';
 
-declare module "../Context" {
+declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
@@ -12,17 +12,13 @@ declare module "../Context" {
   }
 }
 
-export namespace TrueAssertion {
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  function register(registry : Registry) {
-    registry.addAssertion({
-      names: [ 'True', 'true' ],
-      assertion: new ExactlyAssertion(true),
-    });
-  }
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function registerIn(registry : Registry) {
+  registry.addAssertion({
+    names: [ 'True', 'true' ],
+    assertion: new ExactlyAssertion(true),
+  });
 }
-
-export default TrueAssertion;
 

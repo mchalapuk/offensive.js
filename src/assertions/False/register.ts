@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import FalseAssertion from '.';
+import * as False from '.';
 
-FalseAssertion.register(Registry.instance);
+/**
+ * Register `.False` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+False.registerIn(Registry.instance);
 

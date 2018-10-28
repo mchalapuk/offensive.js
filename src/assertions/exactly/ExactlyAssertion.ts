@@ -1,6 +1,7 @@
 
 import { Assertion, StandardMessage } from '../../model';
 import { ObjectSerializer } from '../../ObjectSerializer';
+import { nodslArguments as nodsl } from '../../NoDsl';
 
 const serializer = new ObjectSerializer();
 
@@ -28,6 +29,17 @@ export class ExactlyAssertion implements Assertion {
         );
       },
     };
+  }
+}
+
+export namespace ExactlyAssertion {
+  /**
+   * @author Maciej Chałapuk (maciej@chalapuk.pl)
+   */
+  export function factory(args : any[]) {
+    nodsl.check(args.length === 1, '.exactly requires 1 argument (got ', args.length, ')');
+
+    return new ExactlyAssertion(args[0]);
   }
 }
 

@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import DateAssertion from '.';
+import * as aDate from '.';
 
-DateAssertion.register(Registry.instance);
+/**
+ * Register `.aDate` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+aDate.registerIn(Registry.instance);
 

@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import TruthyAssertion from '.';
+import * as truthy from '.';
 
-TruthyAssertion.register(Registry.instance);
+/**
+ * Register `.truthy` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+truthy.registerIn(Registry.instance);
 

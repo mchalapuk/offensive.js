@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import BooleanAssertion from '.';
+import * as aBoolean from '.';
 
-BooleanAssertion.register(Registry.instance);
+/**
+ * Register `.aBoolean` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+aBoolean.registerIn(Registry.instance);
 

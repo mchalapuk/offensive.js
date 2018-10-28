@@ -1,14 +1,10 @@
 
-import './lessThan';
-import check from '..';
-
-import { TestCaseBuilder, RunFunction } from '../test/TestCaseBuilder';
+import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
+import '.';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);
 }
-
-const instance = {};
 
 describe('check(arg, \'arg\')', () => {
   describe('.is.lt(0)', () => {

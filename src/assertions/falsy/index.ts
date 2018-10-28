@@ -2,7 +2,7 @@
 import Registry from '../../Registry';
 import ConvertsToBooleanAssertion from '../truthy/ConvertsToBooleanAssertion';
 
-declare module "../Context" {
+declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
@@ -14,15 +14,13 @@ declare module "../Context" {
   }
 }
 
-export namespace FalsyAssertion {
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  function register(registry : Registry) {
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function registerIn(registry : Registry) {
+  registry.addAssertion({
     names: [ 'falsy', 'Falsy', 'falsey', 'Falsey' ],
     assertion: new ConvertsToBooleanAssertion(false),
   });
 }
-
-export default FalsyAssertion;
 

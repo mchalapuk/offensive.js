@@ -1,6 +1,11 @@
 
 import Registry from '../../Registry';
-import ExactlyAssertion from '.';
+import * as exactly from '.';
 
-ExactlyAssertion.register(Registry.istance);
+/**
+ * Register `.exactly` assertion in default registry.
+ *
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+exactly.registerIn(Registry.instance);
 

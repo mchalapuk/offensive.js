@@ -2,7 +2,7 @@
 import Registry from '../../Registry';
 import DateAssertion from './DateAssertion';
 
-declare module "../Context" {
+declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
@@ -13,17 +13,16 @@ declare module "../Context" {
   }
 }
 
-namespace DateAssertion {
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  function register(registry : Registry) {
-    registry.addAssertion({
-      names: [ 'aDate', 'Date', 'date' ],
-      assertion: new DateAssertion(),
-    });
-  }
-}
-
+export { DateAssertion };
 export default DateAssertion;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function registerIn(registry : Registry) {
+  registry.addAssertion({
+    names: [ 'aDate', 'Date', 'date' ],
+    assertion: new DateAssertion(),
+  });
+}
 

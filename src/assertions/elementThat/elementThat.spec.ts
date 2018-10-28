@@ -1,9 +1,8 @@
 
-import './elementThat';
-import './boolean';
-import check from '..';
+import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
-import { TestCaseBuilder, RunFunction } from '../test/TestCaseBuilder';
+import '.';
+import '../aBoolean';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);
