@@ -1,10 +1,9 @@
 
-import { Assertion, Result, Message, BinaryOperator } from '../../model';
+import { Assertion, CheckFunction, Result, Message, BinaryOperator } from '../../model';
 import { AssertionContext } from '../../Context';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
-import check from '../..';
 import '../anArray';
 
 export type AllElemsCallback<E> = (context : AssertionContext<E>) => Result;
@@ -20,7 +19,7 @@ export class AllElementsAssertion<E> implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string) : Result {
+  assert(testedValue : any, varName : string, check : CheckFunction) : Result {
     const { callback } = this;
 
     // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.

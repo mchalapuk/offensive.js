@@ -1,8 +1,7 @@
 
-import { Assertion, StandardMessage } from '../../model';
+import { Assertion, CheckFunction, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
-import check from '../..';
 
 import '../Empty';
 import '../Undefined';
@@ -15,7 +14,7 @@ export class FieldAssertion implements Assertion {
     private fieldName : string,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     const { fieldName } = this;
 
     if (!check(testedValue, varName).is.not.Empty.success) {

@@ -1,6 +1,5 @@
 
-import { Assertion, StandardMessage } from '../../model';
-import check from '../..';
+import { Assertion, CheckFunction, StandardMessage } from '../../model';
 
 import '../Null';
 import '../Undefined';
@@ -9,7 +8,7 @@ import '../Undefined';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class EmptyAssertion implements Assertion {
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     return check(testedValue, varName).is.Null.or.Undefined;
   }
 }

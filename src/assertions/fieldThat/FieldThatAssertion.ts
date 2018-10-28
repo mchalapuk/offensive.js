@@ -1,9 +1,8 @@
 
-import { Assertion, Result, StandardMessage } from '../../model';
+import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
 import { AssertionContext } from '../../Context';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
-import check from '../..';
 
 import '../Empty';
 
@@ -18,7 +17,7 @@ export class FieldThatAssertion<F> implements Assertion {
     private callback : FieldThatCallback<F>,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     const { fieldName, callback } = this;
 
     if (!check(testedValue, varName).is.not.Empty.success) {

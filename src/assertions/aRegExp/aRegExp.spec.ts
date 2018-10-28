@@ -1,14 +1,10 @@
 
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import check from '../..';
-
 import '.';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);
 }
-
-const instance = {};
 
 describe('check(arg, \'arg\')', () => {
   describe('.is.aRegExp()', () => {

@@ -1,9 +1,8 @@
 
-import { Assertion, Result, StandardMessage } from '../../model';
+import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { AssertionContext } from '../../Context';
-import check from '../..';
 
 import '../anArray';
 
@@ -18,7 +17,7 @@ export class ElementThatAssertion<E> implements Assertion {
     private callback : ElementThatCallback<E>,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     const { elementIndex, callback } = this;
 
     if (!check(testedValue, varName).is.anArray.success) {

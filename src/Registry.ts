@@ -1,7 +1,19 @@
 
-import { Assertion, UnaryOperator, BinaryOperator, Result, Message } from './model';
-import { AssertionContext, OperatorContext, ConnectorContext } from './Context';
-import ContextImpl from './ContextImpl';
+import {
+  Assertion,
+  UnaryOperator,
+  BinaryOperator,
+  Result,
+  Message,
+} from './model';
+
+import {
+  AssertionContext,
+  OperatorContext,
+  ConnectorContext,
+  RuntimeContext,
+} from './Context';
+
 import nodsl from './NoDsl';
 
 /**
@@ -33,7 +45,7 @@ export class Registry {
     this.registerNames(names);
 
     const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getAssertion(this : ContextImpl) {
+    this.extendPrototype(assertions, names, function getAssertion(this : RuntimeContext) {
       return this.__pushAssertion(assertion);
     });
     return this;
@@ -42,7 +54,7 @@ export class Registry {
     this.registerNames(names);
 
     const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getAssertionFactory(this : ContextImpl) {
+    this.extendPrototype(assertions, names, function getAssertionFactory(this : RuntimeContext) {
       return (...args : any[]) => this.__pushAssertionFactory(factory, args);
     });
     return this;
@@ -53,7 +65,7 @@ export class Registry {
 
     // Unary operators must be added on prototype of `AssertionContext`.
     const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getUnaryOperator(this : ContextImpl) {
+    this.extendPrototype(assertions, names, function getUnaryOperator(this : RuntimeContext) {
       return this.__pushUnaryOperator(operator);
     });
     return this;
@@ -62,20 +74,21 @@ export class Registry {
     this.registerNames(names);
 
     const { operators } = this.contextProto;
-    this.extendPrototype(operators, names, function getBinaryOperator(this : ContextImpl) {
+    this.extendPrototype(operators, names, function getBinaryOperator(this : RuntimeContext) {
       return this.__pushBinaryOperator(operator);
     });
     return this;
   }
 
-  addConnectors(names : string[]) : void {
+  addConnectors(names : string[]) {
     this.registerNames(names);
 
     const { connectors } = this.contextProto;
-    this.extendPrototype(connectors, names, function getConnector(this : ContextImpl) {
+    this.extendPrototype(connectors, names, function getConnector(this : RuntimeContext) {
       // noop
       return this;
     });
+    return this;
   }
 
   private registerNames(names : string[]) {
@@ -122,6 +135,13 @@ export default Registry;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
+export interface HashMap<T> {
+  [_ : string] : T | undefined;
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
 export interface NamedAssertion {
   names : string[];
   assertion : Assertion;
@@ -149,12 +169,5 @@ export interface NamedUnaryOperator {
 export interface NamedBinaryOperator {
   names : string[];
   operator : BinaryOperator;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-export interface HashMap<T> {
-  [_ : string] : T | undefined;
 }
 

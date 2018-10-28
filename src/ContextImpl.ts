@@ -19,6 +19,7 @@ export class ContextImpl {
   // It's important that it doesn't have any property getters.
 
   private __operatorContext : object;
+  private __newContext : <T>(testedValue : T, varName : string) => AssertionContext<T>;
 
   private __result : Result | null = null;
   private __unary : UnaryOperator | null = null;
@@ -31,6 +32,9 @@ export class ContextImpl {
     operatorProto : object,
   ) {
     this.__operatorContext = this.__createOperatorContext(operatorProto);
+    this.__newContext = <T>(testedValue : T, varName : string) => {
+      return new ContextImpl(testedValue, varName, operatorProto) as any;
+    };
   }
 
   __pushAssertionFactory(factory : Assertion.Factory, args : any[]) {
@@ -39,7 +43,7 @@ export class ContextImpl {
 
   __pushAssertion(assertion : Assertion) {
     try {
-      this.__setResult(assertion.assert(this._testedValue, this._varName));
+      this.__setResult(assertion.assert(this._testedValue, this._varName, this.__newContext));
       return this.__operatorContext;
     } catch (e) {
       if (NON_BUGS.indexOf(e.name) !== -1) {

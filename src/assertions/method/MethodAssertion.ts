@@ -1,7 +1,6 @@
 
-import { Assertion, StandardMessage } from '../../model';
+import { Assertion, CheckFunction, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
-import check from '../..';
 
 import '../fieldThat';
 import '../aFunction';
@@ -14,7 +13,7 @@ export class MethodAssertion implements Assertion {
     private methodName : string,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     return check(testedValue, varName)
       .has.fieldThat(this.methodName, field => field.is.aFunction);
   }

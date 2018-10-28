@@ -1,7 +1,6 @@
 
-import { Assertion, Result, StandardMessage } from '../../model';
+import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
-import check from '../..';
 
 import '../fieldThat';
 import '../exactly';
@@ -14,7 +13,7 @@ export class LengthAssertion implements Assertion {
     private requiredLength : number,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(testedValue : any, varName : string, check : CheckFunction) {
     return check(testedValue, varName)
       .has.fieldThat('length', len => len.is.exactly(this.requiredLength));
   }
