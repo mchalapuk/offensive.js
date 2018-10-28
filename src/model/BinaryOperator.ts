@@ -16,14 +16,14 @@ export namespace BinaryOperator {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   export function message(separator : string, operands : Message[]) : Message {
-    const grouped = operands.reduce(groupByObject(), [] as Message[][])
-      .map(messages => joinWithSameObject(separator, messages))
+    const grouped = operands.reduce(groupByVarName(), [] as Message[][])
+      .map(messages => joinRequirements(separator, messages))
     ;
     if (grouped.length === 1) {
       return grouped[0];
     }
 
-    return joinWithDifferentObjects(separator, grouped);
+    return joinMessages(separator, grouped);
   }
 }
 
@@ -31,8 +31,8 @@ export default BinaryOperator;
 
 let objectNumber = 0;
 
-function groupByObject() {
-  let previousObject = {} as any;
+function groupByVarName() {
+  let previousName = {} as any;
 
   function newGroup(result : Message[][]) {
     const group = [] as Message[];
@@ -41,17 +41,17 @@ function groupByObject() {
   }
 
   return (result : Message[][], message : Message) => {
-    const group = previousObject === message.object
+    const group = previousName === message.varName
       ? result[result.length - 1]
       : newGroup(result)
     ;
     group.push(message);
-    previousObject = message.object;
+    previousName = message.varName;
     return result;
   };
 }
 
-function joinWithSameObject(separator : string, messages : Message[]) : Message {
+function joinRequirements(separator : string, messages : Message[]) : Message {
   const head = messages[0];
   const tail = messages.slice(1);
 
@@ -60,31 +60,31 @@ function joinWithSameObject(separator : string, messages : Message[]) : Message 
   }
 
   return {
-    get object() {
-      return head.object;
+    get varName() {
+      return head.varName;
     },
     get requirement() {
-      const shared = sharedStart.apply(null, messages.map(msg => msg.requirement));
-      const article = / an? ?$/.exec(shared);
-      const cut = shared.length - (article ? article[0].length - 1 : 0);
+      const sharedRequirement = sharedStart.apply(null, messages.map(msg => msg.requirement));
+      const article = / an? ?$/.exec(sharedRequirement);
+      const cut = sharedRequirement.length - (article ? article[0].length - 1 : 0);
       const tailRequitements = tail.map(msg => msg.requirement.substring(cut));
       return `${head.requirement} ${separator} ${tailRequitements.join(` ${separator} `)}`;
     },
-    get value() {
-      return head.value;
+    get actualValue() {
+      return head.actualValue;
     },
     toString() {
-      const got = serializer.serializeAny(head.value);
-      return `${this.object} must ${this.requirement} (got ${got})`;
+      const actual = serializer.serializeAny(this.actualValue);
+      return `${this.varName} must ${this.requirement} (got ${actual})`;
     },
   };
 }
 
-function joinWithDifferentObjects(separator : string, messages : Message[]) : Message {
+function joinMessages(separator : string, messages : Message[]) : Message {
   return {
-    get object() {
-      // just unique object
-      return `»BinaryOperator-[${messages.map(msg => msg.object).join(', ')}]`;
+    get varName() {
+      // just a unique name
+      return `»BinaryOperator-[${messages.map(msg => msg.varName).join(', ')}]`;
     },
     get requirement() {
       const head = messages[0];
@@ -94,11 +94,12 @@ function joinWithDifferentObjects(separator : string, messages : Message[]) : Me
       ;
       return `${head} ${separator} ${tail.join(` ${separator} `)}`;
     },
-    get value() {
+    get actualValue() {
+      // value doesn't make sence any more (there are multiple)
       return undefined;
     },
     toString() {
-      return `${this.requirement}`;
+      return this.requirement;
     },
   };
 }

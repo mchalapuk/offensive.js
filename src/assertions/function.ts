@@ -23,8 +23,8 @@ import check from '..';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class FunctionAssertion implements Assertion {
-  assert(value : any, object : string) {
-    return check(value, object).is.ofType('function');
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName).is.ofType('function');
   }
 }
 

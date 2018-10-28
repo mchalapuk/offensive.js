@@ -6,17 +6,8 @@ import ContextImpl from './ContextImpl';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ContextFactory {
-  // Copy the ContextImpl class in order to be able to set its prototype
-  // to different object in each instance of the factory.
-  private readonly ContextConstructor = function ContextConstructor(
-    this : ContextImpl,
-    value : any,
-    object : string,
-    operators : any,
-  ) {
-    ContextImpl.call(this, value, object, operators);
-  } as any as {
-    new (value : any, object : string, operators : any) : AssertionContext<any>;
+  private readonly ContextConstructor : {
+    new (testedValue : any, varName : string, operators : any) : AssertionContext<any>;
     prototype : any;
   };
 
@@ -24,12 +15,23 @@ export class ContextFactory {
     private readonly assertions : object,
     private readonly operators : object,
   ) {
+    // Copy the ContextImpl class in order to be able to set its prototype
+    // to different object in each instance of the factory.
+    this.ContextConstructor = function ContextConstructor(
+      this : ContextImpl,
+      testedValue : any,
+      varName : string,
+      operators : any,
+    ) {
+      ContextImpl.call(this, testedValue, varName, operators);
+    } as any;
+
     this.ContextConstructor.prototype = { ...ContextImpl.prototype };
     Object.setPrototypeOf(this.ContextConstructor.prototype, assertions);
   }
 
-  create<T>(value : T, object : string) : AssertionContext<T> {
-    const context = new this.ContextConstructor(value, object, this.operators);
+  create<T>(testedValue : T, varName : string) : AssertionContext<T> {
+    const context = new this.ContextConstructor(testedValue, varName, this.operators);
     return context as AssertionContext<T>;
   }
 }

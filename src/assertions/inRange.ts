@@ -27,8 +27,8 @@ export class InRangeAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
-    return check(value, object)
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName)
       .is.greaterThanOrEqualTo(this.lowerBounds)
       .and.lessThan(this.upperBounds)
     ;
@@ -48,11 +48,11 @@ Registry.instance
       );
       nodsl.check(
         typeof args[0] === 'number',
-        'lowerBounds must be a number (got ', typeof args[0], ')',
+        'lowerBounds must be a number (got ', (typeof args[0]), ')',
       );
       nodsl.check(
         typeof args[1] === 'number',
-        'upperBounds must be a number (got ', typeof args[1], ')',
+        'upperBounds must be a number (got ', (typeof args[1]), ')',
       );
 
       return new InRangeAssertion(args[0], args[1]);

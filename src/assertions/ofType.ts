@@ -35,12 +35,12 @@ export class OfTypeAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { requiredType } = this;
 
     return {
       get success() {
-        return typeof value === requiredType;
+        return typeof testedValue === requiredType;
       },
       get message() {
         switch (requiredType) {
@@ -48,11 +48,11 @@ export class OfTypeAssertion implements Assertion {
           case 'number':
           case 'string':
           case 'function':
-            return new StandardMessage(object, `be a ${requiredType}`, value);
+            return new StandardMessage(varName, `be a ${requiredType}`, testedValue);
           case 'object':
-            return new StandardMessage(object, `be an ${requiredType}`, value);
+            return new StandardMessage(varName, `be an ${requiredType}`, testedValue);
           case 'undefined':
-            return new StandardMessage(object, `be ${requiredType}`, value);
+            return new StandardMessage(varName, `be ${requiredType}`, testedValue);
         }
       },
     };

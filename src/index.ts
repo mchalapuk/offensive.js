@@ -12,8 +12,8 @@ const factory = new ContextFactory(assertions, operators);
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function check<T>(value : T, name : string) {
-  return factory.create<T>(value, name);
+export function check<T>(testedValue : T, varName : string) {
+  return factory.create<T>(testedValue, varName);
 }
 
 export default check;

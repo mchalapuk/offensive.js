@@ -25,8 +25,9 @@ export class LengthAssertion implements Assertion {
     private requiredLength : number,
   ) {
   }
-  assert(value : any, object : string) {
-    return check(value, object).has.fieldThat('length', len => len.is.exactly(this.requiredLength));
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName)
+      .has.fieldThat('length', len => len.is.exactly(this.requiredLength));
   }
 }
 
@@ -43,7 +44,7 @@ Registry.instance
       );
       nodsl.check(
         typeof args[0] === 'number',
-        'requiredLength must be a number (got ', typeof args[0], ')',
+        'requiredLength must be a number (got ', (typeof args[0]), ')',
       );
 
       return new LengthAssertion(args[0]);

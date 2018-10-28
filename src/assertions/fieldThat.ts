@@ -31,23 +31,23 @@ export class FieldThatAssertion<F> implements Assertion {
     private callback : FieldThatCallback<F>,
   ) {
   }
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { fieldName, callback } = this;
 
-    if (!check(value, object).is.not.Empty.success) {
+    if (!check(testedValue, varName).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
-          const wrapper = new NoObject<F>(value);
-          const newContext = check(wrapper.cast(), `${object}.${fieldName}`);
+          const wrapper = new NoObject<F>(testedValue);
+          const newContext = check(wrapper.cast(), `${varName}.${fieldName}`);
           return callback(newContext).message;
         },
       };
     }
 
-    const newContext = check(value[fieldName], `${object}.${fieldName}`);
+    const newContext = check(testedValue[fieldName], `${varName}.${fieldName}`);
     return callback(newContext);
   }
 }
@@ -65,11 +65,11 @@ Registry.instance
       );
       nodsl.check(
         typeof args[0] === 'string',
-        'fieldName must be a string (got ', typeof args[0], ')',
+        'fieldName must be a string (got ', (typeof args[0]), ')',
       );
       nodsl.check(
         typeof args[1] === 'function',
-        'callback must be a function (got ', typeof args[1], ')',
+        'callback must be a function (got ', (typeof args[1]), ')',
       );
 
       return new FieldThatAssertion(args[0], args[1]);

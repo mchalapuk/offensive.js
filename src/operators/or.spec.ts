@@ -76,7 +76,7 @@ describe('OrOperator', () => {
   });
 });
 
-function msg(object : string, requirement : string) {
-  return new StandardMessage(object, requirement, {});
+function msg(varName : string, requirement : string) {
+  return new StandardMessage(varName, requirement, {});
 }
 

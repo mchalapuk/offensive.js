@@ -35,8 +35,8 @@ import check from '..';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class BooleanAssertion implements Assertion {
-  assert(value : any, object : string) {
-    return check(value, object).is.ofType('boolean');
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName).is.ofType('boolean');
   }
 }
 
@@ -57,15 +57,15 @@ export class BooleanValueAssertion implements Assertion {
     private expectedValue : boolean,
   ) {
   }
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { expectedValue } = this;
 
     return {
       get success() {
-        return value === expectedValue;
+        return testedValue === expectedValue;
       },
       get message() {
-        return new StandardMessage(object, `be ${expectedValue}`, value);
+        return new StandardMessage(varName, `be ${expectedValue}`, testedValue);
       },
     };
   }
@@ -90,15 +90,15 @@ export class ConvertsToBooleanAssertion implements Assertion {
     private expectedValue : boolean,
   ) {
   }
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { expectedValue } = this;
 
     return {
       get success() {
-        return Boolean(value) === expectedValue;
+        return Boolean(testedValue) === expectedValue;
       },
       get message() {
-        return new StandardMessage(object, expectedValue ? 'be truthy' : 'be falsy', value);
+        return new StandardMessage(varName, expectedValue ? 'be truthy' : 'be falsy', testedValue);
       },
     };
   }

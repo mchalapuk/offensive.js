@@ -18,29 +18,29 @@ declare module "../Context" {
   }
 }
 
+const serializer = new ObjectSerializer();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class EqualToAssertion implements Assertion {
-  private serializer = new ObjectSerializer();
-
   constructor(
     private comparedValue : any,
   ) {
   }
 
-  assert(value : any, object : string) {
-    const { comparedValue, serializer } = this;
+  assert(testedValue : any, varName : string) {
+    const { comparedValue } = this;
 
     return {
       get success() {
-        return value == comparedValue;
+        return testedValue == comparedValue;
       },
       get message() {
         return new StandardMessage(
-          object,
+          varName,
           `be equal to ${serializer.serializeAny(comparedValue)}`,
-          value,
+          testedValue,
         );
       },
     };
@@ -54,7 +54,7 @@ Registry.instance
     names: [ 'equalTo', 'EqualTo', 'equal', 'Equal', 'equals', 'Equals' ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, `.equalTo requires 1 argument (got ${args.length})`);
+      nodsl.check(args.length === 1, '.equalTo requires 1 argument (got ', args.length ,')');
 
       return new EqualToAssertion(args[0]);
     },

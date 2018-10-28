@@ -25,22 +25,22 @@ export class FieldAssertion implements Assertion {
     private fieldName : string,
   ) {
   }
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { fieldName } = this;
 
-    if (!check(value, object).is.not.Empty.success) {
+    if (!check(testedValue, varName).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
-          const wrapper = new NoObject<any>(value);
-          return check(wrapper, `${object}.${fieldName}`).is.not.Undefined.message;
+          const wrapper = new NoObject<any>(testedValue);
+          return check(wrapper, `${varName}.${fieldName}`).is.not.Undefined.message;
         },
       };
     }
 
-    return check(value[fieldName], `${object}.${fieldName}`).is.not.Undefined;
+    return check(testedValue[fieldName], `${varName}.${fieldName}`).is.not.Undefined;
   }
 }
 
@@ -57,7 +57,7 @@ Registry.instance
       );
       nodsl.check(
         typeof args[0] === 'string',
-        'fieldName must be a string (got ', typeof args[0], ')',
+        'fieldName must be a string (got ', (typeof args[0]), ')',
       );
 
       return new FieldAssertion(args[0]);

@@ -16,28 +16,30 @@ declare module "../Context" {
 import './matches';
 import check from '..';
 
+const EMAIL_REGEXP = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class NumberAssertion implements Assertion {
-  assert(value : any, object : string) {
+export class EmailAssertion implements Assertion {
+  assert(testedValue : any, varName : string) {
     return {
       get success() {
-        return check(value, object).matches(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i).success;
+        return check(testedValue, varName).matches(EMAIL_REGEXP).success;
       },
       get message() {
-        return new StandardMessage(object, 'be an email', value);
+        return new StandardMessage(varName, 'be an email', testedValue);
       },
     };
   }
 }
 
-export default NumberAssertion;
+export default EmailAssertion;
 
 Registry.instance
   .addAssertion({
     names: [ 'anEmail', 'Email', 'email' ],
-    assertion: new NumberAssertion(),
+    assertion: new EmailAssertion(),
   })
 ;
 

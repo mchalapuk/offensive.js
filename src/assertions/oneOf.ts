@@ -23,25 +23,25 @@ export class OneOfAssertion<E> implements Assertion {
   constructor(
     private serializer : ObjectSerializer,
     private searchedSet : E[],
-    private message ?: string,
+    private requirement ?: string,
   ) {
   }
 
-  assert(value : any, object : string) {
-    const { searchedSet, message, serializer } = this;
+  assert(testedValue : any, varName : string) {
+    const { searchedSet, requirement, serializer } = this;
 
     return {
       get success() {
-        return searchedSet.indexOf(value) !== -1;
+        return searchedSet.indexOf(testedValue) !== -1;
       },
       get message() {
-        if (message !== undefined) {
-          return new StandardMessage(object, message, value);
+        if (requirement !== undefined) {
+          return new StandardMessage(varName, requirement, testedValue);
         }
         return new StandardMessage(
-          object,
+          varName,
           `be one of ${serializer.serializeObject(searchedSet)}`,
-          value,
+          testedValue,
         );
       },
     };
@@ -62,13 +62,13 @@ Registry.instance
         '.oneOf requires 1 or 2 arguments (got ', args.length, ')',
       );
       nodsl.check(
-        typeof args[0] === 'object' && typeof args[0].indexOf === 'function',
+        Array.isArray(args[0]),
         'searchedSet must be an array (got ', serializer.serializeAny(args[0]), ')',
       );
       if (args.length === 2) {
         nodsl.check(
           typeof args[1] === 'string',
-          'message must be a string (got ', (typeof args[1]), ')',
+          'requirement must be a string (got ', (typeof args[1]), ')',
         );
       }
 

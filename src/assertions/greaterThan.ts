@@ -23,15 +23,15 @@ export class GreaterThanAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { comparedNumber } = this;
 
     return {
       get success() {
-        return value > comparedNumber;
+        return testedValue > comparedNumber;
       },
       get message() {
-        return new StandardMessage(object, `be > ${comparedNumber}`, value);
+        return new StandardMessage(varName, `be > ${comparedNumber}`, testedValue);
       },
     };
   }
@@ -50,7 +50,7 @@ Registry.instance
       );
       nodsl.check(
         typeof args[0] === 'number',
-        'comparedNumber must be a number (got ', typeof args[0], ')',
+        'comparedNumber must be a number (got ', (typeof args[0]), ')',
       );
 
       return new GreaterThanAssertion(args[0]);

@@ -1,16 +1,15 @@
 
 import ObjectSerializer from './ObjectSerializer';
 
+const serializer = new ObjectSerializer();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class NoDsl {
-  private serializer : ObjectSerializer;
-
   constructor(
     private errorName : string = 'Error',
   ) {
-    this.serializer = new ObjectSerializer();
   }
 
   check(condition : boolean, ...args : any[]) {
@@ -18,7 +17,7 @@ export class NoDsl {
       return;
     }
     var message = args
-      .map(arg => typeof arg === 'string' ? arg : this.serializer.serializeAny(arg))
+      .map(arg => typeof arg === 'string' ? arg : serializer.serializeAny(arg))
       .join('')
     ;
     var error = new Error(message);

@@ -26,8 +26,8 @@ export class ContextImpl {
   private __binary : BinaryOperator | null = null;
 
   constructor(
-    private _value : any,
-    private _object : string,
+    private _testedValue : any,
+    private _varName : string,
     operatorProto : object,
   ) {
     this.__operatorContext = this.__createOperatorContext(operatorProto);
@@ -39,7 +39,7 @@ export class ContextImpl {
 
   __pushAssertion(assertion : Assertion) {
     try {
-      this.__setResult(assertion.assert(this._value, this._object));
+      this.__setResult(assertion.assert(this._testedValue, this._varName));
       return this.__operatorContext;
     } catch (e) {
       if (NON_BUGS.indexOf(e.name) !== -1) {
@@ -136,7 +136,7 @@ export class ContextImpl {
       if (!result.success) {
         throw new ContractError(result.message.toString());
       }
-      return self._value;
+      return self._testedValue;
     }
     Object.setPrototypeOf(operatorContext, operatorProto);
 

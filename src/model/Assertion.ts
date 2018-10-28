@@ -1,11 +1,11 @@
 
-import { Result, Message } from './Result';
+import { Result } from './Result';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface Assertion {
-  assert(value : any, object : string) : Result;
+  assert(value : any, name : string) : Result;
 }
 
 export namespace Assertion {

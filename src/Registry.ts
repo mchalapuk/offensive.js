@@ -16,14 +16,18 @@ export class Registry {
     connectors: {},
   };
 
+  private registrations : HashMap<string> = {};
+
   constructor() {
     const { assertions, operators, connectors } = this.contextProto;
 
     Object.setPrototypeOf(assertions, connectors);
-    Object.setPrototypeOf(operators, connectors)
-  }
+    Object.setPrototypeOf(operators, connectors);
 
-  private registrations : HashMap<string> = {};
+    // Fields names of `Result` interface are reserved
+    // as `OperatorContext` implements `Result`.
+    this.registerNames(['success', 'message']);
+  }
 
   addAssertion({ names, assertion } : NamedAssertion) {
     this.registerNames(names);
@@ -77,6 +81,14 @@ export class Registry {
   private registerNames(names : string[]) {
     names.forEach(name => {
       const previousRegistration = this.registrations[name];
+      nodsl.check(
+        name.length !== 0,
+        'name.length must be > 0 (got \'', name, '\')',
+      );
+      nodsl.check(
+        name[0] !== '_',
+        'name must not start with underscore (got \'', name, '\')',
+      );
       nodsl.check(
         previousRegistration === undefined,
         'Entity of name ', name, ' already registered.\n',

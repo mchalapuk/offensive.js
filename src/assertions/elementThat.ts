@@ -29,23 +29,23 @@ export class ElementThatAssertion<E> implements Assertion {
     private callback : ElementThatCallback<E>,
   ) {
   }
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { elementIndex, callback } = this;
 
-    if (!check(value, object).is.anArray.success) {
+    if (!check(testedValue, varName).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
-          const wrapper = new NoArrayOperator<E>(value);
-          const newContext = check(wrapper.cast(), `${object}[${elementIndex}]`);
+          const wrapper = new NoArrayOperator<E>(testedValue);
+          const newContext = check(wrapper.cast(), `${varName}[${elementIndex}]`);
           return callback(newContext).message;
         },
       };
     }
 
-    const newContext = check(value[elementIndex], `${object}[${elementIndex}]`);
+    const newContext = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
     return this.callback(newContext);
   }
 }

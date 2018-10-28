@@ -24,7 +24,7 @@ export class MatchesAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { regexp } = this;
 
     function flags() {
@@ -32,10 +32,10 @@ export class MatchesAssertion implements Assertion {
     }
     return {
       get success() {
-        return typeof value === 'string' && value.match(regexp) !== null;
+        return typeof testedValue === 'string' && testedValue.match(regexp) !== null;
       },
       get message() {
-        return new StandardMessage(object, `match /${regexp.source}/${flags()}`, value);
+        return new StandardMessage(varName, `match /${regexp.source}/${flags()}`, testedValue);
       },
     };
   }

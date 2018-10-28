@@ -29,18 +29,18 @@ export class ExactlyAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { comparedValue } = this;
 
     return {
       get success() {
-        return value === comparedValue;
+        return testedValue === comparedValue;
       },
       get message() {
         return new StandardMessage(
-          object,
+          varName,
           `be ${serializer.serializeAny(comparedValue)}`,
-          value,
+          testedValue,
         );
       },
     };
@@ -61,7 +61,7 @@ Registry.instance
     ],
 
     factory: (args : any[]) => {
-      nodsl.check(args.length === 1, `.exactly requires 1 argument (got ${args.length})`);
+      nodsl.check(args.length === 1, '.exactly requires 1 argument (got ', args.length, ')');
 
       return new ExactlyAssertion(args[0]);
     },

@@ -17,9 +17,9 @@ export default Result;
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface Message {
-  object : string;
+  varName : string;
   requirement : string;
-  value : any;
+  actualValue : any;
   toString() : string;
 }
 
@@ -28,15 +28,15 @@ export interface Message {
  */
 export class StandardMessage implements Message {
   constructor(
-    public object : string,
+    public varName : string,
     public requirement : string,
-    public value : any,
+    public actualValue : any,
   ) {
   }
 
   toString() {
-    const got = serializer.serializeAny(this.value);
-    return `${this.object} must ${this.requirement} (got ${got})`;
+    const actual = serializer.serializeAny(this.actualValue);
+    return `${this.varName} must ${this.requirement} (got ${actual})`;
   }
 }
 

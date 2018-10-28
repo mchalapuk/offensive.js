@@ -8,9 +8,8 @@ declare module "../Context" {
   export type AllElemsCallback<E> = (context : AssertionContext<E>) => Result;
 
   /**
-   * ```
-   * .allElementsThat<E>(callback : (context : AssertionContext<E>) => Result);
-   * ```
+   * @assertion .allElementsThat<E>(callback : (context : AssertionContext<E>) => Result);
+   *
    * Checks if all elements of an array satisfy an assertion
    * implemented in provided `callback`.
    *
@@ -60,18 +59,18 @@ export class AllElementsThatAssertion<E> implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) : Result {
+  assert(testedValue : any, varName : string) : Result {
     const { callback } = this;
 
-    // If `value` is not an array, let's just return message about `value[0]` element.
-    if (!check(value, object).is.anArray.success) {
+    // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.
+    if (!check(testedValue, varName).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
-          const wrapper = new NoArrayOperator<E>(value);
-          const newContext = check(wrapper.cast(), `${object}[0]`);
+          const wrapper = new NoArrayOperator<E>(testedValue);
+          const newContext = check(wrapper.cast(), `${varName}[0]`);
           return callback(newContext).message;
         },
       }
@@ -87,8 +86,8 @@ export class AllElementsThatAssertion<E> implements Assertion {
       if (results !== null) {
         return results;
       }
-      return results = (value as E[])
-        .map((elem, i) => callback(check(elem, `${object}[${i}]`)))
+      return results = (testedValue as E[])
+        .map((elem, i) => callback(check(elem, `${varName}[${i}]`)))
       ;
     }
 
@@ -111,16 +110,16 @@ export class AllElementsThatAssertion<E> implements Assertion {
         const message = BinaryOperator.message('and', errorMessages);
 
         return {
-          get object() {
-            // unique object
-            const objects = errorMessages.map(msg => msg.object);
-            return `»allElementsThat-[${objects.join(', ')}]-${objectNumber++}`;
+          get varName() {
+            // unique var name
+            const varNames = errorMessages.map(msg => msg.varName);
+            return `»allElementsThat-[${varNames.join(', ')}]-${objectNumber++}`;
           },
           get requirement() {
             return message.requirement;
           },
-          get value() {
-            return message.value;
+          get actualValue() {
+            return message.actualValue;
           },
           toString() {
             return message.toString();

@@ -20,8 +20,8 @@ import './undefined';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class EmptyAssertion implements Assertion {
-  assert(value : any, object : string) {
-    return check(value, object).is.Null.or.Undefined;
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName).is.Null.or.Undefined;
   }
 }
 

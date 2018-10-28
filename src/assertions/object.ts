@@ -21,8 +21,8 @@ import check from '..';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ObjectAssertion implements Assertion {
-  assert(value : any, object : string) {
-    return check(value, object).is.ofType('object');
+  assert(testedValue : any, varName : string) {
+    return check(testedValue, varName).is.ofType('object');
   }
 }
 

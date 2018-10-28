@@ -20,13 +20,13 @@ declare module "../Context" {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class IntegerAssertion implements Assertion {
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     return {
       get success() {
-        return Number.isInteger(value);
+        return Number.isInteger(testedValue);
       },
       get message() {
-        return new StandardMessage(object, 'be an integer', value);
+        return new StandardMessage(varName, 'be an integer', testedValue);
       },
     };
   }

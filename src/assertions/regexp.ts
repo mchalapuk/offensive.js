@@ -21,13 +21,13 @@ import check from '..';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class RegExpAssertion implements Assertion {
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     return {
       get success() {
-        return check(value, object).is.anInstanceOf(RegExp as any).success;
+        return check(testedValue, varName).is.anInstanceOf(RegExp as any).success;
       },
       get message() {
-        return new StandardMessage(object, 'be a RegExp', value);
+        return new StandardMessage(varName, 'be a RegExp', testedValue);
       },
     };
   }

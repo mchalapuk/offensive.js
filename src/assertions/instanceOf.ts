@@ -22,18 +22,18 @@ export class InstanceOfAssertion<R> implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { requiredType } = this;
 
     return {
       get success() {
-        return value instanceof requiredType;
+        return testedValue instanceof requiredType;
       },
       get message() {
         return new StandardMessage(
-          object,
+          varName,
           `be an instance of ${serializeType(requiredType)}`,
-          value,
+          testedValue,
         );
       },
     };

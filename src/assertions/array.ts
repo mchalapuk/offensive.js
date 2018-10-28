@@ -17,13 +17,13 @@ declare module "../Context" {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ArrayAssertion implements Assertion {
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     return {
       get success() {
-        return Array.isArray(value);
+        return Array.isArray(testedValue);
       },
       get message() {
-        return new StandardMessage(object, 'be an array', value);
+        return new StandardMessage(varName, 'be an array', testedValue);
       },
     };
   }

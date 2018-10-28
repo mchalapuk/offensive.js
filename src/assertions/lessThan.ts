@@ -23,15 +23,15 @@ export class LessThanAssertion implements Assertion {
   ) {
   }
 
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     const { comparedNumber } = this;
 
     return {
       get success() {
-        return value < comparedNumber;
+        return testedValue < comparedNumber;
       },
       get message() {
-        return new StandardMessage(object, `be < ${comparedNumber}`, value);
+        return new StandardMessage(varName, `be < ${comparedNumber}`, testedValue);
       },
     };
   }

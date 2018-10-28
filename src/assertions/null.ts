@@ -18,13 +18,13 @@ declare module "../Context" {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class NullAssertion implements Assertion {
-  assert(value : any, object : string) {
+  assert(testedValue : any, varName : string) {
     return {
       get success() {
-        return value === null;
+        return testedValue === null;
       },
       get message() {
-        return new StandardMessage(object, 'be null', value);
+        return new StandardMessage(varName, 'be null', testedValue);
       },
     };
   }

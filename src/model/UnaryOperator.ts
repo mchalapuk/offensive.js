@@ -16,7 +16,11 @@ export namespace UnaryOperator {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   export function message(prefix : string, message : Message) {
-    return new StandardMessage(message.object, `${prefix} ${message.requirement}`, message.value);
+    return new StandardMessage(
+      message.varName,
+      `${prefix} ${message.requirement}`,
+      message.actualValue,
+    );
   }
 }
 
