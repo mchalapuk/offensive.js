@@ -1,7 +1,8 @@
 
 import Registry from '../../Registry';
-
 import { AllElementsAssertion, AllElemsCallback } from './AllElementsAssertion';
+
+import * as anArray from '../anArray';
 
 declare module "../../Context" {
 
@@ -49,6 +50,8 @@ export default AllElementsAssertion;
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
+  anArray.registerIn(registry);
+
   registry.addAssertionFactory({
     names: [
       'allElementsThat',

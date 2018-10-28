@@ -2,6 +2,8 @@
 import Registry from '../../Registry';
 import { ElementThatAssertion, ElementThatCallback } from './ElementThatAssertion';
 
+import * as anArray from '../anArray';
+
 declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -19,6 +21,8 @@ export default ElementThatAssertion;
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
+  anArray.registerIn(registry);
+
   registry.addAssertionFactory({
     names: [ 'elementThat', 'elementWhich' ],
 

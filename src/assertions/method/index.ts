@@ -2,6 +2,9 @@
 import Registry from '../../Registry';
 import MethodAssertion from './MethodAssertion';
 
+import * as fieldThat from '../fieldThat';
+import * as aFunction from '../aFunction';
+
 declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -19,6 +22,9 @@ export default MethodAssertion;
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
+  fieldThat.registerIn(registry);
+  aFunction.registerIn(registry);
+
   registry.addAssertionFactory({
     names: [ 'aMethod', 'method' ],
 
