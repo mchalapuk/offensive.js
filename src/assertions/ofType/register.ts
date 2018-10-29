@@ -7,5 +7,5 @@ import * as OfTypeAssertion from '.';
  *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-OfTypeAssertion.register(Registry.instance);
+OfTypeAssertion.registerIn(Registry.instance);
 

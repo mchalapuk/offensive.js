@@ -1,16 +1,24 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as truthy from '.';
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.truthy()', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    truthy.registerIn(registry);
+  });
+
+  describe('.truthy()', () => {
     const message0 = 'arg must be truthy (got';
 
-    assertion(arg => arg.is.truthy())
+    assertion(arg => arg.truthy())
       .withArg({}).doesntThrow()
       .withArg([]).doesntThrow()
       .withArg([0]).doesntThrow()

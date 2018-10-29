@@ -1,16 +1,24 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as ofType from '.';
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.ofType(\'undefined\')', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    ofType.registerIn(registry);
+  });
+
+  describe('.ofType(\'undefined\')', () => {
     const message0 = 'arg must be undefined (got';
 
-    assertion(arg => arg.is.ofType('undefined')())
+    assertion(arg => arg.ofType('undefined')())
       .withArg(true).throws(`${message0} true)`)
       .withArg(-1).throws(`${message0} -1)`)
       .withArg({}).throws(`${message0} {})`)
@@ -21,10 +29,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.ofType(\'object\')', () => {
+  describe('.ofType(\'object\')', () => {
     const message0 = 'arg must be an object (got';
 
-    assertion(arg => arg.is.ofType('object')())
+    assertion(arg => arg.ofType('object')())
       .withArg(true).throws(`${message0} true)`)
       .withArg(-1).throws(`${message0} -1)`)
       .withArg({}).doesntThrow()
@@ -35,10 +43,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.ofType(\'function\')', () => {
+  describe('.ofType(\'function\')', () => {
     const message0 = 'arg must be a function (got';
 
-    assertion(arg => arg.is.ofType('function')())
+    assertion(arg => arg.ofType('function')())
       .withArg(true).throws(`${message0} true)`)
       .withArg(-1).throws(`${message0} -1)`)
       .withArg({}).throws(`${message0} {})`)
@@ -49,10 +57,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.ofType(\'string\')', () => {
+  describe('.ofType(\'string\')', () => {
     const message0 = 'arg must be a string (got';
 
-    assertion(arg => arg.is.ofType('string')())
+    assertion(arg => arg.ofType('string')())
       .withArg(true).throws(`${message0} true)`)
       .withArg(-1).throws(`${message0} -1)`)
       .withArg({}).throws(`${message0} {})`)
@@ -63,10 +71,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.ofType(\'number\')', () => {
+  describe('.ofType(\'number\')', () => {
     const message0 = 'arg must be a number (got';
 
-    assertion(arg => arg.is.ofType('number')())
+    assertion(arg => arg.ofType('number')())
       .withArg(true).throws(`${message0} true)`)
       .withArg(-1).doesntThrow()
       .withArg({}).throws(`${message0} {})`)
@@ -77,10 +85,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.ofType(\'boolean\')', () => {
+  describe('.ofType(\'boolean\')', () => {
     const message0 = 'arg must be a boolean (got';
 
-    assertion(arg => arg.is.ofType('boolean')())
+    assertion(arg => arg.ofType('boolean')())
       .withArg(true).doesntThrow()
       .withArg(-1).throws(`${message0} -1)`)
       .withArg({}).throws(`${message0} {})`)

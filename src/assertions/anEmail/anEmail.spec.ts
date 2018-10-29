@@ -1,16 +1,24 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as anEmail from '.';
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.anEmail()', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    anEmail.registerIn(registry);
+  });
+
+  describe('.anEmail()', () => {
     const message0 = 'arg must be an email (got';
 
-    assertion(arg => arg.is.anEmail())
+    assertion(arg => arg.anEmail())
       .withArg(null).throws(`${message0} null)`)
       .withArg(true).throws(`${message0} true)`)
       .withArg({}).throws(`${message0} {})`)

@@ -1,16 +1,24 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as anInteger from '.';
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.anInteger()', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    anInteger.registerIn(registry);
+  });
+
+  describe('.anInteger()', () => {
     const message0 = 'arg must be an integer (got';
 
-    assertion(arg => arg.is.anInteger())
+    assertion(arg => arg.anInteger())
       .withArg({}).throws(`${message0} {})`)
       .withArg(false).throws(`${message0} false)`)
       .withArg('a').throws(`${message0} 'a')`)

@@ -29,7 +29,7 @@ export default OfTypeAssertion;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function register(registry : Registry) {
+export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
     ofType: OfTypeAssertion.factory,
     type: OfTypeAssertion.factory,

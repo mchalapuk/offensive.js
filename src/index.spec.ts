@@ -1,4 +1,7 @@
 
+import Registry from './Registry';
+
+// register assertions, operators and connectors in default registry
 import './assertions/allElementsThat/register';
 import './assertions/anArray/register';
 import './assertions/equalTo/register';
@@ -10,11 +13,14 @@ import './assertions/Null/register';
 import './assertions/aNumber/register';
 import './assertions/aString/register';
 import './assertions/Undefined/register';
+import './operators/register'
+import './connectors/register'
 
 import { TestCaseBuilder, RunFunction } from './test/TestCaseBuilder';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
+  // using default Registry
+  return new TestCaseBuilder<ReturnType>(runTestCase, Registry.instance);
 }
 
 describe('check(arg, \'arg\')', () => {

@@ -1,35 +1,31 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as exactly from '.';
 
 const instance = {};
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.exacly(instance)', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    exactly.registerIn(registry);
+  });
+
+  describe('.exactly(instance)', () => {
     const message0 = 'arg must be {} (got';
 
-    assertion(arg => arg.is.exactly(instance)())
+    assertion(arg => arg.exactly(instance)())
       .withArg(true).throws(`${message0} true)`)
       .withArg(false).throws(`${message0} false)`)
       .withArg({}).throws(`${message0} {})`)
       .withArg([]).throws(`${message0} [])`)
       .withArg(instance).doesntThrow()
-    ;
-  });
-
-  describe('.isnt.exactly(instance)', () => {
-    const message0 = 'arg must not be {} (got';
-
-    assertion(arg => arg.isnt.exactly(instance)())
-      .withArg(true).doesntThrow()
-      .withArg(false).doesntThrow()
-      .withArg({}).doesntThrow()
-      .withArg([]).doesntThrow()
-      .withArg(instance).throws(`${message0} {})`)
     ;
   });
 });

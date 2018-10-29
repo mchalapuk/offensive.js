@@ -1,16 +1,24 @@
 
+import Registry from '../../Registry';
 import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
-import '.';
 
-function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  return new TestCaseBuilder<ReturnType>(runTestCase);
-}
+import * as False from '.';
 
 describe('check(arg, \'arg\')', () => {
-  describe('.is.False()', () => {
+  let registry : Registry;
+
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+  beforeEach(() => {
+    registry = new Registry();
+    False.registerIn(registry);
+  });
+
+  describe('.False()', () => {
     const message0 = 'arg must be false (got';
 
-    assertion(arg => arg.is.False())
+    assertion(arg => arg.False())
       .withArg({}).throws(`${message0} {})`)
       .withArg([]).throws(`${message0} [])`)
       .withArg([0]).throws(`${message0} [0])`)

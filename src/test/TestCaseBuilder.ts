@@ -1,6 +1,8 @@
 
 import { AssertionContext } from '../Context';
-import check from '..';
+
+import ContextFactory from '../ContextFactory';
+import Registry from '../Registry';
 
 export type RunFunction<T> = (context : AssertionContext<T>) => T;
 
@@ -8,16 +10,21 @@ export type RunFunction<T> = (context : AssertionContext<T>) => T;
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class TestCaseBuilder<T> {
+  private factory : ContextFactory;
+
   constructor(
     private runTestCase : RunFunction<T>,
+    registry : Registry = Registry.instance,
   ) {
+    const { assertions, operators } = registry.contextProto;
+    this.factory = new ContextFactory(assertions, operators);
   }
 
   withArg(arg : any) : ExpectationBuilder<T> {
     const { runTestCase } = this;
     const builder = this;
 
-    const context = check<any>(arg, 'arg');
+    const context = this.factory.create(arg, 'arg');
     const got = JSON.stringify(arg);
 
     function throws(expectedMessage : string) {
