@@ -25,7 +25,7 @@ for JavaScript.
  2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
  3. Enables easy implementation of offensive and defensive techniques,
  4. Has zero runtime dependencies,
- 5. Contains its own `.d.ts` file.
+ 5. Contains its own `.d.ts` files.
 
 ## Installation
 
@@ -52,46 +52,51 @@ as corrupted state or illegal parameter is detected, program is crashed
 with a descriptive error message. This technique greatly helps in finding
 bugs at&nbsp;their cause.
 ```js
-class Time {
-  timestamp;
+import 'offensive/assertions/fieldThat/register';
+import 'offensive/assertions/aNumber/register';
 
+import check from 'offensive';
+
+class Point2D {
   /**
-   * @param init initializer object containing `timestamp` property.
+   * @param init initializer object containing `x` and `y` properties.
    */
   constructor(init) {
-    // Contract is satisfied
-    // if init contains 'timestamp' property of type number.
-    check(init, 'init').is.anObject();
-    check(init.timestamp, 'init.timestamp').is.aNumber();
-
-    this.timestamp = init.timestamp;
+    // Contract is satisfied if init contains
+    // `x` and `y` property of type number.
+    check(init, 'init')
+      .has.fieldThat('x', x => x.is.aNumber)
+      .and.fieldThat('y', y => y.is.aNumber)
+      ();
+    this.x = init.x;
+    this.y = init.y;
   }
 }
 ```
 Now, following erroneus call...
 ```js
-const time = new Time({ time : 1528271117 });
+const point = new Point2D({ x: 'a', y: null });
 ```
 ...will result in throwing following exception.
 ```
-ContractError: init.timestamp must be a numer; got undefined
-  at Object.aNumber (node_modules/offensive/lib/registry/assertion.js:59:21)
-  at Time (example.js:9:24)
-  at example.js:20:0
+ContractError: init.x must be a number (got 'a') and init.y be a number (got null)
+  at operatorContext (offensives/ContextFactory.js:34:33)
+  at new Point2D (example.js:16:7)
+  at Object.<anonymous> (example.js:22:15)
 ```
 
-Alternatively, above contract could be implemented using following
-single-statement check.
+Alternatively, above contract could be implemented using multiple checks, but
+the error would only contain information about first failed check.
 
 ```js
-check(init, 'init')
-  .is.anObject
-  .and.has.propertyOfType('timestamp', 'number')
+check(init, 'init').is.anObject();
+check(init.x, 'init.x').is.aNumber();
+check(init.y, 'init.y').is.aNumber();
 ;
 ```
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
-and [`.propertyOfType`][property-of-type] assertions.
+and [`.fieldThat`][field-that] assertions.
 
 **[See full list of offensive.js built-in assertions][assertions]**.
 
@@ -116,6 +121,8 @@ on&nbsp;HTTP request implemented using [offensive.js][offensive].
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
+import 'offensive/assertions/aString/register';
+import 'offensive/assertions/fieldThat/register';
 import check from 'offensive';
 
 const app = express();
@@ -125,10 +132,10 @@ app.use(bodyParser.json());
 app.post('/ping', function (req, res, next) {
   try {
     // Contract is satisfied if body has a message which is a string
+    // (.propertyThat is an alias of .fieldThat assertion)
     check(req.body, 'req.body')
-      .is.anObject
-      .and.contains.propertyOfType('message', 'string')
-    ;
+      .contains.propertyThat('message', message => message.is.aString)();
+
     const { message } = body;
     res.json({ message });
 
@@ -168,9 +175,10 @@ app.use(function (err, req, res, next) {
 });
 ```
 
-Above code shows defensive programming on server side, but the same technique
-is applicable in the client. When&nbsp;using defensive programming on client side
-contract should be tested after fetching data from a server.
+Above code presents defensive programming on the server side, but the same
+technique is applicable in the client. When&nbsp;using defensive programming
+in client applications. Client-server contract should be tested both, after
+receiving request from the client, and after receiving response from the server.
 
 **Further Rading:**
  * [What is the difference between offensive and defensive
@@ -191,18 +199,38 @@ contract should be tested after fetching data from a server.
 <a id=check-function></a>
 ### Check Function
 ```js
-module.exports = function check(value, name) { ... }
+function check<T>(testedValue : T, varName : string) : AssertionBuilder<T>;
 ```
-Creates a [Context][interfaces] object. All [assertions][assertions]
-called on returned context will be applied to passed **value**.
-In case some assertions fail, **name** will be used as part of
-error message.
+Creates an instance of `AssertionBuilder`. [Methods of returned
+instance][assertions] add assertions to the builder. All requested assertions
+will be checked against given **testedValue** after [executing assertion
+expression][call-operator]. In case some assertions fail, given **name**
+will be used as part of error message.
 ```js
-var check = require('offensive');
+import check from 'offensive';
 ...
 
 check(arg, 'arg')...
 ```
+
+[call-operator]: #call-operator
+### Call Operator
+```js
+interface AssertionBuilder<T> {
+  () : T;
+}
+```
+Executes built assert expression. Returns **testedValue** if assertion succeeds.
+Throws `ContractError` in case it fails.
+```js
+import 'offensive/assertions/length';
+import check from 'offensive';
+
+check(arg, 'arg')
+  .has.length(10)
+  (); // <- executes built assert expression
+```
+**NOTE: Assertion will not be run in without call operator being called.**
 
 [assertions]: #assertions
 ### Assertions
@@ -224,6 +252,7 @@ offensive.js contains following built-in assertions.
  1. [`.anArray()`][array]
  1. [`.anInstanceOf(RequiredClass)`][instance-of]
  1. [`.aDate()`][date]
+ 1. [`.aRegExp()`][regexp]
  1. [`.True()`][true]
  1. [`.False()`][false]
  1. [`.truthy()`][truthy]
@@ -233,22 +262,17 @@ offensive.js contains following built-in assertions.
  1. [`.equalTo()`][equal-to]
  1. [`.exactly()`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
+ 1. [`.lessThanOrEqualTo(rightBounds)`][less-than-or-equal-to]
  1. [`.greaterThan(leftBounds)`][greater-than]
+ 1. [`.greaterThanOrEqualTo(leftBounds)`][greater-than-or-equal-to]
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
- 1. [`.property(propertyName, propertyValue)`][property]
+ 1. [`.field(fieldName)`][field]
+ 1. [`.fieldThat(fieldName)`][field-that]
  1. [`.method(methodName)`][method]
- 1. [`.propertyOfType(propertyName, propertyType)`][property-of-type]
- 1. [`.propertyLessThan(propertyName, rightBounds)`][property-less-than]
- 1. [`.propertyGreaterThan(propertyName, leftBounds)`][property-greater-than]
  1. [`.length(requiredLength)`][length]
  1. [`.oneOf(set, name)`][one-of]
- 1. [`.elementThatIs(index, assertName, condition)`][element]
- 1. [`.eachElementIs(assertName, condition)`][each-element]
- 1. [`.onlyNumbers()`][only-numbers]
- 1. [`.onlyStrings()`][only-strings]
- 1. [`.onlyObjects()`][only-objects]
- 1. [`.onlyFunctions()`][only-functions]
- 1. [`.onlyInstancesOf(RequiredClass)`][only-instances-of]
+ 1. [`.elementThat(index, assertName, condition)`][element-that]
+ 1. [`.allElementsThat(assertName, condition)`][all-elements-that]
 
 [null]: #null-assertion
 <a id=null-assertion></a>
@@ -279,10 +303,10 @@ check(arg, 'arg').is.not.Empty();
 
 [of-type]: #of-type-assertion
 <a id=of-type-assertion></a>
-#### `.ofType(requiredType)` aliases: `.type`
+#### `.ofType(requiredType : string)` aliases: `.type`
 Asserts that checked value is of **requiredType** by ivoking `typeof` operator.
 ```js
-check(arg, 'arg').is.ofType('boolean');
+check(arg, 'arg').is.ofType('boolean')();
 ```
 
 [boolean]: #boolean-assertion
@@ -339,20 +363,18 @@ check(arg, 'arg').is.aFunction();
 [array]: #array-assertion
 <a id=array-assertion></a>
 #### `.anArray()` aliases: `.Array`, `.array`
-Asserts that checked value is an array, by performing few
-[duck typing][duck-typing] method checks.
+Asserts that checked value is an array by invoking `Array.isArray`.
 ```js
 check(arg, 'arg').is.anArray();
 ```
-[duck-typing]: https://en.wikipedia.org/wiki/Duck_typing
 
 [instance-of]: #instanceof-assertion
 <a id=instanceof-assertion></a>
-#### `.anInstanceOf(RequiredClass)` aliases: `.instanceOf`
+#### `.anInstanceOf(RequiredClass : Function)` aliases: `.instanceOf`
 Asserts that checked value is a instance of **RequiredClass**, by
 using `instanceof` operator.
 ```js
-check(arg, 'arg').is.anInstanceOf(RegExp);
+check(arg, 'arg').is.anInstanceOf(RegExp)();
 ```
 
 [date]: #date-assertion
@@ -362,6 +384,15 @@ Asserts that checked value is a instance of `Date`, by
 using `instanceof` operator.
 ```js
 check(arg, 'arg').is.aDate();
+```
+
+[regexp]: #regexp-assertion
+<a id=regexp-assertion></a>
+#### `.aRegExp()` aliases: `.RegExp`, `.regexp`
+Asserts that checked value is a instance of `RegExp`, by
+using `instanceof` operator.
+```js
+check(arg, 'arg').is.aRegExp();
 ```
 
 [true]: #true-assertion
@@ -398,10 +429,10 @@ check(arg, 'arg').is.falsy();
 
 [matches]: #matches-assertion
 <a id=matches-assertion></a>
-#### `.matches(regexp)` aliases: `.matchesRegexp`, `.matchesRegExp`, `.match`
+#### `.matches(regexp : RegExp)` aliases: `.matchesRegexp`, `.matchesRegExp`
 Asserts that checked value fully matches given **regexp**.
 ```js
-check(arg, 'arg').matches(/[a-z]+/);
+check(arg, 'arg').matches(/[a-z]+/)();
 ```
 
 [email]: #email-assertion
@@ -414,193 +445,129 @@ check(arg, 'arg').is.anEmail();
 
 [equal-to]: #equal-to-assertion
 <a id=equal-to-assertion></a>
-#### `.equalTo(another)` aliases: `.equal`, `.equals`
+#### `.equalTo(another : any)` aliases: `.equal`, `.equals`
 Asserts that checked value is equal to **another**.
 Comparison is made with `==` (double equals) operator.
 ```js
-check(arg, 'arg').is.equalTo(100);
+check(arg, 'arg').is.equalTo(100)();
 ```
 
 [exactly]: #exactly-assertion
 <a id=exactly-assertion></a>
-#### `.exactly(another)`
+#### `.exactly(another : any)`
 Asserts that checked value is exactly the same as **another**.
 Comparison is made with `===` (triple equals) operator.
 ```js
-check(arg, 'arg').is.exactly(instance);
+check(arg, 'arg').is.exactly(instance)();
 ```
 
 [less-than]: #less-than-assertion
 <a id=less-than-assertion></a>
-#### `.lessThan(rightBounds)` aliases: `.lt`, `.less`
-Asserts that checked value is a number, which is less than **rightBounds**.
+#### `.lessThan(rightBounds : number)` aliases: `.lt`, `.less`
+Asserts that checked value is less than **rightBounds**.
 ```js
-check(arg, 'arg').is.lessThan(100);
+check(arg, 'arg').is.lessThan(100)();
+```
+
+[less-than-or-equal-to]: #less-than-or-equal-to-assertion
+<a id=less-than-or-equal-to-assertion></a>
+#### `.lessThanOrEqualTo(rightBounds : number)` aliases: `.lte`, `.lessThanEqual`
+Asserts that checked value is less than or equal to **rightBounds**.
+```js
+check(arg, 'arg').is.lessThanOrEqualTo(100)();
 ```
 
 [greater-than]: #greater-than-assertion
 <a id=greater-than-assertion></a>
-#### `.greaterThan(leftBounds)` aliases: `.gt`, `.greater`
-Asserts that checked value is a number, which is greater than **leftBounds**.
+#### `.greaterThan(leftBounds) : number` aliases: `.gt`, `.greater`
+Asserts that checked value is greater than **leftBounds**.
 ```js
-check(arg, 'arg').is.greaterThan(0);
+check(arg, 'arg').is.greaterThan(0)();
+```
+
+[greater-than-or-equal-to]: #greater-than-or-equal-to-assertion
+<a id=greater-than-or-equal-to-assertion></a>
+#### `.greaterThanOrEqualTo(leftBounds : number)` aliases: `.gte`, `.greaterThanEqual`
+Asserts that checked value is greater than or equal to **leftBounds**.
+```js
+check(arg, 'arg').is.greaterThanOrEqualTo(0)();
 ```
 
 [in-range]: #in-range-assertion
 <a id=in-range-assertion></a>
-#### `.inRange(leftBounds, rightBounds)` aliases: `.between`
-Asserts that checked value is a number, which is grater than **leftBounds - 1**
+#### `.inRange(leftBounds : number, rightBounds : number)` aliases: `.between`
+Asserts that checked value is grater than or equal to **leftBounds**
 and less than **rightBounds**.
 ```js
-check(arg, 'arg').is.inRange(0, 100);
+check(arg, 'arg').is.inRange(0, 100)();
 ```
 
-[property]: #property-assertion
-<a id=property-assertion></a>
-#### `.property(propertyName, propertyValue)` aliases: `.field`
-Asserts that checked value has property of name **propertyName**.
-It also asserts that value of the property equals **propertyValue**
-(if propertyValue is present). It uses `===` operator for comparing values.
+[field]: #field-assertion
+<a id=field-assertion></a>
+#### `.field(fieldName : string)` aliases: `.property`
+Asserts that checked value has field of name **propertyName**.
 ```js
-check(arg, 'arg').has.property('length');
-check(arg, 'arg').contains.property('nodeName', 'DIV');
+check(arg, 'arg').has.property('length')();
+```
+
+[field-that]: #field-that-assertion
+<a id=field-that-assertion></a>
+#### `.fieldThat(fieldName : string, builder : FieldAssertionBuilder)`
+
+Asserts that checked value has field of name **propertyName**, which satisfied
+assertion created in gived **builder**.
+```js
+check(arg, 'arg').has.propertyThat('x', x => x.is.aNumber)();
 ```
 
 [method]: #method-assertion
 <a id=method-assertion></a>
-#### `.method(methodName)`
-Asserts that checked value has property of name **methodName**
-which is a function.
+#### `.method(methodName : string)`
+Asserts that checked value has field of name **methodName** which is a function.
 ```js
-check(arg, 'arg').has.method('toString');
-```
-
-[property-of-type]: #property-of-type-assertion
-<a id=property-of-type-assertion></a>
-#### `.propertyOfType(propertyName, propertyType)`
-Asserts that checked value has property of name **propertyName** and that this
-property is of type **propertyType**. Type is checked with `typeof` operator.
-```js
-check(arg, 'arg').has.propertyOfType('length', 'number');
-check(arg, 'arg').contains.propertyType('nodeName', 'string');
-```
-
-[property-less-than]: #property-less-than-assertion
-<a id=property-less-than-assertion></a>
-#### `.propertyLessThan(propertyName, rightBounds)` aliases: `.propertyLT`, `.fieldLessThan`
-`Asserts that checked value has property of name **propertyName**, value
-of this property is of type `number`, and that this value is less than
-**rightBounds**.
-```js
-check(arg, 'arg').has.propertyLessThan('index', 10);
-```
-
-[property-greater-than]: #property-greater-than-assertion
-<a id=property-greater-than-assertion></a>
-#### `.propertyGreaterThan(propertyName, leftBounds)` aliases: `.propertyGT`, `.fieldGreaterThan`
-`Asserts that checked value has property of name **propertyName**, value
-of this property is of type `number`, and that this value is greater than
-**leftBounds**.
-```js
-check(arg, 'arg').has.propertyLessThan('index', 10);
+check(arg, 'arg').has.method('toString')();
 ```
 
 [length]: #length-assertion
 <a id=length-assertion></a>
-#### `.length(requiredLength)` aliases: `.len`
+#### `.length(requiredLength : number)` aliases: `.len`
 Asserts that checked value has property of name "length" and value
 of **requiredLength**.
 ```js
-check(arg, 'arg').has.length(0);
+check(arg, 'arg').has.length(0)();
 ```
 
 [one-of]: #one-of-assertion
 <a id=one-of-assertion></a>
-#### `.oneOf(set, ?name)` aliases: `.elementOf`, `.containedIn`
+#### `.oneOf(set : any[], name ?: string)` aliases: `.elementOf`, `.containedIn`
 Asserts that checked value is contained in given **set**. Given **name** (if
 present) is used as a name of set in produced error message.
 ```js
-check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ]);
-check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ], 'valid status');
+check(arg, 'arg').is.oneOf([ 'started', 'running', 'finished' ])();
+check(arg, 'arg')
+  .is.oneOf([ 'started', 'running', 'finished' ], 'valid status')
+  ();
 ```
 
-[element]: #elementthatis-assertion
-<a id=elementthatis-assertion></a>
-#### `.elementThatIs(index, assertName, condition)` aliases: `.elementWhichIs`
+[element-that]: #element-that-assertion
+<a id=element-that-assertion></a>
+#### `.elementThat(index : number, builder : ElemAssertionBuilder)` aliases: `.elementWhichIs`
 Asserts that:
  1. Checked value is an array of length at least **`index`**` + 1`,
- 2. Element under **index** satisfies **condition**.
-
-**condition** must be an object implementing [`Condition`][interfaces] interface
-or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][interfaces]
-method. **assertName** is used as assertion name in generated error message.
+ 2. Element under **index** satisfies assertion created by given **builder**.
 ```js
-check(arg, 'arg').has.elementThatIs(0, "an integer", Number.isInteger);
+check(arg, 'arg').has.elementThat(0, elem => elem.is.anInteger)();
 ```
 
-[each-element]: #eachelementis-assertion
-<a id=eachelementis-assertion></a>
-#### `.eachElementIs(assertName, condition)` <sup>aliases: `.everyElementIs`, `.allElements`, `.onlyElements`</sup>
+[all-elements-that]: #all-elements-that-assertion
+<a id=all-elements-that-assertion></a>
+#### `.allElementThat(builder : ElemAssertionBuilder)` aliases: `.allElementsWhich`
 Asserts that:
  1. Checked value is an array,
- 2. Each element of this array satisfies **condition**.
+ 2. Each element of this array satisfies assertuin created by given **builder**.
 
-**condition** must be an object implementing [`Condition`][interfaces] interface
-or a `function` with signature matching [`Condition.isSatisfiedBy(arg)`][interfaces]
-method. **assertName** is used as assertion name in generated error message.
 ```js
-check(arg, 'arg').eachElementIs("an integer", Number.isInteger);
-```
-
-[only-numbers]: #onlynumbers-assertion
-<a id=onlynumbers-assertion></a>
-#### `.onlyNumbers()`
-Asserts that:
- 1. Checked value is an array,
- 2. Each element of this array is a number.
-```js
-check(arg, 'arg').contains.onlyNumbers();
-```
-
-[only-strings]: #onlystrings-assertion
-<a id=onlystrings-assertion></a>
-#### `.onlyStrings()`
-Asserts that:
- 1. Checked value is an array,
- 2. Each element of this array is a string.
-```js
-check(arg, 'arg').contains.onlyStrings();
-```
-
-[only-objects]: #onlyobjects-assertion
-<a id=onlyobjects-assertion></a>
-#### `.onlyObjects()`
-Asserts that:
- 1. Checked value is an array,
- 2. Each element of this array is an object.
-```js
-check(arg, 'arg').contains.onlyObjects();
-```
-
-[only-functions]: #onlyfunctions-assertion
-<a id=onlyfunctions-assertion></a>
-#### `.onlyFunctions()`
-
-Asserts that:
- 1. Checked value is an array,
- 2. Each element of this array is a function.
-```js
-check(arg, 'arg').contains.onlyFunctions();
-```
-
-[only-instances-of]: #onlyinstancesof-assertion
-<a id=onlyinstancesof-assertion></a>
-#### `.onlyInstancesOf(RequiredClass)`
-Asserts that:
- 1. Checked value is an array,
- 2. Each element of this array is an instance of **RequiredClass**.
-```js
-check(arg, 'arg').contains.onlyInstancesOf(MyClass);
+check(arg, 'arg').has.allElementsThat(elem => elem.is.anInteger)();
 ```
 
 [operators]: #boolean-operators
@@ -617,50 +584,45 @@ offensive.js implements following operators.
 [and]: #and-operator
 <a id=and-operator></a>
 #### `.and` aliases: `.of`, `.with`
-Logical conjunction of two boolean values which are separated by call to `.and` operator.
+Logical conjunction of two boolean values which are separated by call to `.and`
+operator.
 ```js
-check(arg, 'arg').has.length(2).and.contains.onlyNumbers();
+check(arg, 'arg')
+  .has.length(2)
+  .and.allElementsThat(elem => elem.is.aNumber)
+  ();
 ```
 
 [or]: #or-operator
 <a id=or-operator></a>
-#### `.either()` aliases: `.weather`
 #### `.or()`
-Logical alternative of two values which are separated by call to `.or` operator.
-Result of whole expression between `.either` and `.or` is taken as left-hand-side
-argument. First result after `.or` is taken as right-hand-side argument.
+Logical alternative of two (or more) values which are separated by call to `.or`
+operator.
 ```js
-check(arg, 'arg').is.either.anObject.or.aFunction();
+check(arg, 'arg').is.anObject.or.aFunction();
 ```
 
 [not]: #not-operator
 <a id=not-operator></a>
 #### `.not` aliases: `.no`, `.dont`, `.doesnt`
-Logical negation of a value after `.not` operator.
+Logical negation of an assertion after `.not` operator.
 ```js
 check(arg, 'arg').is.not.Undefined();
 ```
-
-[type-definitions]: #type-definitions
-<a id=type-definitions></a>
-### Type Definitions
-
-See [index.d.ts][typedefs].
-
-[typedefs]: index.d.ts
 
 ## Extension API
 
 offensive.js is extensible, but extension API is not documented yet.
 If you wish to write an extension, take a look at the implementation
-of [built-in assertions][assertions-code] and [offensive.js][main-code]
-file.
+of [built-in assertions][assertions-code], [operators][operators-code]
+and also at the interface of [`Registry`][registry-code] class.
 
-[assertions-code]: lib/built-ins/assertions
-[main-code]: offensive.js
+[assertions-code]: src/assertions
+[operators-code]: src/operators
+[registry-code]: src/Registry.ts
 
 ## License
 
-Copyright &copy; 2018 Maciej Chałapuk.
+Copyright &copy; 2016 - 2018 Maciej Chałapuk.
 Released under [MIT license](LICENSE).
 
