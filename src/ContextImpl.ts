@@ -4,7 +4,6 @@ import { AssertionContext, OperatorContext, RuntimeContext } from './Context';
 import { NoDsl } from './NoDsl';
 
 const nodsl = new NoDsl('DslError');
-const NON_BUGS = ['ContractError', 'ArgumentError', 'DslError'];
 
 /**
  * All implemnentation details are prefixed with double underscore (__)
@@ -46,20 +45,12 @@ export class ContextImpl implements RuntimeContext {
   }
 
   __pushAssertionFactory(factory : Assertion.Factory, args : any[]) {
-    return this.__pushAssertion(createAssertion(factory, args));
+    return this.__pushAssertion(factory(args));
   }
 
   __pushAssertion(assertion : Assertion) {
-    try {
       this.__setResult(assertion.assert(this._testedValue, this._varName, this._check));
       return this._operatorContext;
-    } catch (e) {
-      if (NON_BUGS.indexOf(e.name) !== -1) {
-        // shortening the stacktrace in case of non-bug errors
-        throw new ErrorProxy(e);
-      }
-      throw augumentBug(e);
-    }
   }
 
   __pushBinaryOperator(operator : BinaryOperator) {
@@ -139,40 +130,4 @@ export class ContextImpl implements RuntimeContext {
 }
 
 export default ContextImpl;
-
-function createAssertion(factory : Assertion.Factory, args : any[]) {
-  try {
-    return factory(args);
-
-  } catch (e) {
-    if (NON_BUGS.indexOf(e.name) !== -1) {
-      // shortening the stacktrace in case of non-bug errors
-      throw new ErrorProxy(e);
-    }
-    // anything else is an internal bug
-    throw augumentBug(e);
-  }
-}
-
-function augumentBug(e : Error & { offensiveAugmented ?: boolean }) {
-  if (!e.offensiveAugmented) {
-    e.name = 'BUG! ('+ e.name +')';
-    e.message += '\n\n> Unless it\'s caused by extension of yours, please submit an issue at\n'+
-      '>\n>  https://github.com/mchalapuk/offensive.js/issues\n>\n> Thanks for your help!\n';
-    e.offensiveAugmented = true;
-  }
-  return e;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-class ErrorProxy extends Error {
-  constructor(
-    public cause : Error,
-  ) {
-    super(cause.message);
-    this.name = cause.name;
-  }
-}
 
