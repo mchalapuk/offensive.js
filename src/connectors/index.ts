@@ -1,11 +1,11 @@
 
 import Registry from '../Registry';
 
-declare module "../Context" {
+declare module "../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface ConnectorContext {
+  interface ConnectorBuilder {
     is : this;
     be : this;
     being : this;

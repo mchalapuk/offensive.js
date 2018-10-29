@@ -6,13 +6,13 @@ import * as fieldThat from '../fieldThat';
 import * as aFunction from '../aFunction';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    aMethod(methodName : string) : OperatorContext<T>;
-    method(methodName : string) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    aMethod(methodName : string) : OperatorBuilder<T>;
+    method(methodName : string) : OperatorBuilder<T>;
   }
 }
 

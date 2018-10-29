@@ -5,15 +5,15 @@ import RegExpAssertion from './RegExpAssertion';
 import * as anInstanceOf from '../anInstanceOf';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    aRegExp : OperatorContext<T>;
-    RegExp : OperatorContext<T>;
-    aRegexp : OperatorContext<T>;
-    regexp : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    aRegExp : OperatorBuilder<T>;
+    RegExp : OperatorBuilder<T>;
+    aRegexp : OperatorBuilder<T>;
+    regexp : OperatorBuilder<T>;
   }
 }
 

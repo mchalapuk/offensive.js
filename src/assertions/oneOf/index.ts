@@ -2,15 +2,15 @@
 import Registry from '../../Registry';
 import OneOfAssertion from './OneOfAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    oneOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
-    elementOf<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
-    containedIn<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
-    inSet<E>(searchedSet : E[], message ?: string) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    oneOf<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
+    elementOf<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
+    containedIn<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
+    inSet<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
   }
 }
 

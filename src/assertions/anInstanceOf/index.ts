@@ -2,13 +2,13 @@
 import Registry from '../../Registry';
 import InstanceOfAssertion from './InstanceOfAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    anInstanceOf<R>(requiredType : { new() : R }) : OperatorContext<T>;
-    instanceOf<R>(requiredType : { new() : R }) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    anInstanceOf<R>(requiredType : { new() : R }) : OperatorBuilder<T>;
+    instanceOf<R>(requiredType : { new() : R }) : OperatorBuilder<T>;
   }
 }
 

@@ -1,13 +1,13 @@
 
 import { Assertion, CheckFunction, Result, Message, BinaryOperator } from '../../model';
-import { AssertionContext } from '../../Context';
+import { AssertionBuilder } from '../../Builder';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../anArray';
 import '../../connectors';
 
-export type AllElemsCallback<E> = (context : AssertionContext<E>) => Result;
+export type AllElemsCallback<E> = (context : AssertionBuilder<E>) => Result;
 
 let objectNumber = 0;
 
@@ -31,8 +31,8 @@ export class AllElementsAssertion<E> implements Assertion {
         },
         get message() {
           const wrapper = new NoArrayOperator<E>(testedValue);
-          const newContext = check(wrapper.cast(), `${varName}[0]`);
-          return callback(newContext).message;
+          const newBuilder = check(wrapper.cast(), `${varName}[0]`);
+          return callback(newBuilder).message;
         },
       }
     }

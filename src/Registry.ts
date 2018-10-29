@@ -8,11 +8,11 @@ import {
 } from './model';
 
 import {
-  AssertionContext,
-  OperatorContext,
-  ConnectorContext,
-  RuntimeContext,
-} from './Context';
+  AssertionBuilder,
+  OperatorBuilder,
+  ConnectorBuilder,
+  RuntimeBuilder,
+} from './Builder';
 
 import nodsl from './NoDsl';
 
@@ -38,7 +38,7 @@ export class Registry {
     Object.setPrototypeOf(operators, connectors);
 
     // Fields names of `Result` interface are reserved
-    // as `OperatorContext` implements `Result`.
+    // as `OperatorBuilder` implements `Result`.
     const trace = prepareTrace();
     this.traces['success'] = this.traces['message'] = trace;
     this.entities['success'] = this.entities['message'] = {};
@@ -50,7 +50,7 @@ export class Registry {
     this.extendPrototype(
       this.contextProto.assertions,
       newAssertions,
-      function getAssertion(this : RuntimeContext, assertion : Assertion) {
+      function getAssertion(this : RuntimeBuilder, assertion : Assertion) {
         return this.__pushAssertion(assertion);
       },
     );
@@ -62,7 +62,7 @@ export class Registry {
     this.extendPrototype(
       this.contextProto.assertions,
       newFactories,
-      function getAssertionFactory(this : RuntimeContext, factory : Assertion.Factory) {
+      function getAssertionFactory(this : RuntimeBuilder, factory : Assertion.Factory) {
         return (...args : any[]) => this.__pushAssertionFactory(factory, args);
       },
     );
@@ -72,11 +72,11 @@ export class Registry {
   addUnaryOperator(operators : HashMap<UnaryOperator>) {
     const newOperators = this.filterAlreadyRegistered(operators);
 
-    // Unary operators must be added on prototype of `AssertionContext`.
+    // Unary operators must be added on prototype of `AssertionBuilder`.
     this.extendPrototype(
       this.contextProto.assertions,
       newOperators,
-      function getUnaryOperator(this : RuntimeContext, operator : UnaryOperator) {
+      function getUnaryOperator(this : RuntimeBuilder, operator : UnaryOperator) {
         return this.__pushUnaryOperator(operator);
       },
     );
@@ -88,7 +88,7 @@ export class Registry {
     this.extendPrototype(
       this.contextProto.operators,
       newOperators,
-      function getBinaryOperator(this : RuntimeContext, operator : BinaryOperator) {
+      function getBinaryOperator(this : RuntimeBuilder, operator : BinaryOperator) {
         return this.__pushBinaryOperator(operator);
       },
     );
@@ -101,7 +101,7 @@ export class Registry {
     this.extendPrototype(
       this.contextProto.connectors,
       newConnectors,
-      function getConnector(this : RuntimeContext) {
+      function getConnector(this : RuntimeBuilder) {
         // noop
         return this;
       },
@@ -154,7 +154,7 @@ export class Registry {
     const names = Object.keys(newElements);
 
     names.forEach(name => {
-      function get(this : RuntimeContext) {
+      function get(this : RuntimeBuilder) {
         return getter.call(this, newElements[name]);
       }
       Object.defineProperty(proto, name, { get, enumerable });

@@ -2,15 +2,15 @@
 import Registry from '../../Registry';
 import ConvertsToBooleanAssertion from './ConvertsToBooleanAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    truthy : OperatorContext<T>;
-    Truthy : OperatorContext<T>;
-    truethy : OperatorContext<T>;
-    Truethy : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    truthy : OperatorBuilder<T>;
+    Truthy : OperatorBuilder<T>;
+    truethy : OperatorBuilder<T>;
+    Truethy : OperatorBuilder<T>;
   }
 }
 

@@ -2,14 +2,14 @@
 import Registry from '../../Registry';
 import GreaterThanAssertion from './GreaterThanAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    greaterThan(comparedNumber : number) : OperatorContext<T>;
-    greater(comparedNumber : number) : OperatorContext<T>;
-    gt(comparedNumber : number) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    greaterThan(comparedNumber : number) : OperatorBuilder<T>;
+    greater(comparedNumber : number) : OperatorBuilder<T>;
+    gt(comparedNumber : number) : OperatorBuilder<T>;
   }
 }
 

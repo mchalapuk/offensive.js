@@ -5,14 +5,14 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as elementThat from '.';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * `.good` assertion to be used only in this test.
    *
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    fancy : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    fancy : OperatorBuilder<T>;
   }
 }
 

@@ -1,6 +1,6 @@
 
 import { Assertion, CheckFunction, UnaryOperator, BinaryOperator, Result, Message } from './model';
-import { AssertionContext, OperatorContext, RuntimeContext } from './Context';
+import { AssertionBuilder, OperatorBuilder, RuntimeBuilder } from './Builder';
 import { NoDsl } from './NoDsl';
 
 const nodsl = new NoDsl('DslError');
@@ -11,9 +11,9 @@ const nodsl = new NoDsl('DslError');
  *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ContextImpl implements RuntimeContext {
+export class BuilderImpl implements RuntimeBuilder {
   // NOTE:
-  // Prototype of this class is being copied in `ContextFactory`.
+  // Prototype of this class is being copied in `BuilderFactory`.
   // It's important that it doesn't have any property getters.
 
   private __result : Result | null = null;
@@ -22,9 +22,9 @@ export class ContextImpl implements RuntimeContext {
   private __binary : BinaryOperator | null = null;
 
   constructor(
-    private _testedValue : any,
-    private _varName : string,
-    private _operatorContext : OperatorContext<any>,
+    public _testedValue : any,
+    public _varName : string,
+    private _operatorBuilder : OperatorBuilder<any>,
     private _check : CheckFunction,
   ) {
     const pushBinaryOperator = this.__pushBinaryOperator.bind(this);
@@ -40,7 +40,7 @@ export class ContextImpl implements RuntimeContext {
 
     const keys = Object.keys(props);
     keys.forEach((key : string) => {
-      Object.defineProperty(_operatorContext, key, { get: props[key], enumerable: false });
+      Object.defineProperty(_operatorBuilder, key, { get: props[key], enumerable: false });
     });
   }
 
@@ -50,7 +50,7 @@ export class ContextImpl implements RuntimeContext {
 
   __pushAssertion(assertion : Assertion) {
       this.__setResult(assertion.assert(this._testedValue, this._varName, this._check));
-      return this._operatorContext;
+      return this._operatorBuilder;
   }
 
   __pushBinaryOperator(operator : BinaryOperator) {
@@ -129,5 +129,5 @@ export class ContextImpl implements RuntimeContext {
   }
 }
 
-export default ContextImpl;
+export default BuilderImpl;
 

@@ -2,18 +2,18 @@
 import Registry from '../../Registry';
 import LessThanOrEqualToAssertion from './LessThanOrEqualToAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    lessThanOrEqualTo(comparedNumber : number) : OperatorContext<T>;
-    lessThanOrEqual(comparedNumber : number) : OperatorContext<T>;
-    lessThanEqualTo(comparedNumber : number) : OperatorContext<T>;
-    lessThanEqual(comparedNumber : number) : OperatorContext<T>;
-    lessOrEqualTo(comparedNumber : number) : OperatorContext<T>;
-    lessOrEqual(comparedNumber : number) : OperatorContext<T>;
-    lte(comparedNumber : number) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    lessThanOrEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    lessThanOrEqual(comparedNumber : number) : OperatorBuilder<T>;
+    lessThanEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    lessThanEqual(comparedNumber : number) : OperatorBuilder<T>;
+    lessOrEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    lessOrEqual(comparedNumber : number) : OperatorBuilder<T>;
+    lte(comparedNumber : number) : OperatorBuilder<T>;
   }
 }
 

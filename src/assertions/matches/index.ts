@@ -2,15 +2,15 @@
 import Registry from '../../Registry';
 import MatchesAssertion from './MatchesAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    matches(exp : RegExp) : OperatorContext<T>;
-    matchesRegExp(exp : RegExp) : OperatorContext<T>;
-    matchesRegexp(exp : RegExp) : OperatorContext<T>;
-    match(exp : RegExp) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    matches(exp : RegExp) : OperatorBuilder<T>;
+    matchesRegExp(exp : RegExp) : OperatorBuilder<T>;
+    matchesRegexp(exp : RegExp) : OperatorBuilder<T>;
+    match(exp : RegExp) : OperatorBuilder<T>;
   }
 }
 

@@ -5,14 +5,14 @@ import DateAssertion from './DateAssertion';
 import * as anInstanceOf from '../anInstanceOf';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    aDate : OperatorContext<T>;
-    Date : OperatorContext<T>;
-    date : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    aDate : OperatorBuilder<T>;
+    Date : OperatorBuilder<T>;
+    date : OperatorBuilder<T>;
   }
 }
 

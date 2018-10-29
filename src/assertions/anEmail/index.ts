@@ -4,14 +4,14 @@ import EmailAssertion from './EmailAssertion';
 
 import * as matches from '../matches';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    anEmail : OperatorContext<T>;
-    Email : OperatorContext<T>;
-    email : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    anEmail : OperatorBuilder<T>;
+    Email : OperatorBuilder<T>;
+    email : OperatorBuilder<T>;
   }
 }
 

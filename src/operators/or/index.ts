@@ -2,12 +2,12 @@
 import Registry from '../../Registry';
 import OrOperator from './OrOperator';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface OperatorContext<T> {
-    or : AssertionContext<T>;
+  interface OperatorBuilder<T> {
+    or : AssertionBuilder<T>;
   }
 }
 

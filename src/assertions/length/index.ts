@@ -5,13 +5,13 @@ import LengthAssertion from './LengthAssertion';
 import * as fieldThat from '../fieldThat';
 import * as exactly from '../exactly';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    length(requiredLength : number) : OperatorContext<T>;
-    len(requiredLength : number) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    length(requiredLength : number) : OperatorBuilder<T>;
+    len(requiredLength : number) : OperatorBuilder<T>;
   }
 }
 

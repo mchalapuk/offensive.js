@@ -2,14 +2,14 @@
 import Registry from '../../Registry';
 import AndOperator from './AndOperator';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface OperatorContext<T> {
-    and : AssertionContext<T>;
-    with : AssertionContext<T>;
-    of : AssertionContext<T>;
+  interface OperatorBuilder<T> {
+    and : AssertionBuilder<T>;
+    with : AssertionBuilder<T>;
+    of : AssertionBuilder<T>;
   }
 }
 

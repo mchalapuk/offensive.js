@@ -2,17 +2,17 @@
 import Registry from '../../Registry';
 import NotOperator from './NotOperator';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    not : AssertionContext<T>;
-    no : AssertionContext<T>;
-    doesnt : AssertionContext<T>;
-    dont : AssertionContext<T>;
-    isnt : AssertionContext<T>;
-    arent : AssertionContext<T>;
+  interface AssertionBuilder<T> {
+    not : AssertionBuilder<T>;
+    no : AssertionBuilder<T>;
+    doesnt : AssertionBuilder<T>;
+    dont : AssertionBuilder<T>;
+    isnt : AssertionBuilder<T>;
+    arent : AssertionBuilder<T>;
   }
 }
 export { NotOperator };

@@ -5,10 +5,10 @@ import { AllElementsAssertion, AllElemsCallback } from './AllElementsAssertion';
 import * as anArray from '../anArray';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
 
   /**
-   * @assertion .allElementsThat<E>(callback : (context : AssertionContext<E>) => Result);
+   * @assertion .allElementsThat<E>(callback : (context : AssertionBuilder<E>) => Result);
    *
    * Checks if all elements of an array satisfy an assertion
    * implemented in provided `callback`.
@@ -28,19 +28,19 @@ declare module "../../Context" {
    *
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    allElementsThat<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    allElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    onlyElementsThat<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    onlyElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    eachElementIs<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    everyElementIs<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    allElemsThat<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    allElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    onlyElemsThat<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    onlyElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    eachElemIs<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
-    everyElemIs<E>(callback : AllElemsCallback<E>) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    allElementsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    allElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    onlyElementsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    onlyElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    eachElementIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    everyElementIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    allElemsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    allElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    onlyElemsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    onlyElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    eachElemIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    everyElemIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
   }
 }
 

@@ -2,12 +2,12 @@
 import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoArrayOperator } from '../../ObjectSerializer';
-import { AssertionContext } from '../../Context';
+import { AssertionBuilder } from '../../Builder';
 
 import '../anArray';
 import '../../connectors';
 
-export type ElementThatCallback<F> = (context : AssertionContext<F>) => Result;
+export type ElementThatCallback<F> = (context : AssertionBuilder<F>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -28,14 +28,14 @@ export class ElementThatAssertion<E> implements Assertion {
         },
         get message() {
           const wrapper = new NoArrayOperator<E>(testedValue);
-          const newContext = check(wrapper.cast(), `${varName}[${elementIndex}]`);
-          return callback(newContext).message;
+          const newBuilder = check(wrapper.cast(), `${varName}[${elementIndex}]`);
+          return callback(newBuilder).message;
         },
       };
     }
 
-    const newContext = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
-    return this.callback(newContext);
+    const newBuilder = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
+    return this.callback(newBuilder);
   }
 }
 

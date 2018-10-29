@@ -5,13 +5,13 @@ import FieldAssertion from './FieldAssertion';
 import * as Empty from '../Empty';
 import * as Undefined from '../Undefined';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    field(fieldName : string) : OperatorContext<T>;
-    property(fieldName : string) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    field(fieldName : string) : OperatorBuilder<T>;
+    property(fieldName : string) : OperatorBuilder<T>;
   }
 }
 

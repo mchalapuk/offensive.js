@@ -2,18 +2,18 @@
 import Registry from '../../Registry';
 import GreaterThanOrEqualToAssertion from './GreaterThanOrEqualToAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    greaterThanOrEqualTo(comparedNumber : number) : OperatorContext<T>;
-    greaterThanOrEqual(comparedNumber : number) : OperatorContext<T>;
-    greaterThanEqualTo(comparedNumber : number) : OperatorContext<T>;
-    greaterThanEqual(comparedNumber : number) : OperatorContext<T>;
-    greaterOrEqualTo(comparedNumber : number) : OperatorContext<T>;
-    greaterOrEqual(comparedNumber : number) : OperatorContext<T>;
-    gte(comparedNumber : number) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    greaterThanOrEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    greaterThanOrEqual(comparedNumber : number) : OperatorBuilder<T>;
+    greaterThanEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    greaterThanEqual(comparedNumber : number) : OperatorBuilder<T>;
+    greaterOrEqualTo(comparedNumber : number) : OperatorBuilder<T>;
+    greaterOrEqual(comparedNumber : number) : OperatorBuilder<T>;
+    gte(comparedNumber : number) : OperatorBuilder<T>;
   }
 }
 

@@ -1,23 +1,23 @@
 
-import { AssertionContext } from '../Context';
+import { AssertionBuilder } from '../Builder';
 
-import ContextFactory from '../ContextFactory';
+import BuilderFactory from '../BuilderFactory';
 import Registry from '../Registry';
 
-export type RunFunction<T> = (context : AssertionContext<T>) => T;
+export type RunFunction<T> = (context : AssertionBuilder<T>) => T;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class TestCaseBuilder<T> {
-  private factory : ContextFactory;
+  private factory : BuilderFactory;
 
   constructor(
     private runTestCase : RunFunction<T>,
     registry : Registry = Registry.instance,
   ) {
     const { assertions, operators } = registry.contextProto;
-    this.factory = new ContextFactory(assertions, operators);
+    this.factory = new BuilderFactory(assertions, operators);
   }
 
   withArg(arg : any) : ExpectationBuilder<T> {

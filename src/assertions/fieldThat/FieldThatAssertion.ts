@@ -1,6 +1,6 @@
 
 import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
-import { AssertionContext } from '../../Context';
+import { AssertionBuilder } from '../../Builder';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
 
@@ -8,7 +8,7 @@ import '../Empty';
 import '../../operators/not';
 import '../../connectors';
 
-export type FieldThatCallback<F> = (context : AssertionContext<F>) => Result;
+export type FieldThatCallback<F> = (context : AssertionBuilder<F>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -29,14 +29,14 @@ export class FieldThatAssertion<F> implements Assertion {
         },
         get message() {
           const wrapper = new NoObject<F>(testedValue);
-          const newContext = check(wrapper.cast(), `${varName}.${fieldName}`);
-          return callback(newContext).message;
+          const newBuilder = check(wrapper.cast(), `${varName}.${fieldName}`);
+          return callback(newBuilder).message;
         },
       };
     }
 
-    const newContext = check(testedValue[fieldName], `${varName}.${fieldName}`);
-    return callback(newContext);
+    const newBuilder = check(testedValue[fieldName], `${varName}.${fieldName}`);
+    return callback(newBuilder);
   }
 }
 

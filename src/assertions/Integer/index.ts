@@ -2,17 +2,17 @@
 import Registry from '../../Registry';
 import IntegerAssertion from './IntegerAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    anInteger : OperatorContext<T>;
-    Integer : OperatorContext<T>;
-    integer : OperatorContext<T>;
-    anInt : OperatorContext<T>;
-    Int : OperatorContext<T>;
-    int : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    anInteger : OperatorBuilder<T>;
+    Integer : OperatorBuilder<T>;
+    integer : OperatorBuilder<T>;
+    anInt : OperatorBuilder<T>;
+    Int : OperatorBuilder<T>;
+    int : OperatorBuilder<T>;
   }
 }
 

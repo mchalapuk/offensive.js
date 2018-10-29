@@ -2,15 +2,15 @@
 import Registry from '../../Registry';
 import ExactlyAssertion from '../exactly';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    Null : OperatorContext<T>;
-    null : OperatorContext<T>;
-    Nil : OperatorContext<T>;
-    nil : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    Null : OperatorBuilder<T>;
+    null : OperatorBuilder<T>;
+    Nil : OperatorBuilder<T>;
+    nil : OperatorBuilder<T>;
   }
 }
 

@@ -2,15 +2,15 @@
 import Registry from '../../Registry';
 import OfTypeAssertion from '../ofType';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    aString : OperatorContext<T>;
-    String : OperatorContext<T>;
-    string : OperatorContext<T>;
-    str : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    aString : OperatorBuilder<T>;
+    String : OperatorBuilder<T>;
+    string : OperatorBuilder<T>;
+    str : OperatorBuilder<T>;
   }
 }
 

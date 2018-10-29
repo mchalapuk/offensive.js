@@ -2,14 +2,14 @@
 import Registry from '../../Registry';
 import ArrayAssertion from './ArrayAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    anArray : OperatorContext<T>;
-    Array : OperatorContext<T>;
-    array : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    anArray : OperatorBuilder<T>;
+    Array : OperatorBuilder<T>;
+    array : OperatorBuilder<T>;
   }
 }
 

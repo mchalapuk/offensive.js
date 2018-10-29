@@ -7,13 +7,13 @@ import * as Undefined from '../Undefined';
 import * as or from '../../operators/or';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    Empty : OperatorContext<T>;
-    empty : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    Empty : OperatorBuilder<T>;
+    empty : OperatorBuilder<T>;
   }
 }
 

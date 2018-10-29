@@ -2,17 +2,17 @@
 import Registry from '../../Registry';
 import ExactlyAssertion from './ExactlyAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    exactly(comparedValue : any) : OperatorContext<T>;
-    Exactly(comparedValue : any) : OperatorContext<T>;
-    exactlyEqualTo(comparedValue : any) : OperatorContext<T>;
-    ExactlyEqualTo(comparedValue : any) : OperatorContext<T>;
-    exactlyEquals(comparedValue : any) : OperatorContext<T>;
-    ExactlyEquals(comparedValue : any) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    exactly(comparedValue : any) : OperatorBuilder<T>;
+    Exactly(comparedValue : any) : OperatorBuilder<T>;
+    exactlyEqualTo(comparedValue : any) : OperatorBuilder<T>;
+    ExactlyEqualTo(comparedValue : any) : OperatorBuilder<T>;
+    exactlyEquals(comparedValue : any) : OperatorBuilder<T>;
+    ExactlyEquals(comparedValue : any) : OperatorBuilder<T>;
   }
 }
 

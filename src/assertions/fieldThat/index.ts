@@ -6,15 +6,15 @@ import * as Empty from '../Empty';
 import * as not from '../../operators/not';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    fieldThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorContext<T>;
-    fieldWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorContext<T>;
-    propertyThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorContext<T>;
-    propertyWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    fieldThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
+    fieldWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
+    propertyThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
+    propertyWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
   }
 }
 

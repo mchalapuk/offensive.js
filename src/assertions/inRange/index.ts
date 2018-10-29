@@ -7,13 +7,13 @@ import * as lessThan from '../lessThan';
 import * as and from '../../operators/and';
 import * as connectors from '../../connectors';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    inRange(lowerBounds : number, upperBounds : number) : OperatorContext<T>;
-    between(lowerBounds : number, upperBounds : number) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    inRange(lowerBounds : number, upperBounds : number) : OperatorBuilder<T>;
+    between(lowerBounds : number, upperBounds : number) : OperatorBuilder<T>;
   }
 }
 

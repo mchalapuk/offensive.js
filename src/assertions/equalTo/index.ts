@@ -2,17 +2,17 @@
 import Registry from '../../Registry';
 import EqualToAssertion from './EqualToAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    equalTo(comparedValue : any) : OperatorContext<T>;
-    EqualTo(comparedValue : any) : OperatorContext<T>;
-    equal(comparedValue : any) : OperatorContext<T>;
-    Equal(comparedValue : any) : OperatorContext<T>;
-    equals(comparedValue : any) : OperatorContext<T>;
-    Equals(comparedValue : any) : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    equalTo(comparedValue : any) : OperatorBuilder<T>;
+    EqualTo(comparedValue : any) : OperatorBuilder<T>;
+    equal(comparedValue : any) : OperatorBuilder<T>;
+    Equal(comparedValue : any) : OperatorBuilder<T>;
+    equals(comparedValue : any) : OperatorBuilder<T>;
+    Equals(comparedValue : any) : OperatorBuilder<T>;
   }
 }
 

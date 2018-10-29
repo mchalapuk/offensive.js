@@ -1,8 +1,8 @@
 
 import { Result } from './Result';
-import { AssertionContext } from '../Context';
+import { AssertionBuilder } from '../Builder';
 
-export type CheckFunction = <T>(testedValue : T, varName : string) => AssertionContext<T>;
+export type CheckFunction = <T>(testedValue : T, varName : string) => AssertionBuilder<T>;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

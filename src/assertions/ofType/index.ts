@@ -3,23 +3,23 @@ import Registry from '../../Registry';
 
 import OfTypeAssertion from './OfTypeAssertion';
 
-declare module "../../Context" {
+declare module "../../Builder" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    ofType(requiredType : 'function') : OperatorContext<T>;
-    ofType(requiredType : 'object') : OperatorContext<T>;
-    ofType(requiredType : 'string') : OperatorContext<T>;
-    ofType(requiredType : 'number') : OperatorContext<T>;
-    ofType(requiredType : 'boolean') : OperatorContext<T>;
-    ofType(requiredType : 'undefined') : OperatorContext<T>;
-    type(requiredType : 'function') : OperatorContext<T>;
-    type(requiredType : 'object') : OperatorContext<T>;
-    type(requiredType : 'string') : OperatorContext<T>;
-    type(requiredType : 'number') : OperatorContext<T>;
-    type(requiredType : 'boolean') : OperatorContext<T>;
-    type(requiredType : 'undefined') : OperatorContext<T>;
+  interface AssertionBuilder<T> {
+    ofType(requiredType : 'function') : OperatorBuilder<T>;
+    ofType(requiredType : 'object') : OperatorBuilder<T>;
+    ofType(requiredType : 'string') : OperatorBuilder<T>;
+    ofType(requiredType : 'number') : OperatorBuilder<T>;
+    ofType(requiredType : 'boolean') : OperatorBuilder<T>;
+    ofType(requiredType : 'undefined') : OperatorBuilder<T>;
+    type(requiredType : 'function') : OperatorBuilder<T>;
+    type(requiredType : 'object') : OperatorBuilder<T>;
+    type(requiredType : 'string') : OperatorBuilder<T>;
+    type(requiredType : 'number') : OperatorBuilder<T>;
+    type(requiredType : 'boolean') : OperatorBuilder<T>;
+    type(requiredType : 'undefined') : OperatorBuilder<T>;
   }
 }
 
