@@ -175,33 +175,27 @@ app.use(function (err, req, res, next) {
 ```
 
 Above code presents defensive programming on the server side, but the same
-technique is applicable in the client. When&nbsp;using defensive programming
-in client applications. Client-server contract should be tested both, after
-receiving request from the client, and after receiving response from the server.
-
-**Further Rading:**
- * [What is the difference between offensive and defensive
-   programming?][defensive-design]
-
-[defensive-design]: http://softwarephilosophy.ninja/defensive-design
+technique is applicable in the client. Client-server contract should be tested
+both, after receiving request from the client, and after receiving response
+from the server.
 
 ## API Reference
 
 **Table of Contents**
 
-1. [Check Function][check]
+1. [Check Function][check-function]
+1. [Call Operator][call-operator]
 1. [Assertions][assertions]
-2. [Boolean Operators][operators]
-3. [Type Definitions][type-definitions]
+1. [Boolean Operators][operators]
 
-[check]: #check-function
+[check-function]: #check-function
 <a id=check-function></a>
 ### Check Function
 ```js
 function check<T>(testedValue : T, varName : string) : AssertionBuilder<T>;
 ```
 Creates an instance of `AssertionBuilder`. [Methods of returned
-instance][assertions] add assertions to the builder. All requested assertions
+instance][assertions] add assertions to the builder. Requested assertions
 will be checked against given **testedValue** after [executing assertion
 expression][call-operator]. In case some assertions fail, given **name**
 will be used as part of error message.
@@ -229,7 +223,7 @@ check(arg, 'arg')
   .has.length(10)
   (); // <- executes built assert expression
 ```
-**NOTE: Assertion will not be run in without call operator being called.**
+**NOTE: Assertion will not be run unless call operator is invoked.**
 
 [assertions]: #assertions
 ### Assertions
@@ -478,7 +472,7 @@ check(arg, 'arg').is.lessThanOrEqualTo(100)();
 
 [greater-than]: #greater-than-assertion
 <a id=greater-than-assertion></a>
-#### `.greaterThan(leftBounds) : number` aliases: `.gt`, `.greater`
+#### `.greaterThan(leftBounds : number)` aliases: `.gt`, `.greater`
 Asserts that checked value is greater than **leftBounds**.
 ```js
 check(arg, 'arg').is.greaterThan(0)();
