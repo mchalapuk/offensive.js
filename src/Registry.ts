@@ -41,53 +41,73 @@ export class Registry {
     this.registerNames(['success', 'message']);
   }
 
-  addAssertion({ names, assertion } : NamedAssertion) {
+  addAssertion(newAssertions : HashMap<Assertion>) {
+    const names = Object.keys(newAssertions);
     this.registerNames(names);
 
-    const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getAssertion(this : RuntimeContext) {
-      return this.__pushAssertion(assertion);
-    });
+    this.extendPrototype(
+      this.contextProto.assertions,
+      newAssertions,
+      function getAssertion(this : RuntimeContext, assertion : Assertion) {
+        return this.__pushAssertion(assertion);
+      },
+    );
     return this;
   }
-  addAssertionFactory({ names, factory } : NamedAssertionFactory) {
+  addAssertionFactory(newFactories : HashMap<Assertion.Factory>) {
+    const names = Object.keys(newFactories);
     this.registerNames(names);
 
-    const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getAssertionFactory(this : RuntimeContext) {
-      return (...args : any[]) => this.__pushAssertionFactory(factory, args);
-    });
+    this.extendPrototype(
+      this.contextProto.assertions,
+      newFactories,
+      function getAssertionFactory(this : RuntimeContext, factory : Assertion.Factory) {
+        return (...args : any[]) => this.__pushAssertionFactory(factory, args);
+      },
+    );
     return this;
   }
 
-  addUnaryOperator({ names, operator } : NamedUnaryOperator) {
+  addUnaryOperator(newOperators : HashMap<UnaryOperator>) {
+    const names = Object.keys(newOperators);
     this.registerNames(names);
 
     // Unary operators must be added on prototype of `AssertionContext`.
-    const { assertions } = this.contextProto;
-    this.extendPrototype(assertions, names, function getUnaryOperator(this : RuntimeContext) {
-      return this.__pushUnaryOperator(operator);
-    });
+    this.extendPrototype(
+      this.contextProto.assertions,
+      newOperators,
+      function getUnaryOperator(this : RuntimeContext, operator : UnaryOperator) {
+        return this.__pushUnaryOperator(operator);
+      },
+    );
     return this;
   }
-  addBinaryOperator({ names, operator } : NamedBinaryOperator) {
+  addBinaryOperator(newOperators : HashMap<BinaryOperator>) {
+    const names = Object.keys(newOperators);
     this.registerNames(names);
 
-    const { operators } = this.contextProto;
-    this.extendPrototype(operators, names, function getBinaryOperator(this : RuntimeContext) {
-      return this.__pushBinaryOperator(operator);
-    });
+    this.extendPrototype(
+      this.contextProto.operators,
+      newOperators,
+      function getBinaryOperator(this : RuntimeContext, operator : BinaryOperator) {
+        return this.__pushBinaryOperator(operator);
+      },
+    );
     return this;
   }
 
-  addConnectors(names : string[]) {
+  addConnectors(newConnectors : HashMap<any>) {
+    const names = Object.keys(newConnectors);
     this.registerNames(names);
 
-    const { connectors } = this.contextProto;
-    this.extendPrototype(connectors, names, function getConnector(this : RuntimeContext) {
-      // noop
-      return this;
-    });
+    this.extendPrototype(
+      this.contextProto.connectors,
+      newConnectors,
+      function getConnector(this : RuntimeContext) {
+        // noop
+        return this;
+      },
+    );
     return this;
   }
 
@@ -118,14 +138,12 @@ export class Registry {
     names.forEach(name => this.registrations[name] = registration);
   }
 
-  private extendPrototype(proto : object, names : string[], get : () => any) {
+  private extendPrototype<T>(proto : object, newElements : HashMap<T>, get : (elem : T) => any) {
     const enumerable = true;
+    const names = Object.keys(newElements);
 
     names.forEach(name => {
-      function set() {
-        throw new Error(`.${name} is read-only`);
-      }
-      Object.defineProperty(proto, name, { get, set, enumerable });
+      Object.defineProperty(proto, name, { get: get.bind(newElements[name]), enumerable });
     });
   }
 }
@@ -137,37 +155,5 @@ export default Registry;
  */
 export interface HashMap<T> {
   [_ : string] : T | undefined;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-export interface NamedAssertion {
-  names : string[];
-  assertion : Assertion;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-export interface NamedAssertionFactory {
-  names : string[];
-  factory : Assertion.Factory;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-export interface NamedUnaryOperator {
-  names : string[];
-  operator : UnaryOperator;
-}
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-export interface NamedBinaryOperator {
-  names : string[];
-  operator : BinaryOperator;
 }
 
