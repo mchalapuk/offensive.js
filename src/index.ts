@@ -3,8 +3,8 @@ import { AssertionContext } from './Context';
 import { ContextFactory } from './ContextFactory';
 import { Registry } from './Registry';
 
-import './operators'
-import './connectors'
+import './operators/register'
+import './connectors/register'
 
 const { assertions, operators } = Registry.instance.contextProto;
 const factory = new ContextFactory(assertions, operators);

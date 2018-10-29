@@ -26,9 +26,8 @@ export function registerIn(registry : Registry) {
   aFunction.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'aMethod', 'method' ],
-
-    factory: MethodAssertion.factory,
+    aMethod: MethodAssertion.factory,
+    method: MethodAssertion.factory,
   });
 }
 

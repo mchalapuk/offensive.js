@@ -14,13 +14,17 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new ConvertsToBooleanAssertion(true);
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'truthy', 'Truthy', 'truethy', 'Truethy' ],
-    assertion: new ConvertsToBooleanAssertion(true),
+    truthy: instance,
+    Truthy: instance,
+    truethy: instance,
+    Truethy: instance,
   });
 }
 

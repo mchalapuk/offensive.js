@@ -18,6 +18,8 @@ declare module "../../Context" {
 export { EmptyAssertion };
 export default EmptyAssertion;
 
+export const instance = new EmptyAssertion();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -26,8 +28,8 @@ export function registerIn(registry : Registry) {
   Undefined.registerIn(registry);
 
   registry.addAssertion({
-    names: [ 'Empty', 'empty' ],
-    assertion: new EmptyAssertion(),
+    Empty: instance,
+    empty: instance,
   });
 }
 

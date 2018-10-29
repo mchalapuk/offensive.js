@@ -14,13 +14,17 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new ExactlyAssertion(null);
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'Null', 'null', 'Nil', 'nil' ],
-    assertion: new ExactlyAssertion(null),
+    Null: instance,
+    null: instance,
+    Nil: instance,
+    nil: instance,
   });
 }
 

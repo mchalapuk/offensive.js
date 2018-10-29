@@ -21,9 +21,9 @@ export default LessThanAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'lessThan', 'less', 'lt' ],
-
-    factory: LessThanAssertion.factory,
+    lessThan: LessThanAssertion.factory,
+    less: LessThanAssertion.factory,
+    lt: LessThanAssertion.factory,
   });
 }
 

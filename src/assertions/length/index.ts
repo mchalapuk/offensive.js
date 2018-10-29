@@ -26,9 +26,8 @@ export function registerIn(registry : Registry) {
   exactly.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'length', 'len' ],
-
-    factory: LengthAssertion.factory,
+    length: LengthAssertion.factory,
+    len: LengthAssertion.factory,
   });
 }
 

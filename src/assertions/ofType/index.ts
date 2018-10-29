@@ -31,9 +31,8 @@ export default OfTypeAssertion;
  */
 export function register(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'ofType', 'type' ],
-
-    factory: OfTypeAssertion.factory,
+    ofType: OfTypeAssertion.factory,
+    type: OfTypeAssertion.factory,
   });
 }
 

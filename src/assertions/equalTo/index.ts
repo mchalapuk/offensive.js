@@ -24,9 +24,12 @@ export default EqualToAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'equalTo', 'EqualTo', 'equal', 'Equal', 'equals', 'Equals' ],
-
-    factory: EqualToAssertion.factory,
+    equalTo: EqualToAssertion.factory,
+    EqualTo: EqualToAssertion.factory,
+    equal: EqualToAssertion.factory,
+    Equal: EqualToAssertion.factory,
+    equals: EqualToAssertion.factory,
+    Equals: EqualToAssertion.factory,
   });
 }
 

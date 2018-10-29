@@ -19,13 +19,19 @@ declare module "../../Context" {
 export { IntegerAssertion };
 export default IntegerAssertion;
 
+export const instance = new IntegerAssertion();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'anInteger', 'Integer', 'integer', 'anInt', 'Int', 'int' ],
-    assertion: new IntegerAssertion(),
+    anInteger: instance,
+    Integer: instance,
+    integer: instance,
+    anInt: instance,
+    Int: instance,
+    int: instance,
   });
 }
 

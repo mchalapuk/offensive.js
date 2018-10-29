@@ -18,6 +18,8 @@ declare module "../../Context" {
 export { EmailAssertion };
 export default EmailAssertion;
 
+export const instance = new EmailAssertion();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -25,8 +27,9 @@ export function registerIn(registry : Registry) {
   matches.registerIn(registry);
 
   registry.addAssertion({
-    names: [ 'anEmail', 'Email', 'email' ],
-    assertion: new EmailAssertion(),
+    anEmail: instance,
+    Email: instance,
+    email: instance,
   });
 }
 

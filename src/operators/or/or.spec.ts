@@ -1,6 +1,6 @@
 
-import { BinaryOperator, Result, StandardMessage } from '../model';
-import OrOperator from './or';
+import { BinaryOperator, Result, StandardMessage } from '../../model';
+import OrOperator from './OrOperator';
 
 describe('OrOperator', () => {
   let testedOperator : BinaryOperator;

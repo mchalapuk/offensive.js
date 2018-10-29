@@ -18,6 +18,8 @@ declare module "../../Context" {
 export { DateAssertion };
 export default DateAssertion;
 
+export const instance = new DateAssertion();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
@@ -25,8 +27,9 @@ export function registerIn(registry : Registry) {
   anInstanceOf.registerIn(registry);
 
   registry.addAssertion({
-    names: [ 'aDate', 'Date', 'date' ],
-    assertion: new DateAssertion(),
+    aDate: instance,
+    Date: instance,
+    date: instance,
   });
 }
 

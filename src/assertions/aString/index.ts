@@ -14,13 +14,17 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new OfTypeAssertion('string');
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'aString', 'String', 'string', 'str' ],
-    assertion: new OfTypeAssertion('string'),
+    aString: instance,
+    String: instance,
+    string: instance,
+    str: instance,
   });
 }
 

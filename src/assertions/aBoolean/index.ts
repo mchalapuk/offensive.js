@@ -16,13 +16,19 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new OfTypeAssertion('boolean');
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'aBoolean', 'Boolean', 'boolean', 'aBool', 'Bool', 'bool' ],
-    assertion: new OfTypeAssertion('boolean'),
+    aBoolean: instance,
+    Boolean: instance,
+    boolean: instance,
+    aBool: instance,
+    Bool: instance,
+    bool: instance,
   });
 }
 

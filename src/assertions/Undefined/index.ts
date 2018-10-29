@@ -12,13 +12,15 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new OfTypeAssertion('undefined');
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'Undefined', 'undefined' ],
-    assertion: new OfTypeAssertion('undefined'),
+    Undefined: instance,
+    undefined: instance,
   });
 }
 

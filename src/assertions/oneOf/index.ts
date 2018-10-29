@@ -22,9 +22,10 @@ export default OneOfAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'oneOf', 'elementOf', 'containedIn', 'inSet' ],
-
-    factory: OneOfAssertion.factory,
+    oneOf: OneOfAssertion.factory,
+    elementOf: OneOfAssertion.factory,
+    containedIn: OneOfAssertion.factory,
+    inSet: OneOfAssertion.factory,
   });
 }
 

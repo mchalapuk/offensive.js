@@ -16,13 +16,16 @@ declare module "../../Context" {
 export { ArrayAssertion };
 export default ArrayAssertion;
 
+export const instance = new ArrayAssertion();
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'anArray', 'Array', 'array' ],
-    assertion: new ArrayAssertion(),
+    anArray: instance,
+    Array: instance,
+    array: instance,
   });
 }
 

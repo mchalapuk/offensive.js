@@ -24,9 +24,8 @@ export function registerIn(registry : Registry) {
   anArray.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'elementThat', 'elementWhich' ],
-
-    factory: ElementThatAssertion.factory,
+    elementThat: ElementThatAssertion.factory,
+    elementWhich: ElementThatAssertion.factory,
   });
 }
 

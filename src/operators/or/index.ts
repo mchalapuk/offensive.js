@@ -1,26 +1,27 @@
 
 import Registry from '../../Registry';
-import ExactlyAssertion from '../exactly';
+import OrOperator from './OrOperator';
 
 declare module "../../Context" {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  interface AssertionContext<T> {
-    True : OperatorContext<T>;
-    true : OperatorContext<T>;
+  interface OperatorContext<T> {
+    or : AssertionContext<T>;
   }
 }
 
-export const instance = new ExactlyAssertion(true);
+export { OrOperator };
+export default OrOperator;
+
+export const instance = new OrOperator();
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
-  registry.addAssertion({
-    True: instance,
-    true: instance,
+  registry.addBinaryOperator({
+    or : instance,
   });
 }
 

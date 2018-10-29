@@ -28,7 +28,8 @@ export class Registry {
     connectors: {},
   };
 
-  private registrations : HashMap<string> = {};
+  private traces : HashMap<any> = {};
+  private entities : HashMap<any> = {};
 
   constructor() {
     const { assertions, operators, connectors } = this.contextProto;
@@ -38,12 +39,13 @@ export class Registry {
 
     // Fields names of `Result` interface are reserved
     // as `OperatorContext` implements `Result`.
-    this.registerNames(['success', 'message']);
+    const trace = prepareTrace();
+    this.traces['success'] = this.traces['message'] = trace;
+    this.entities['success'] = this.entities['message'] = {};
   }
 
-  addAssertion(newAssertions : HashMap<Assertion>) {
-    const names = Object.keys(newAssertions);
-    this.registerNames(names);
+  addAssertion(assertions : HashMap<Assertion>) {
+    const newAssertions = this.filterAlreadyRegistered(assertions);
 
     this.extendPrototype(
       this.contextProto.assertions,
@@ -54,9 +56,8 @@ export class Registry {
     );
     return this;
   }
-  addAssertionFactory(newFactories : HashMap<Assertion.Factory>) {
-    const names = Object.keys(newFactories);
-    this.registerNames(names);
+  addAssertionFactory(factories : HashMap<Assertion.Factory>) {
+    const newFactories = this.filterAlreadyRegistered(factories);
 
     this.extendPrototype(
       this.contextProto.assertions,
@@ -68,9 +69,8 @@ export class Registry {
     return this;
   }
 
-  addUnaryOperator(newOperators : HashMap<UnaryOperator>) {
-    const names = Object.keys(newOperators);
-    this.registerNames(names);
+  addUnaryOperator(operators : HashMap<UnaryOperator>) {
+    const newOperators = this.filterAlreadyRegistered(operators);
 
     // Unary operators must be added on prototype of `AssertionContext`.
     this.extendPrototype(
@@ -82,9 +82,8 @@ export class Registry {
     );
     return this;
   }
-  addBinaryOperator(newOperators : HashMap<BinaryOperator>) {
-    const names = Object.keys(newOperators);
-    this.registerNames(names);
+  addBinaryOperator(operators : HashMap<BinaryOperator>) {
+    const newOperators = this.filterAlreadyRegistered(operators);
 
     this.extendPrototype(
       this.contextProto.operators,
@@ -96,9 +95,8 @@ export class Registry {
     return this;
   }
 
-  addConnectors(newConnectors : HashMap<any>) {
-    const names = Object.keys(newConnectors);
-    this.registerNames(names);
+  addConnectors(connectors : HashMap<any>) {
+    const newConnectors = this.filterAlreadyRegistered(connectors);
 
     this.extendPrototype(
       this.contextProto.connectors,
@@ -111,31 +109,44 @@ export class Registry {
     return this;
   }
 
-  private registerNames(names : string[]) {
-    names.forEach(name => {
-      const previousRegistration = this.registrations[name];
-      nodsl.check(
-        name.length !== 0,
-        'name.length must be > 0 (got \'', name, '\')',
-      );
-      nodsl.check(
-        name[0] !== '_',
-        'name must not start with underscore (got \'', name, '\')',
-      );
-      nodsl.check(
-        previousRegistration === undefined,
-        'Entity of name ', name, ' already registered.\n',
-        'PREVIOUS REGISTRATION STACK TRACE:\n', previousRegistration,
-        'CURRENT REGISTRATION STACK TRACE:\n'
-      );
-    });
+  private filterAlreadyRegistered<T>(entities : HashMap<T>) {
+    const trace = prepareTrace();
 
-    const stack = new Error().stack as string;
-    const firstNewlineIndex = stack.indexOf('\n');
-    const secondNewlineIndex = stack.indexOf('\n', firstNewlineIndex + 1)
-    const registration = stack.substring(secondNewlineIndex + 1);
+    return Object.keys(entities)
+      .filter(name => {
+        nodsl.check(
+          name.length !== 0,
+          'name.length must be > 0 (got \'', name, '\')',
+        );
+        nodsl.check(
+          name[0] !== '_',
+          'name must not start with underscore (got \'', name, '\')',
+        );
 
-    names.forEach(name => this.registrations[name] = registration);
+        const alreadyRegistered = this.entities[name];
+        if (alreadyRegistered === undefined) {
+          return true;
+        }
+
+        nodsl.check(
+          alreadyRegistered === entities[name],
+          'Entity of name ', name, ' already registered.\n',
+          'PREVIOUS REGISTRATION STACK TRACE:\n',
+          this.traces[name],
+          'CURRENT REGISTRATION STACK TRACE:\n'
+        );
+        return false;
+      })
+      .reduce(
+        (result, name) => {
+          this.traces[name] = trace;
+          this.entities[name] = entities[name];
+          result[name] = entities[name];
+          return result;
+        },
+        {} as HashMap<T>,
+      )
+    ;
   }
 
   private extendPrototype<T>(proto : object, newElements : HashMap<T>, get : (elem : T) => any) {
@@ -155,5 +166,16 @@ export default Registry;
  */
 export interface HashMap<T> {
   [_ : string] : T | undefined;
+}
+
+function prepareTrace() {
+  const stack = new Error().stack as string;
+  const firstNewlineIndex = stack.indexOf('\n');
+  const secondNewlineIndex = stack.indexOf('\n', firstNewlineIndex + 1)
+  const trace = stack.substring(secondNewlineIndex + 1)
+    .split('\n')
+    .map(line => `  ${line}`)
+    .join('\n')
+  ;
 }
 

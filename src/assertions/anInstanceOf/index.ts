@@ -20,9 +20,8 @@ export default InstanceOfAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'anInstanceOf', 'instanceOf' ],
-
-    factory: InstanceOfAssertion.factory,
+    anInstanceOf: InstanceOfAssertion.factory,
+    instanceOf: InstanceOfAssertion.factory,
   });
 }
 

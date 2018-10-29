@@ -1,15 +1,5 @@
 
-import Registry from '../Registry';
-import { BinaryOperator, Result } from '../model';
-
-declare module "../Context" {
-  /**
-   * @author Maciej Chałapuk (maciej@chalapuk.pl)
-   */
-  interface OperatorContext<T> {
-    or : AssertionContext<T>;
-  }
-}
+import { BinaryOperator, Result } from '../../model';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -34,11 +24,4 @@ export class OrOperator implements BinaryOperator {
 }
 
 export default OrOperator;
-
-Registry.instance
-  .addBinaryOperator({
-    names: [ 'or' ],
-    operator: new OrOperator(),
-  })
-;
 

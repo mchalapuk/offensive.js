@@ -1,6 +1,6 @@
 
-import { BinaryOperator, Result, StandardMessage } from '../model';
-import AndOperator from './and';
+import { BinaryOperator, Result, StandardMessage } from '../../model';
+import AndOperator from './AndOperator';
 
 describe('AndOperator', () => {
   let testedOperator : BinaryOperator;

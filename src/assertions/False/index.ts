@@ -12,13 +12,15 @@ declare module "../../Context" {
   }
 }
 
+export const instance = new ExactlyAssertion(false);
+
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export function registerIn(registry : Registry) {
   registry.addAssertion({
-    names: [ 'False', 'false' ],
-    assertion: new ExactlyAssertion(false),
+    False: instance,
+    false: instance,
   });
 }
 

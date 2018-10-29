@@ -26,9 +26,8 @@ export function registerIn(registry : Registry) {
   Undefined.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'field', 'property' ],
-
-    factory: FieldAssertion.factory,
+    field: FieldAssertion.factory,
+    property: FieldAssertion.factory,
   });
 }
 

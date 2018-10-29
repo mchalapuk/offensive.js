@@ -25,17 +25,13 @@ export default GreaterThanOrEqualToAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [
-      'greaterThanOrEqualTo',
-      'greaterThanOrEqual',
-      'greaterThanEqualTo',
-      'greaterThanEqual',
-      'greaterOrEqualTo',
-      'greaterOrEqual',
-      'gte',
-    ],
-
-    factory: GreaterThanOrEqualToAssertion.factory,
+    greaterThanOrEqualTo: GreaterThanOrEqualToAssertion.factory,
+    greaterThanOrEqual: GreaterThanOrEqualToAssertion.factory,
+    greaterThanEqualTo: GreaterThanOrEqualToAssertion.factory,
+    greaterThanEqual: GreaterThanOrEqualToAssertion.factory,
+    greaterOrEqualTo: GreaterThanOrEqualToAssertion.factory,
+    greaterOrEqual: GreaterThanOrEqualToAssertion.factory,
+    gte: GreaterThanOrEqualToAssertion.factory,
   });
 }
 

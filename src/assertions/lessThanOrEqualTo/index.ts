@@ -25,17 +25,13 @@ export default LessThanOrEqualToAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [
-      'lessThanOrEqualTo',
-      'lessThanOrEqual',
-      'lessThanEqualTo',
-      'lessThanEqual',
-      'lessOrEqualTo',
-      'lessOrEqual',
-      'lte',
-    ],
-
-    factory: LessThanOrEqualToAssertion.factory,
+    lessThanOrEqualTo: LessThanOrEqualToAssertion.factory,
+    lessThanOrEqual: LessThanOrEqualToAssertion.factory,
+    lessThanEqualTo: LessThanOrEqualToAssertion.factory,
+    lessThanEqual: LessThanOrEqualToAssertion.factory,
+    lessOrEqualTo: LessThanOrEqualToAssertion.factory,
+    lessOrEqual: LessThanOrEqualToAssertion.factory,
+    lte: LessThanOrEqualToAssertion.factory,
   });
 }
 

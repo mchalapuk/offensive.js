@@ -24,16 +24,12 @@ export default ExactlyAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [
-      'exactly',
-      'Exactly',
-      'exactlyEqualTo',
-      'ExactlyEqualTo',
-      'exactlyEquals',
-      'ExactlyEquals',
-    ],
-
-    factory: ExactlyAssertion.factory,
+    exactly: ExactlyAssertion.factory,
+    Exactly: ExactlyAssertion.factory,
+    exactlyEqualTo: ExactlyAssertion.factory,
+    ExactlyEqualTo: ExactlyAssertion.factory,
+    exactlyEquals: ExactlyAssertion.factory,
+    ExactlyEquals: ExactlyAssertion.factory,
   });
 }
 

@@ -25,18 +25,33 @@ declare module "../Context" {
   }
 }
 
-export const connectors = [
-  'is', 'be', 'being',
-  'to', 'from', 'under', 'over',
-  'has', 'have',
-  'defines', 'define',
-  'contains', 'contain',
-  'precondition', 'postcondition', 'invariant',
-];
+const noop = {};
+
+export const connectors = {
+  is: noop,
+  be: noop,
+  being: noop,
+  to: noop,
+  from: noop,
+  under: noop,
+  over: noop,
+  has: noop,
+  have: noop,
+  defines: noop,
+  define: noop,
+  contains: noop,
+  contain: noop,
+  precondition: noop,
+  postcondition: noop,
+  invariant: noop,
+};
 
 export default connectors;
 
-Registry.instance
-  .addConnectors(connectors)
-;
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export function registerIn(registry : Registry) {
+  registry.addConnectors(connectors);
+}
 

@@ -21,9 +21,9 @@ export default GreaterThanAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'greaterThan', 'greater', 'gt' ],
-
-    factory: GreaterThanAssertion.factory,
+    greaterThan: GreaterThanAssertion.factory,
+    greater: GreaterThanAssertion.factory,
+    gt: GreaterThanAssertion.factory,
   });
 }
 

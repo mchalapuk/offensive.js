@@ -26,9 +26,10 @@ export function registerIn(registry : Registry) {
   Empty.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'fieldThat', 'fieldWhich', 'propertyThat', 'propertyWhich' ],
-
-    factory: FieldThatAssertion.factory,
+    fieldThat: FieldThatAssertion.factory,
+    fieldWhich: FieldThatAssertion.factory,
+    propertyThat: FieldThatAssertion.factory,
+    propertyWhich: FieldThatAssertion.factory,
   });
 }
 

@@ -26,9 +26,8 @@ export function registerIn(registry : Registry) {
   lessThan.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [ 'inRange', 'between' ],
-
-    factory: InRangeAssertion.factory,
+    inRange: InRangeAssertion.factory,
+    between: InRangeAssertion.factory,
   });
 }
 

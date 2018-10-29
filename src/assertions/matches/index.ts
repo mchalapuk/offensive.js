@@ -22,9 +22,10 @@ export default MatchesAssertion;
  */
 export function registerIn(registry : Registry) {
   registry.addAssertionFactory({
-    names: [ 'matches', 'matchesRegExp', 'matchesRegexp', 'match' ],
-
-    factory: MatchesAssertion.factory,
+    matches: MatchesAssertion.factory,
+    matchesRegExp: MatchesAssertion.factory,
+    matchesRegexp: MatchesAssertion.factory,
+    match: MatchesAssertion.factory,
   });
 }
 

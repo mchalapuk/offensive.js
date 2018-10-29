@@ -53,22 +53,18 @@ export function registerIn(registry : Registry) {
   anArray.registerIn(registry);
 
   registry.addAssertionFactory({
-    names: [
-      'allElementsThat',
-      'allElementsWhich',
-      'onlyElementsThat',
-      'onlyElementsWhich',
-      'eachElementIs',
-      'everyElementIs',
-      'allElemsThat',
-      'allElemsWhich',
-      'onlyElemsThat',
-      'onlyElemsWhich',
-      'eachElemIs',
-      'everyElemIs',
-    ],
-
-    factory : AllElementsAssertion.factory,
+    allElementsThat: AllElementsAssertion.factory,
+    allElementsWhich: AllElementsAssertion.factory,
+    onlyElementsThat: AllElementsAssertion.factory,
+    onlyElementsWhich: AllElementsAssertion.factory,
+    eachElementIs: AllElementsAssertion.factory,
+    everyElementIs: AllElementsAssertion.factory,
+    allElemsThat: AllElementsAssertion.factory,
+    allElemsWhich: AllElementsAssertion.factory,
+    onlyElemsThat: AllElementsAssertion.factory,
+    onlyElemsWhich: AllElementsAssertion.factory,
+    eachElemIs: AllElementsAssertion.factory,
+    everyElemIs: AllElementsAssertion.factory,
   });
 }
 
