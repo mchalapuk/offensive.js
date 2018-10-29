@@ -92,7 +92,6 @@ the error would only contain information about first failed check.
 check(init, 'init').is.anObject();
 check(init.x, 'init.x').is.aNumber();
 check(init.y, 'init.y').is.aNumber();
-;
 ```
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
