@@ -35,7 +35,9 @@ export class ContextFactory {
       function operatorContext<T>() : T {
         const result = self.__evaluate();
         if (!result.success) {
-          throw new ContractError(result.message.toString());
+          const error = new Error(result.message.toString());
+          error.name = 'ContractError';
+          throw error;
         }
         return testedValue;
       }
@@ -55,15 +57,4 @@ export class ContextFactory {
 }
 
 export default ContextFactory;
-
-/**
- * @author Maciej Chałapuk (maciej@chalapuk.pl)
- */
-class ContractError extends Error {
-  name = 'ContractError';
-
-  constructor(message : string) {
-    super(message);
-  }
-}
 
