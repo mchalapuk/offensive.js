@@ -4,6 +4,8 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../greaterThanOrEqualTo';
 import '../lessThan';
+import '../../operators/and';
+import '../../connectors';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

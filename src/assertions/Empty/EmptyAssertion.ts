@@ -3,6 +3,8 @@ import { Assertion, CheckFunction, StandardMessage } from '../../model';
 
 import '../Null';
 import '../Undefined';
+import '../../connectors';
+import '../../operators/or';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

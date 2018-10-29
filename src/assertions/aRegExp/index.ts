@@ -3,6 +3,7 @@ import Registry from '../../Registry';
 import RegExpAssertion from './RegExpAssertion';
 
 import * as anInstanceOf from '../anInstanceOf';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -26,6 +27,7 @@ export const instance = new RegExpAssertion();
  */
 export function registerIn(registry : Registry) {
   anInstanceOf.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertion({
     aRegExp: instance,

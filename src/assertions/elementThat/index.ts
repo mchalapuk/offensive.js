@@ -3,6 +3,7 @@ import Registry from '../../Registry';
 import { ElementThatAssertion, ElementThatCallback } from './ElementThatAssertion';
 
 import * as anArray from '../anArray';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -22,6 +23,7 @@ export default ElementThatAssertion;
  */
 export function registerIn(registry : Registry) {
   anArray.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertionFactory({
     elementThat: ElementThatAssertion.factory,

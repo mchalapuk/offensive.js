@@ -3,6 +3,7 @@ import Registry from '../../Registry';
 import { AllElementsAssertion, AllElemsCallback } from './AllElementsAssertion';
 
 import * as anArray from '../anArray';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
 
@@ -51,6 +52,7 @@ export default AllElementsAssertion;
  */
 export function registerIn(registry : Registry) {
   anArray.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertionFactory({
     allElementsThat: AllElementsAssertion.factory,

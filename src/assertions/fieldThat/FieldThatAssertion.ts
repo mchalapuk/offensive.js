@@ -5,6 +5,8 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
 
 import '../Empty';
+import '../../operators/not';
+import '../../connectors';
 
 export type FieldThatCallback<F> = (context : AssertionContext<F>) => Result;
 

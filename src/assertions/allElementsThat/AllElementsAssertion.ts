@@ -5,6 +5,7 @@ import { NoArrayOperator } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../anArray';
+import '../../connectors';
 
 export type AllElemsCallback<E> = (context : AssertionContext<E>) => Result;
 

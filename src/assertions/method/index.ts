@@ -4,6 +4,7 @@ import MethodAssertion from './MethodAssertion';
 
 import * as fieldThat from '../fieldThat';
 import * as aFunction from '../aFunction';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -24,6 +25,7 @@ export default MethodAssertion;
 export function registerIn(registry : Registry) {
   fieldThat.registerIn(registry);
   aFunction.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertionFactory({
     aMethod: MethodAssertion.factory,

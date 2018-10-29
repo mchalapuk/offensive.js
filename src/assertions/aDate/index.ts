@@ -3,6 +3,7 @@ import Registry from '../../Registry';
 import DateAssertion from './DateAssertion';
 
 import * as anInstanceOf from '../anInstanceOf';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -25,6 +26,7 @@ export const instance = new DateAssertion();
  */
 export function registerIn(registry : Registry) {
   anInstanceOf.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertion({
     aDate: instance,

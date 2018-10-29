@@ -48,6 +48,7 @@ namespace fancy {
 describe('check(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
+    elementThat.registerIn(registry);
     fancy.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }

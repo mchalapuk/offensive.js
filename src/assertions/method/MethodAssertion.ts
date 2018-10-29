@@ -4,6 +4,7 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../fieldThat';
 import '../aFunction';
+import '../../connectors';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

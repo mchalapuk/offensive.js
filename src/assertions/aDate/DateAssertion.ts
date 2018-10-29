@@ -2,6 +2,7 @@
 import { Assertion, CheckFunction, StandardMessage } from '../../model';
 
 import '../anInstanceOf';
+import '../../connectors';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

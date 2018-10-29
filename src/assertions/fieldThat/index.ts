@@ -3,6 +3,8 @@ import Registry from '../../Registry';
 import { FieldThatAssertion, FieldThatCallback } from './FieldThatAssertion';
 
 import * as Empty from '../Empty';
+import * as not from '../../operators/not';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -24,6 +26,8 @@ export default FieldThatAssertion;
  */
 export function registerIn(registry : Registry) {
   Empty.registerIn(registry);
+  not.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertionFactory({
     fieldThat: FieldThatAssertion.factory,

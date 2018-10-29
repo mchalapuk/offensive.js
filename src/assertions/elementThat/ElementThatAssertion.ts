@@ -5,6 +5,7 @@ import { NoArrayOperator } from '../../ObjectSerializer';
 import { AssertionContext } from '../../Context';
 
 import '../anArray';
+import '../../connectors';
 
 export type ElementThatCallback<F> = (context : AssertionContext<F>) => Result;
 

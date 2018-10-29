@@ -16,8 +16,8 @@ declare module "../../Context" {
   }
 }
 
-const Good = {};
-const Bad = {};
+const Good = 'good';
+const Bad = 'bad';
 
 namespace good {
   /**
@@ -50,6 +50,7 @@ describe('check(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     allElementsThat.registerIn(registry);
+    good.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
 
@@ -62,8 +63,8 @@ describe('check(arg, \'arg\')', () => {
       .withArg(null).throws(`${message0} no array operator (null))`)
       .withArg(true).throws(`${message0} no array operator (true))`)
       .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([Bad, Bad]).throws(`${message0} 0) ${message1b} 1)`)
-      .withArg([Good, Bad]).throws(`${message1a} 1)`)
+      .withArg([Bad, Bad]).throws(`${message0} 'bad') ${message1b} 'bad')`)
+      .withArg([Good, Bad]).throws(`${message1a} 'bad')`)
       .withArg([Good, Good]).doesntThrow()
       .withArg([]).doesntThrow()
     ;

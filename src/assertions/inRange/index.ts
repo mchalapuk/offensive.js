@@ -4,6 +4,8 @@ import InRangeAssertion from './InRangeAssertion';
 
 import * as greaterThanOrEqualTo from '../greaterThanOrEqualTo';
 import * as lessThan from '../lessThan';
+import * as and from '../../operators/and';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -24,6 +26,8 @@ export default InRangeAssertion;
 export function registerIn(registry : Registry) {
   greaterThanOrEqualTo.registerIn(registry);
   lessThan.registerIn(registry);
+  and.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertionFactory({
     inRange: InRangeAssertion.factory,

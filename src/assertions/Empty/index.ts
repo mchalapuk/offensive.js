@@ -4,6 +4,8 @@ import EmptyAssertion from './EmptyAssertion';
 
 import * as Null from '../Null';
 import * as Undefined from '../Undefined';
+import * as or from '../../operators/or';
+import * as connectors from '../../connectors';
 
 declare module "../../Context" {
   /**
@@ -26,6 +28,8 @@ export const instance = new EmptyAssertion();
 export function registerIn(registry : Registry) {
   Null.registerIn(registry);
   Undefined.registerIn(registry);
+  or.registerIn(registry);
+  connectors.registerIn(registry);
 
   registry.addAssertion({
     Empty: instance,
