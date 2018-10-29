@@ -19,8 +19,7 @@ import './connectors/register'
 import { TestCaseBuilder, RunFunction } from './test/TestCaseBuilder';
 
 function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-  // using default Registry
-  return new TestCaseBuilder<ReturnType>(runTestCase, Registry.instance);
+  return new TestCaseBuilder<ReturnType>(runTestCase);
 }
 
 describe('check(arg, \'arg\')', () => {

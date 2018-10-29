@@ -1,6 +1,10 @@
 
-import { AssertionContext } from './Context';
+import { CheckFunction } from './model';
+import { AssertionContext, RuntimeContext } from './Context';
 import ContextImpl from './ContextImpl';
+import ObjectSerializer from './ObjectSerializer';
+
+const serializer = new ObjectSerializer();
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -15,15 +19,29 @@ export class ContextFactory {
     private readonly assertions : object,
     private readonly operators : object,
   ) {
+    const check = this.create.bind(this);
+
     // Copy the ContextImpl class in order to be able to set its prototype
     // to different object in each instance of the factory.
     this.ContextConstructor = function ContextConstructor(
-      this : ContextImpl,
+      this : RuntimeContext,
       testedValue : any,
       varName : string,
-      operators : any,
     ) {
-      ContextImpl.call(this, testedValue, varName, operators);
+      const self = this;
+
+      // In order to have a call operator (() : T) on the `OperatorContext`,
+      // we need to create a function and set its prototype to `OperatorContext.prototype`.
+      function operatorContext<T>() : T {
+        const result = self.__evaluate();
+        if (!result.success) {
+          throw new ContractError(result.message.toString());
+        }
+        return testedValue;
+      }
+      Object.setPrototypeOf(operatorContext, operators);
+
+      ContextImpl.call(self, testedValue, varName, operatorContext, check);
     } as any;
 
     this.ContextConstructor.prototype = { ...ContextImpl.prototype };
@@ -37,4 +55,15 @@ export class ContextFactory {
 }
 
 export default ContextFactory;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+class ContractError extends Error {
+  name = 'ContractError';
+
+  constructor(message : string) {
+    super(message);
+  }
+}
 

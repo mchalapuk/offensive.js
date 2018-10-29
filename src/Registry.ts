@@ -149,12 +149,15 @@ export class Registry {
     ;
   }
 
-  private extendPrototype<T>(proto : object, newElements : HashMap<T>, get : (elem : T) => any) {
+  private extendPrototype<T>(proto : object, newElements : HashMap<T>, getter : (elem : T) => any) {
     const enumerable = true;
     const names = Object.keys(newElements);
 
     names.forEach(name => {
-      Object.defineProperty(proto, name, { get: get.bind(newElements[name]), enumerable });
+      function get(this : RuntimeContext) {
+        return getter.call(this, newElements[name]);
+      }
+      Object.defineProperty(proto, name, { get, enumerable });
     });
   }
 }

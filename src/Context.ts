@@ -26,7 +26,8 @@ export interface ConnectorContext {
 export interface RuntimeContext {
   __pushAssertion(assertion : Assertion) : OperatorContext<any>;
   __pushAssertionFactory(factory : Assertion.Factory, args : any[]) : OperatorContext<any>;
-  __pushUnaryOperator(operator : UnaryOperator) : AssertionContext<any>;
-  __pushBinaryOperator(operator : BinaryOperator) : AssertionContext<any>;
+  __pushUnaryOperator(operator : UnaryOperator) : this;
+  __pushBinaryOperator(operator : BinaryOperator) : this;
+  __evaluate() : Result;
 }
 
