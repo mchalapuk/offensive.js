@@ -7,15 +7,11 @@ import * as exactly from '.';
 const instance = {};
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    exactly.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    exactly.registerIn(registry);
-  });
 
   describe('.exactly(instance)', () => {
     const message0 = 'arg must be {} (got';

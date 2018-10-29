@@ -5,15 +5,11 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 import * as greaterThan from '.';
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    greaterThan.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    greaterThan.registerIn(registry);
-  });
 
   describe('.gt(0)', () => {
     const message0 = 'arg must be > 0 (got';

@@ -5,15 +5,11 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 import * as matches from '.';
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    matches.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    matches.registerIn(registry);
-  });
 
   describe('.matches(/^\\w+$/gim)', () => {
     const message0 = 'arg must match /^\\w+$/gim (got';

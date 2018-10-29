@@ -5,39 +5,6 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as allElementsThat from '.';
 
-const Good = {};
-const Bad = {};
-
-describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
-  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
-  }
-  beforeEach(() => {
-    registry = new Registry();
-
-    allElementsThat.registerIn(registry);
-    good.registerIn(registry);
-  });
-
-  describe('.allElementsThat(elem => elem.good)', () => {
-    const message0 = 'arg[0] must be good (got';
-    const message1a = 'arg[1] must be good (got';
-    const message1b = 'and arg[1] be good (got';
-
-    assertion(arg => arg.allElementsThat(elem => elem.good)())
-      .withArg(null).throws(`${message0} no array operator (null))`)
-      .withArg(true).throws(`${message0} no array operator (true))`)
-      .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([Bad, Bad]).throws(`${message0} 0) ${message1b} 1)`)
-      .withArg([Good, Bad]).throws(`${message1a} 1)`)
-      .withArg([Good, Good]).doesntThrow()
-      .withArg([]).doesntThrow()
-    ;
-  });
-});
-
 declare module "../../Context" {
   /**
    * `.good` assertion to be used only in this test.
@@ -48,6 +15,9 @@ declare module "../../Context" {
     good : OperatorContext<T>;
   }
 }
+
+const Good = {};
+const Bad = {};
 
 namespace good {
   /**
@@ -75,4 +45,28 @@ namespace good {
     registry.addAssertion({ good: instance });
   }
 }
+
+describe('check(arg, \'arg\')', () => {
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    allElementsThat.registerIn(registry);
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+
+  describe('.allElementsThat(elem => elem.good)', () => {
+    const message0 = 'arg[0] must be good (got';
+    const message1a = 'arg[1] must be good (got';
+    const message1b = 'and arg[1] be good (got';
+
+    assertion(arg => arg.allElementsThat(elem => elem.good)())
+      .withArg(null).throws(`${message0} no array operator (null))`)
+      .withArg(true).throws(`${message0} no array operator (true))`)
+      .withArg({}).throws(`${message0} no array operator ({}))`)
+      .withArg([Bad, Bad]).throws(`${message0} 0) ${message1b} 1)`)
+      .withArg([Good, Bad]).throws(`${message1a} 1)`)
+      .withArg([Good, Good]).doesntThrow()
+      .withArg([]).doesntThrow()
+    ;
+  });
+});
 

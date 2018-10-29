@@ -5,15 +5,11 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 import * as Empty from '.';
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    Empty.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    Empty.registerIn(registry);
-  });
 
   describe('.Empty()', () => {
     const message0 = 'arg must be null or undefined (got';

@@ -5,15 +5,11 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 import * as inRange from '.';
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    inRange.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    inRange.registerIn(registry);
-  });
 
   describe('.inRange(0, 10)', () => {
     const message0 = 'arg must be ≥ 0 (got';

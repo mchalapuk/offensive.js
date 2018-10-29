@@ -5,34 +5,6 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as elementThat from '.';
 
-const Fancy = {};
-
-describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
-  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
-    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
-  }
-  beforeEach(() => {
-    registry = new Registry();
-    elementThat.registerIn(registry);
-    fancy.registerIn(registry);
-  });
-
-  describe('.elementThat(1, elem => elem.fancy)', () => {
-    const message0 = 'arg[1] must be fancy (got';
-
-    assertion(arg => arg.elementThat(1, elem => elem.fancy)())
-      .withArg(null).throws(`${message0} no array operator (null))`)
-      .withArg(true).throws(`${message0} no array operator (true))`)
-      .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([]).throws(`${message0} undefined)`)
-      .withArg([0, 1]).throws(`${message0} 1)`)
-      .withArg([0, Fancy]).doesntThrow()
-    ;
-  });
-});
-
 declare module "../../Context" {
   /**
    * `.good` assertion to be used only in this test.
@@ -43,6 +15,8 @@ declare module "../../Context" {
     fancy : OperatorContext<T>;
   }
 }
+
+const Fancy = {};
 
 namespace fancy {
   /**
@@ -70,4 +44,25 @@ namespace fancy {
     registry.addAssertion({ fancy: instance });
   }
 }
+
+describe('check(arg, \'arg\')', () => {
+  function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    fancy.registerIn(registry);
+    return new TestCaseBuilder<ReturnType>(runTestCase, registry);
+  }
+
+  describe('.elementThat(1, elem => elem.fancy)', () => {
+    const message0 = 'arg[1] must be fancy (got';
+
+    assertion(arg => arg.elementThat(1, elem => elem.fancy)())
+      .withArg(null).throws(`${message0} no array operator (null))`)
+      .withArg(true).throws(`${message0} no array operator (true))`)
+      .withArg({}).throws(`${message0} no array operator ({}))`)
+      .withArg([]).throws(`${message0} undefined)`)
+      .withArg([0, 1]).throws(`${message0} 1)`)
+      .withArg([0, Fancy]).doesntThrow()
+    ;
+  });
+});
 

@@ -8,15 +8,11 @@ class TestType {
 }
 
 describe('check(arg, \'arg\')', () => {
-  let registry : Registry;
-
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
+    const registry = new Registry();
+    anInstanceOf.registerIn(registry);
     return new TestCaseBuilder<ReturnType>(runTestCase, registry);
   }
-  beforeEach(() => {
-    registry = new Registry();
-    anInstanceOf.registerIn(registry);
-  });
 
   describe('.instanceOf(TestType)', () => {
     const message0 = 'arg must be an instance of TestType (got';
