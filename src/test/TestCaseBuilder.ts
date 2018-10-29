@@ -24,12 +24,12 @@ export class TestCaseBuilder<T> {
     const { runTestCase } = this;
     const builder = this;
 
-    const context = this.factory.create(arg, 'arg');
     const got = JSON.stringify(arg);
 
     function throws(expectedMessage : string) {
       it(`should throw Error('${expectedMessage}')`, () => {
         try {
+          const context = builder.factory.create(arg, 'arg');
           runTestCase(context);
 
         } catch (e) {
@@ -55,6 +55,7 @@ export class TestCaseBuilder<T> {
 
     function doesntThrow() {
       it(`should not throw when called on ${got}`, () => {
+        const context = builder.factory.create(arg, 'arg');
         const retVal = runTestCase(context);
 
         if (retVal !== arg) {

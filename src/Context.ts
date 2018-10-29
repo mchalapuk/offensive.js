@@ -24,6 +24,8 @@ export interface ConnectorContext {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface RuntimeContext {
+  _testedValue : any;
+  _varName : string;
   __pushAssertion(assertion : Assertion) : OperatorContext<any>;
   __pushAssertionFactory(factory : Assertion.Factory, args : any[]) : OperatorContext<any>;
   __pushUnaryOperator(operator : UnaryOperator) : this;

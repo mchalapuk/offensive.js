@@ -7,7 +7,7 @@ import ObjectSerializer from './ObjectSerializer';
 const serializer = new ObjectSerializer();
 
 export interface ContextConstructor {
-  new (testedValue : any, varName : string) : AssertionContext<any>;
+  new (testedValue : any, varName : string) : RuntimeContext;
   prototype : any;
 }
 
@@ -18,11 +18,14 @@ export class ContextFactory {
   private readonly Constructor : ContextConstructor;
   private readonly InnerConstructor : ContextConstructor;
 
+  private currentBuilder : RuntimeContext | null = null;
+
   constructor(
     private readonly assertions : object,
     private readonly operators : object,
   ) {
     const innerCheck = this.createInner.bind(this);
+    const factory = this;
 
     // Copy the ContextImpl class in order to be able to set its prototype
     // to different object in each instance of the factory.
@@ -36,6 +39,7 @@ export class ContextFactory {
       // In order to have a call operator (() : T) on the `OperatorContext`,
       // we need to create a function and set its prototype to `OperatorContext.prototype`.
       function operatorContext<T>() : T {
+        factory.currentBuilder = null;
         const result = self.__evaluate();
         if (!result.success) {
           const error = new Error(result.message.toString());
@@ -69,13 +73,18 @@ export class ContextFactory {
   }
 
   create<T>(testedValue : T, varName : string) : AssertionContext<T> {
-    const context = new this.Constructor(testedValue, varName);
-    return context as AssertionContext<T>;
+    if (this.currentBuilder !== null) {
+      throw new Error(`Previous top-level assertion builder not finished (varName='${
+        this.currentBuilder._varName}'). Did you forget to invoke call operator?`);
+    }
+
+    this.currentBuilder = new this.Constructor(testedValue, varName);
+    return this.currentBuilder as any;
   }
 
   private createInner<T>(testedValue : T, varName : string) : AssertionContext<T> {
     const context = new this.InnerConstructor(testedValue, varName);
-    return context as AssertionContext<T>;
+    return context as any;
   }
 }
 
