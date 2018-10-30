@@ -12,10 +12,9 @@ const factory = new BuilderFactory(assertions, operators);
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-function check<T>(testedValue : T, varName : string) {
+export function check<T>(testedValue : T, varName : string) {
   return factory.create<T>(testedValue, varName);
 }
 
-export = check;
-(check as any).default = check;
+export default check;
 

@@ -39,7 +39,7 @@ npm install --save offensive
 
 ```js
 // node-style require
-const check = require('offensive');
+const { check } = require('offensive');
 
 // es6-style default import
 import check from 'offensive';
