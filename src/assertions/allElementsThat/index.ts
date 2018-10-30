@@ -29,18 +29,18 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    allElementsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    allElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    onlyElementsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    onlyElementsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    eachElementIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    everyElementIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    allElemsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    allElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    onlyElemsThat<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    onlyElemsWhich<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    eachElemIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
-    everyElemIs<E>(callback : AllElemsCallback<E>) : OperatorBuilder<T>;
+    allElementsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
+    allElementsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
+    onlyElementsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
+    onlyElementsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
+    eachElementIs(callback : AllElemsCallback) : OperatorBuilder<T>;
+    everyElementIs(callback : AllElemsCallback) : OperatorBuilder<T>;
+    allElemsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
+    allElemsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
+    onlyElemsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
+    onlyElemsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
+    eachElemIs(callback : AllElemsCallback) : OperatorBuilder<T>;
+    everyElemIs(callback : AllElemsCallback) : OperatorBuilder<T>;
   }
 }
 

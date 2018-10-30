@@ -11,10 +11,10 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    fieldThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
-    fieldWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
-    propertyThat<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
-    propertyWhich<F>(fieldName : string, callback : FieldThatCallback<F>) : OperatorBuilder<T>;
+    fieldThat(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
+    fieldWhich(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
+    propertyThat(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
+    propertyWhich(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
   }
 }
 

@@ -7,16 +7,16 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 import '../anArray';
 import '../../connectors';
 
-export type AllElemsCallback<E> = (context : AssertionBuilder<E>) => Result;
+export type AllElemsCallback = (context : AssertionBuilder<any>) => Result;
 
 let objectNumber = 0;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AllElementsAssertion<E> implements Assertion {
+export class AllElementsAssertion implements Assertion {
   constructor(
-    private callback : AllElemsCallback<E>,
+    private callback : AllElemsCallback,
   ) {
   }
 
@@ -30,7 +30,7 @@ export class AllElementsAssertion<E> implements Assertion {
           return false;
         },
         get message() {
-          const wrapper = new NoArrayOperator<E>(testedValue);
+          const wrapper = new NoArrayOperator<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}[0]`);
           return callback(newBuilder).message;
         },
@@ -47,7 +47,7 @@ export class AllElementsAssertion<E> implements Assertion {
       if (results !== null) {
         return results;
       }
-      return results = (testedValue as E[])
+      return results = (testedValue as any[])
         .map((elem, i) => callback(check(elem, `${varName}[${i}]`)))
       ;
     }

@@ -10,8 +10,8 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    elementThat<E>(elementIndex : number, callback : ElementThatCallback<E>) : OperatorBuilder<T>;
-    elementWhich<E>(elementIndex : number, callback : ElementThatCallback<E>) : OperatorBuilder<T>;
+    elementThat(elementIndex : number, callback : ElementThatCallback) : OperatorBuilder<T>;
+    elementWhich(elementIndex : number, callback : ElementThatCallback) : OperatorBuilder<T>;
   }
 }
 

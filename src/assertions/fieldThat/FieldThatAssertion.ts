@@ -8,15 +8,15 @@ import '../Empty';
 import '../../operators/not';
 import '../../connectors';
 
-export type FieldThatCallback<F> = (context : AssertionBuilder<F>) => Result;
+export type FieldThatCallback = (context : AssertionBuilder<any>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class FieldThatAssertion<F> implements Assertion {
+export class FieldThatAssertion implements Assertion {
   constructor(
     private fieldName : string,
-    private callback : FieldThatCallback<F>,
+    private callback : FieldThatCallback,
   ) {
   }
   assert(testedValue : any, varName : string, check : CheckFunction) {
@@ -28,7 +28,7 @@ export class FieldThatAssertion<F> implements Assertion {
           return false;
         },
         get message() {
-          const wrapper = new NoObject<F>(testedValue);
+          const wrapper = new NoObject<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}.${fieldName}`);
           return callback(newBuilder).message;
         },

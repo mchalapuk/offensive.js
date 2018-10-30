@@ -7,15 +7,15 @@ import { AssertionBuilder } from '../../Builder';
 import '../anArray';
 import '../../connectors';
 
-export type ElementThatCallback<F> = (context : AssertionBuilder<F>) => Result;
+export type ElementThatCallback = (context : AssertionBuilder<any>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ElementThatAssertion<E> implements Assertion {
+export class ElementThatAssertion implements Assertion {
   constructor(
     private elementIndex : number,
-    private callback : ElementThatCallback<E>,
+    private callback : ElementThatCallback,
   ) {
   }
   assert(testedValue : any, varName : string, check : CheckFunction) {
@@ -27,7 +27,7 @@ export class ElementThatAssertion<E> implements Assertion {
           return false;
         },
         get message() {
-          const wrapper = new NoArrayOperator<E>(testedValue);
+          const wrapper = new NoArrayOperator<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}[${elementIndex}]`);
           return callback(newBuilder).message;
         },
