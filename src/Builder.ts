@@ -33,3 +33,8 @@ export interface RuntimeBuilder {
   __evaluate() : Result;
 }
 
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export type InnerExpression = (context : AssertionBuilder<any>) => Result;
+

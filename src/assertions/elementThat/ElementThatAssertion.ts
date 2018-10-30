@@ -2,12 +2,10 @@
 import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoArrayOperator } from '../../ObjectSerializer';
-import { AssertionBuilder } from '../../Builder';
+import { InnerExpression } from '../../Builder';
 
 import '../anArray';
 import '../../connectors';
-
-export type ElementThatCallback = (context : AssertionBuilder<any>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -15,11 +13,11 @@ export type ElementThatCallback = (context : AssertionBuilder<any>) => Result;
 export class ElementThatAssertion implements Assertion {
   constructor(
     private elementIndex : number,
-    private callback : ElementThatCallback,
+    private innerAssert : InnerExpression,
   ) {
   }
   assert(testedValue : any, varName : string, check : CheckFunction) {
-    const { elementIndex, callback } = this;
+    const { elementIndex, innerAssert } = this;
 
     if (!check(testedValue, varName).is.anArray.success) {
       return {
@@ -29,13 +27,13 @@ export class ElementThatAssertion implements Assertion {
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}[${elementIndex}]`);
-          return callback(newBuilder).message;
+          return innerAssert(newBuilder).message;
         },
       };
     }
 
     const newBuilder = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
-    return this.callback(newBuilder);
+    return innerAssert(newBuilder);
   }
 }
 
@@ -54,7 +52,7 @@ export namespace ElementThatAssertion {
     );
     nodsl.check(
       typeof args[1] === 'function',
-      'callback must be a function (got ', (typeof args[1]), ')',
+      'assert must be a function (got ', (typeof args[1]), ')',
     );
 
     return new ElementThatAssertion(args[0], args[1]);

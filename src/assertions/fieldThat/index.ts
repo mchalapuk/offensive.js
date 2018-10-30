@@ -1,6 +1,6 @@
 
 import Registry from '../../Registry';
-import { FieldThatAssertion, FieldThatCallback } from './FieldThatAssertion';
+import FieldThatAssertion from './FieldThatAssertion';
 
 import * as Empty from '../Empty';
 import * as not from '../../operators/not';
@@ -11,10 +11,10 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    fieldThat(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
-    fieldWhich(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
-    propertyThat(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
-    propertyWhich(fieldName : string, callback : FieldThatCallback) : OperatorBuilder<T>;
+    fieldThat(fieldName : string, assert : InnerExpression) : OperatorBuilder<T>;
+    fieldWhich(fieldName : string, assert : InnerExpression) : OperatorBuilder<T>;
+    propertyThat(fieldName : string, assert : InnerExpression) : OperatorBuilder<T>;
+    propertyWhich(fieldName : string, assert : InnerExpression) : OperatorBuilder<T>;
   }
 }
 

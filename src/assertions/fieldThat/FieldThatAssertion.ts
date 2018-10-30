@@ -1,14 +1,12 @@
 
 import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
-import { AssertionBuilder } from '../../Builder';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
+import { InnerExpression } from '../../Builder';
 
 import '../Empty';
 import '../../operators/not';
 import '../../connectors';
-
-export type FieldThatCallback = (context : AssertionBuilder<any>) => Result;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -16,11 +14,11 @@ export type FieldThatCallback = (context : AssertionBuilder<any>) => Result;
 export class FieldThatAssertion implements Assertion {
   constructor(
     private fieldName : string,
-    private callback : FieldThatCallback,
+    private innerAssert : InnerExpression,
   ) {
   }
   assert(testedValue : any, varName : string, check : CheckFunction) {
-    const { fieldName, callback } = this;
+    const { fieldName, innerAssert } = this;
 
     if (!check(testedValue, varName).is.not.Empty.success) {
       return {
@@ -30,13 +28,13 @@ export class FieldThatAssertion implements Assertion {
         get message() {
           const wrapper = new NoObject<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}.${fieldName}`);
-          return callback(newBuilder).message;
+          return innerAssert(newBuilder).message;
         },
       };
     }
 
     const newBuilder = check(testedValue[fieldName], `${varName}.${fieldName}`);
-    return callback(newBuilder);
+    return innerAssert(newBuilder);
   }
 }
 
@@ -55,7 +53,7 @@ export namespace FieldThatAssertion {
     );
     nodsl.check(
       typeof args[1] === 'function',
-      'callback must be a function (got ', (typeof args[1]), ')',
+      'assert must be a function (got ', (typeof args[1]), ')',
     );
 
     return new FieldThatAssertion(args[0], args[1]);

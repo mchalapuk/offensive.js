@@ -1,13 +1,11 @@
 
 import { Assertion, CheckFunction, Result, Message, BinaryOperator } from '../../model';
-import { AssertionBuilder } from '../../Builder';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
+import { InnerExpression } from '../../Builder';
 
 import '../anArray';
 import '../../connectors';
-
-export type AllElemsCallback = (context : AssertionBuilder<any>) => Result;
 
 let objectNumber = 0;
 
@@ -16,12 +14,12 @@ let objectNumber = 0;
  */
 export class AllElementsAssertion implements Assertion {
   constructor(
-    private callback : AllElemsCallback,
+    private innerAssert : InnerExpression,
   ) {
   }
 
   assert(testedValue : any, varName : string, check : CheckFunction) : Result {
-    const { callback } = this;
+    const { innerAssert } = this;
 
     // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.
     if (!check(testedValue, varName).is.anArray.success) {
@@ -32,7 +30,7 @@ export class AllElementsAssertion implements Assertion {
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
           const newBuilder = check(wrapper.cast(), `${varName}[0]`);
-          return callback(newBuilder).message;
+          return innerAssert(newBuilder).message;
         },
       }
     }
@@ -48,7 +46,7 @@ export class AllElementsAssertion implements Assertion {
         return results;
       }
       return results = (testedValue as any[])
-        .map((elem, i) => callback(check(elem, `${varName}[${i}]`)))
+        .map((elem, i) => innerAssert(check(elem, `${varName}[${i}]`)))
       ;
     }
 
@@ -102,7 +100,7 @@ export namespace AllElementsAssertion {
     );
     nodsl.check(
       typeof args[0] === 'function',
-      'callback must be a function (got ', (typeof args[0]), ')',
+      'assert must be a function (got ', (typeof args[0]), ')',
     );
 
     return new AllElementsAssertion(args[0]);

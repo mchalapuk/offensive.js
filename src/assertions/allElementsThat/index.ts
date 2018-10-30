@@ -1,14 +1,14 @@
 
 import Registry from '../../Registry';
-import { AllElementsAssertion, AllElemsCallback } from './AllElementsAssertion';
+import { Result } from '../../model';
+import { AllElementsAssertion } from './AllElementsAssertion';
 
 import * as anArray from '../anArray';
 import * as connectors from '../../connectors';
 
 declare module "../../Builder" {
-
   /**
-   * @assertion .allElementsThat<E>(callback : (context : AssertionBuilder<E>) => Result);
+   * @assertion .allElementsThat(assert : InnerExpression);
    *
    * Checks if all elements of an array satisfy an assertion
    * implemented in provided `callback`.
@@ -29,18 +29,18 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    allElementsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
-    allElementsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
-    onlyElementsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
-    onlyElementsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
-    eachElementIs(callback : AllElemsCallback) : OperatorBuilder<T>;
-    everyElementIs(callback : AllElemsCallback) : OperatorBuilder<T>;
-    allElemsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
-    allElemsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
-    onlyElemsThat(callback : AllElemsCallback) : OperatorBuilder<T>;
-    onlyElemsWhich(callback : AllElemsCallback) : OperatorBuilder<T>;
-    eachElemIs(callback : AllElemsCallback) : OperatorBuilder<T>;
-    everyElemIs(callback : AllElemsCallback) : OperatorBuilder<T>;
+    allElementsThat(assert : InnerExpression) : OperatorBuilder<T>;
+    allElementsWhich(assert : InnerExpression) : OperatorBuilder<T>;
+    onlyElementsThat(assert : InnerExpression) : OperatorBuilder<T>;
+    onlyElementsWhich(assert : InnerExpression) : OperatorBuilder<T>;
+    eachElementIs(assert : InnerExpression) : OperatorBuilder<T>;
+    everyElementIs(assert : InnerExpression) : OperatorBuilder<T>;
+    allElemsThat(assert : InnerExpression) : OperatorBuilder<T>;
+    allElemsWhich(assert : InnerExpression) : OperatorBuilder<T>;
+    onlyElemsThat(assert : InnerExpression) : OperatorBuilder<T>;
+    onlyElemsWhich(assert : InnerExpression) : OperatorBuilder<T>;
+    eachElemIs(assert : InnerExpression) : OperatorBuilder<T>;
+    everyElemIs(assert : InnerExpression) : OperatorBuilder<T>;
   }
 }
 
