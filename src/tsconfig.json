@@ -5,7 +5,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "declaration": false,
+    "declaration": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [ "ES2015.Core", "ES2016", "ES2017", ],
