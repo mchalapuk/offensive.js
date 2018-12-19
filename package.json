@@ -10,7 +10,7 @@
     "clean-build": "npm run clean && npm run build && npm run copy-config",
     "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test/harness.ts $(find -name \"${PATTERN}\")",
     "all-tests": "PATTERN='*.spec.ts' npm run test",
-    "deploy": "npm run clean-build && cd lib && npm run publish"
+    "deploy": "npm run clean-build && cd lib && npm publish"
   },
   "repository": {
     "type": "git",
