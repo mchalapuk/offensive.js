@@ -261,6 +261,7 @@ offensive.js contains following built-in assertions.
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
  1. [`.field(fieldName)`][field]
  1. [`.fieldThat(fieldName)`][field-that]
+ 1. [`.allFieldsThat(condition)`][all-fields-that]
  1. [`.method(methodName)`][method]
  1. [`.length(requiredLength)`][length]
  1. [`.oneOf(set, name)`][one-of]
@@ -511,6 +512,18 @@ Asserts that checked value has field of name **propertyName**, which satisfied
 assertion created in gived **builder**.
 ```js
 check(arg, 'arg').has.propertyThat('x', x => x.is.aNumber)();
+```
+
+[all-fields-that]: #all-fields-that-assertion
+<a id=all-fields-that-assertion></a>
+#### `.allFieldsThat(builder : FieldAssertionBuilder)`
+Asserts that:
+ 1. Checked value is not null or undefined,
+ 2. Value of each field of this object satisfies assertuin created
+   by given **builder**.
+
+```js
+check(arg, 'arg').has.allFieldsThat(field => field.is.aNumber)();
 ```
 
 [method]: #method-assertion
