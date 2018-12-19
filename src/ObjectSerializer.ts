@@ -30,19 +30,16 @@ export class ObjectSerializer {
     if (arg === null) {
       return 'null';
     }
-    if (arg instanceof Array) {
-      return `[${arg.map(this.serializeField).join(', ')}]`;
+    if (Array.isArray(arg)) {
+      return `[${arg.map(this.serializeField.bind(this)).join(', ')}]`;
     }
 
-    var keys = Object.keys(arg);
+    const keys = Object.keys(arg);
     if (keys.length === 0) {
       return '{}';
     }
 
-    var that = this;
-    function keyToString(key : string) {
-      return `${key}: ${that.serializeField(arg[key])}`;
-    }
+    const keyToString = (key : string) => `${key}: ${this.serializeField(arg[key])}`;
     return `{ ${keys.map(keyToString).join(', ')} }`;
   }
 
