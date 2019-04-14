@@ -42,7 +42,7 @@
   "homepage": "https://github.com/mchalapuk/offensive.js",
   "devDependencies": {
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.1",
+    "@types/node": "^11.13.4",
     "@types/should": "^13.0.0",
     "@types/should-sinon": "0.0.3",
     "@types/sinon": "^5.0.5",

@@ -19,6 +19,7 @@ export class BuilderFactory {
   private readonly InnerConstructor : BuilderConstructor;
 
   private currentBuilder : RuntimeBuilder | null = null;
+  private currentStack : string = '';
 
   constructor(
     private readonly assertions : object,
@@ -74,11 +75,19 @@ export class BuilderFactory {
 
   create<T>(testedValue : T, varName : string) : AssertionBuilder<T> {
     if (this.currentBuilder !== null) {
-      throw new Error(`Previous top-level assertion builder not finished (varName='${
-        this.currentBuilder._varName}'). Did you forget to invoke call operator?`);
+      throw new Error(
+        `Previous top-level assertion builder not finished (varName='${
+          this.currentBuilder._varName
+        }'). Did you forget to invoke call operator?${
+          this.currentStack
+        }`
+      );
     }
 
     this.currentBuilder = new this.Constructor(testedValue, varName);
+    if (process.env.NODE_ENV !== 'production') {
+      this.currentStack = extractStackTrace(new Error());
+    }
     return this.currentBuilder as any;
   }
 
@@ -89,4 +98,13 @@ export class BuilderFactory {
 }
 
 export default BuilderFactory;
+
+function extractStackTrace(error : Error) {
+  return '\n'+ (error.stack as string).split('\n')
+    .slice(1)
+    .map(row => `  ${row}`)
+    .concat([ 'EOS' ])
+    .join('\n')
+  ;
+}
 

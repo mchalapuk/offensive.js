@@ -8,7 +8,11 @@
     "declaration": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [ "ES2015.Core", "ES2016", "ES2017", ],
+    "lib": [
+      "ES2015.Core",
+      "ES2016",
+      "ES2017",
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "lf",
@@ -23,6 +27,7 @@
     "target": "es5",
     "types": [
       "mocha",
+      "node",
     ],
     "baseUrl": ".",
     "paths": {
