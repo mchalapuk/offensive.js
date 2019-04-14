@@ -103,9 +103,9 @@ function extractStackTrace(error : Error) {
   const stack = (error.stack as string);
 
   return '\n  TRACE OF PREVIOUS CALL:\n'+ stack.split('\n')
-    .slice(1, stack.length - 1)
+    .slice(3, 8)
+    .concat([ '  ...' ])
     .map(row => `  ${row}`)
-    .concat([ '  EOT' ])
     .join('\n')
   ;
 }
