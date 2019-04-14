@@ -100,10 +100,12 @@ export class BuilderFactory {
 export default BuilderFactory;
 
 function extractStackTrace(error : Error) {
-  return '\n'+ (error.stack as string).split('\n')
-    .slice(1)
+  const stack = (error.stack as string);
+
+  return '\n  TRACE OF PREVIOUS CALL:\n'+ stack.split('\n')
+    .slice(1, stack.length - 1)
     .map(row => `  ${row}`)
-    .concat([ 'EOS' ])
+    .concat([ '  EOT' ])
     .join('\n')
   ;
 }
