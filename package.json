@@ -4,6 +4,7 @@
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "index.js",
   "scripts": {
+    "all": "npm run clean-build && npm run all-tests",
     "clean": "rm -rf ./lib",
     "build": "cd src && tsc",
     "copy-config": "cp package* ./lib && cp *.md ./lib && cd lib && npm shrinkwrap --production",
