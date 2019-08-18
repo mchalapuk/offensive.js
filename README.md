@@ -629,6 +629,6 @@ and also at the interface of [`Registry`][registry-code] class.
 
 ## License
 
-Copyright &copy; 2016 - 2018 Maciej Chałapuk.
+Copyright &copy; 2016 - 2019 Maciej Chałapuk.
 Released under [MIT license](LICENSE).
 
