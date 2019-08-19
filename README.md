@@ -22,11 +22,10 @@ for JavaScript.
 **Why would I want it?**
 
  1. It reduces the boilerplate of writing assertion messsages to zero,
- 2. Provides very **intuitive and extensible DSL for writing assertions**,
- 3. Enables easy implementation of offensive and defensive techniques,
- 4. Low core bundle size (22.5kB minified) and a way of bundling only needed assertions,
- 5. Has zero runtime dependencies which greatly increases package security,
- 6. It's TypeScript-friendly (contains its own `.d.ts` files).
+ 1. Provides very **intuitive and extensible DSL for writing assertions**,
+ 1. Low core bundle size (22.5kB minified) and a way of bundling only needed assertions,
+ 1. Has zero runtime dependencies which greatly increases package security,
+ 1. It's TypeScript-friendly (contains its own `.d.ts` files).
 
 ## Installation
 
