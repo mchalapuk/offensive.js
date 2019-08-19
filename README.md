@@ -34,9 +34,7 @@ for JavaScript.
 npm install --save offensive
 ```
 
-## Loading
-
-### The Library
+### Loading The Library
 
 ```js
 // node-style require
@@ -46,7 +44,7 @@ const { check } = require('offensive');
 import check from 'offensive';
 ```
 
-### Assertions
+### Loading Assertions
 
 In order to minimize bundle payload, each assertion must be imported separately. It can be done during application bootup or in each file where specific assertion is used (importing an assertion multiple times is harmless).
 
