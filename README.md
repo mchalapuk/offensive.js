@@ -21,11 +21,12 @@ for JavaScript.
 
 **Why would I want it?**
 
- 1. It reduces the boilerplate of writing error messsages to zero,
- 2. Provides very intuitive and extensible DSL for writing assertions (zero learning curve),
+ 1. It reduces the boilerplate of writing assertion messsages to zero,
+ 2. Provides very intuitive and extensible DSL for writing assertions,
  3. Enables easy implementation of offensive and defensive techniques,
- 4. Has zero runtime dependencies,
- 5. Contains its own `.d.ts` files.
+ 4. Low core bundle size (22.5kB minified) and a way of bundling only needed assertions,
+ 5. Has zero runtime dependencies,
+ 6. Contains its own `.d.ts` files.
 
 ## Installation
 
@@ -33,9 +34,7 @@ for JavaScript.
 npm install --save offensive
 ```
 
-## Usage
-
-### Loading the Library
+## Loading the Library
 
 ```js
 // node-style require
@@ -44,6 +43,20 @@ const { check } = require('offensive');
 // es6-style default import
 import check from 'offensive';
 ```
+
+## Loading Assertions
+
+In order to minimize bundle payload, each assertion must be imported separately. It can be done during application bootup or in each file where specific assertion is used (importing an assertion multiple times is harmless).
+
+```js
+// node-style require
+require('offensive/assertions/aString/register');
+
+// es6-style default import
+import 'offensive/assertions/aString/register';
+```
+
+## Usage Examples
 
 ### Precondition Checks A.K.A. Offensive Programming
 
