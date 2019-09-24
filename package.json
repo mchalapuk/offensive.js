@@ -11,8 +11,8 @@
     "clean-build": "npm run clean && npm run build && npm run copy-config",
     "test": "cd src && TS_NODE_PROJECT=./tsconfig.test.json TS_NODE_FILES=1 mocha -r source-map-support/register -r ts-node/register ./test/harness.ts $(find -name \"${PATTERN}\")",
     "all-tests": "PATTERN='*.spec.ts' npm run test",
-    "prepublishOnly": "npm uninstall $(npm ls --depth=0 2>/dev/null | grep -v offensive | cut -d' ' -f2 | sed -r 's/@[^@]+$//')",
-    "deploy": "npm install && npm run clean-build && npm run all-tests && cd lib && npm publish"
+    "uninstall-dev-deps": "npm uninstall $(npm ls --depth=0 2>/dev/null | grep -v offensive | cut -d' ' -f2 | sed -r 's/@[^@]+$//')",
+    "deploy": "npm install && npm run clean-build && npm run all-tests && cd lib && npm run uninstall-dev-deps && npm publish"
   },
   "repository": {
     "type": "git",
