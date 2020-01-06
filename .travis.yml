@@ -4,7 +4,6 @@ matrix:
     - node_js: '12'
     - node_js: '10'
     - node_js: '8'
-    - node_js: '6'
 install:
   - 'npm i -g npm@latest'
   - 'npm install'
