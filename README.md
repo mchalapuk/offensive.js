@@ -264,6 +264,7 @@ offensive.js contains following built-in assertions.
  1. [`.falsy()`][falsy]
  1. [`.matches(regexp)`][matches]
  1. [`.anEmail()`][email]
+ 1. [`.anIntegerString()`][integer-string]
  1. [`.equalTo()`][equal-to]
  1. [`.exactly()`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
@@ -444,9 +445,17 @@ check(arg, 'arg').matches(/[a-z]+/)();
 [email]: #email-assertion
 <a id=email-assertion></a>
 #### `.anEmail()` aliases: `.Email`, `.email`
-Asserts that checked value fully email given **regexp**.
+Asserts that checked value is a valid email.
 ```js
 check(arg, 'arg').is.anEmail();
+```
+
+[integer-string]: #integer-string-assertion
+<a id=integer-string-assertion></a>
+#### `.anIntegerString()` aliases: `.IntegerString`, `.intString`
+Asserts that checked value is a valid string form of an integer.
+```js
+check(arg, 'arg').is.anIntegerString();
 ```
 
 [equal-to]: #equal-to-assertion
