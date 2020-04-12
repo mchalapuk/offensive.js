@@ -24,6 +24,7 @@ export class BuilderFactory {
   constructor(
     private readonly assertions : object,
     private readonly operators : object,
+    private readonly errorName : string = 'ContractError',
   ) {
     const innerCheck = this.createInner.bind(this);
     const factory = this;
@@ -44,7 +45,7 @@ export class BuilderFactory {
         const result = self.__evaluate();
         if (!result.success) {
           const error = new Error(result.message.toString());
-          error.name = 'ContractError';
+          error.name = factory.errorName;
           throw error;
         }
         return testedValue;

@@ -2,19 +2,27 @@
 import { AssertionBuilder } from './Builder';
 import { BuilderFactory } from './BuilderFactory';
 import { Registry } from './Registry';
+import { CheckFunction } from './model';
 
 import './operators/register'
 import './connectors/register'
 
-const { assertions, operators } = Registry.instance.contextProto;
-const factory = new BuilderFactory(assertions, operators);
+const factories : { [_ : string] : CheckFunction } = {};
+
+export const check = withError('ContractError');
+export default check;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function check<T>(testedValue : T, varName : string) {
-  return factory.create<T>(testedValue, varName);
-}
+export function withError(errorName : string) : CheckFunction {
+  return factories[errorName] || (() => {
+    const { assertions, operators } = Registry.instance.contextProto;
+    const factory = new BuilderFactory(assertions, operators, errorName);
 
-export default check;
+    return factories[errorName] = function check<T>(testedValue : T, varName : string) {
+      return factory.create<T>(testedValue, varName);
+    };
+  })()
+}
 
