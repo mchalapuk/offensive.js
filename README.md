@@ -272,6 +272,8 @@ offensive.js contains following built-in assertions.
  1. [`.greaterThan(leftBounds)`][greater-than]
  1. [`.greaterThanOrEqualTo(leftBounds)`][greater-than-or-equal-to]
  1. [`.inRange(leftBounds, rightBounds)`][in-range]
+ 1. [`.before(rightBounds, boundsVarName?)`][before]
+ 1. [`.after(leftBounds, boundsVarName?)`][after]
  1. [`.field(fieldName)`][field]
  1. [`.fieldThat(fieldName)`][field-that]
  1. [`.allFieldsThat(condition)`][all-fields-that]
@@ -515,6 +517,22 @@ Asserts that checked value is grater than or equal to **leftBounds**
 and less than **rightBounds**.
 ```js
 check(arg, 'arg').is.inRange(0, 100)();
+```
+
+[before]: #before
+<a id=before-assertion></a>
+#### `.before(rightBounds : Date, boundsVarName ?: string)`
+Asserts that checked value a Date chronologically before **rightBounds**.
+```js
+check(arg, 'arg').is.before(new Date(0), 'Epoch')();
+```
+
+[after]: #after
+<a id=after-assertion></a>
+#### `.after(leftBounds : Date, boundsVarName ?: string)`
+Asserts that checked value a Date chronologically after **leftBounds**.
+```js
+check(arg, 'arg').is.after(new Date(0), 'Epoch')();
 ```
 
 [field]: #field-assertion
