@@ -4,6 +4,9 @@
  */
 export class ObjectSerializer {
   serializeAny(arg : any) : string {
+    if (arg instanceof Date) {
+      return this.serializeDate(arg);
+    }
     switch (typeof arg) {
       default:
         return String(arg);
@@ -26,6 +29,9 @@ export class ObjectSerializer {
     }
     if (arg instanceof NoArrayOperator) {
       return `no array operator (${this.serializeAny((arg as NoArrayOperator<any>).value)})`;
+    }
+    if (arg instanceof NoDate) {
+      return `no date (${this.serializeAny((arg as NoDate<any>).value)})`;
     }
     if (arg === null) {
       return 'null';
@@ -65,6 +71,10 @@ export class ObjectSerializer {
     }
     return '{ ... }';
   }
+
+  serializeDate(date : Date) {
+    return `Date('${date.toISOString()}')`
+  }
 }
 
 export default ObjectSerializer;
@@ -85,6 +95,18 @@ export class NoArrayOperator<T> {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class NoObject<T> {
+  constructor(public value : T) {
+  }
+
+  cast() {
+    return this as any as T;
+  }
+}
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export class NoDate<T> {
   constructor(public value : T) {
   }
 
