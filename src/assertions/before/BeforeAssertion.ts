@@ -68,7 +68,7 @@ export namespace BeforeAssertion {
       'comparedVarName must be undefined or a string (got ', (typeof args[1]), ')',
     );
 
-    return new BeforeAssertion(args[0]);
+    return new BeforeAssertion(args[0], args[1]);
   }
 }
 

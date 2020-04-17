@@ -68,7 +68,7 @@ export namespace AfterAssertion {
       'comparedVarName must be undefined or a string (got ', (typeof args[1]), ')',
     );
 
-    return new AfterAssertion(args[0]);
+    return new AfterAssertion(args[0], args[1]);
   }
 }
 
