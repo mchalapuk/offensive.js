@@ -22,14 +22,11 @@ export class OneOfAssertion<E> implements Assertion {
         return searchedSet.indexOf(testedValue) !== -1;
       },
       get message() {
-        if (requirement !== undefined) {
-          return new StandardMessage(varName, requirement, testedValue);
-        }
-        return new StandardMessage(
-          varName,
-          `be one of ${serializer.serializeObject(searchedSet)}`,
-          testedValue,
-        );
+        const message = requirement !== undefined
+          ? `be ${requirement} (${serializer.serializeObject(searchedSet)})`
+          : `be one of ${serializer.serializeObject(searchedSet)}`
+        ;
+        return new StandardMessage(varName, message, testedValue);
       },
     };
   }
