@@ -7,10 +7,10 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    oneOf<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
-    elementOf<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
-    containedIn<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
-    inSet<E>(searchedSet : E[], message ?: string) : OperatorBuilder<T>;
+    oneOf<E>(searchedSet : ReadonlyArray<E>, message ?: string) : OperatorBuilder<T>;
+    elementOf<E>(searchedSet : ReadonlyArray<E>, message ?: string) : OperatorBuilder<T>;
+    containedIn<E>(searchedSet : ReadonlyArray<E>, message ?: string) : OperatorBuilder<T>;
+    inSet<E>(searchedSet : ReadonlyArray<E>, message ?: string) : OperatorBuilder<T>;
   }
 }
 
