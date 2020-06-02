@@ -44,7 +44,7 @@
   "homepage": "https://github.com/mchalapuk/offensive.js",
   "devDependencies": {
     "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.6",
+    "@types/node": "^14.0.9",
     "@types/should": "^13.0.0",
     "@types/should-sinon": "0.0.6",
     "@types/sinon": "^9.0.4",
