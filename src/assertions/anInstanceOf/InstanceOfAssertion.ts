@@ -7,7 +7,7 @@ import { nodslArguments as nodsl } from '../../NoDsl';
  */
 export class InstanceOfAssertion<R> implements Assertion {
   constructor(
-    private requiredType : { new() : R },
+    private requiredType : { new(...args : any[]) : R },
   ) {
   }
 

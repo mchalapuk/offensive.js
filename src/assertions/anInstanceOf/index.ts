@@ -7,8 +7,8 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    anInstanceOf<R>(requiredType : { new() : R }) : OperatorBuilder<T>;
-    instanceOf<R>(requiredType : { new() : R }) : OperatorBuilder<T>;
+    anInstanceOf<R>(requiredType : { new(...args : any[]) : R }) : OperatorBuilder<T>;
+    instanceOf<R>(requiredType : { new(...args : any[]) : R }) : OperatorBuilder<T>;
   }
 }
 
