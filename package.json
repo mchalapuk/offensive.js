@@ -1,6 +1,6 @@
 {
   "name": "offensive",
-  "version": "2.7.31",
+  "version": "2.7.32",
   "description": "Fast and boilerplate-free precondition checks for javascript.",
   "main": "index.js",
   "scripts": {
