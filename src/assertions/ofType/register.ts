@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as OfTypeAssertion from '.';
+export const _ = OfTypeAssertion;
 
 /**
  * Register `.ofType` assertion in default registry.

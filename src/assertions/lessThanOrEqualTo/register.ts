@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as lessThanOrEqualTo from '.';
+export const _ = lessThanOrEqualTo;
 
 /**
  * Register `.lessThanOrEqualTo` assertion in default registry.

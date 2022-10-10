@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as and from '.';
+export const _ = and;
 
 /**
  * Register `.and` operator in default registry.

@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as exactly from '.';
+export const _ = exactly;
 
 /**
  * Register `.exactly` assertion in default registry.

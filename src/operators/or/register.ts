@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as or from '.';
+export const _ = or;
 
 /**
  * Register `.or` operator in default registry.

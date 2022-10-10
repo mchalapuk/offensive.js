@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as aNumber from '.';
+export const _ = aNumber;
 
 /**
  * Register `.aNumber` assertion in default registry.

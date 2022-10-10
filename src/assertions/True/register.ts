@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as True from '.';
+export const _ = True;
 
 /**
  * Register `.True` assertion in default registry.

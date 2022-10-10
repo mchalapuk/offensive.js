@@ -1,6 +1,7 @@
 
 import Registry from '../../Registry';
 import * as greaterThanOrEqualTo from '.';
+export const _ = greaterThanOrEqualTo;
 
 /**
  * Register `.greatedThanOrEqualTo` in default registry.
