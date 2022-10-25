@@ -38,22 +38,43 @@ npm install --save offensive
 ```js
 // node-style require
 const { check } = require('offensive');
+// or (with all assertions pre-loaded)
+const { check } = require('offensive/all');
 
 // es6-style default import
 import check from 'offensive';
+// or (with all assertions pre-loaded)
+import check from 'offensive/all';
 ```
 
 ### Loading Assertions
 
-In order to minimize bundle payload, each assertion must be imported separately. It can be done during application bootup or in each file where specific assertion is used (importing an assertion multiple times is harmless).
+In order to minimize the bundle payload, each assertion can be imported
+separately, either during application bootup or in each file where the specific
+assertions are used. The same assertion can be safely imported multiple times
+(importing an assertion second time is a no op).
 
 ```js
 // node-style require
 require('offensive/assertions/aString/register');
 
-// es6-style default import
+// es6-style import
 import 'offensive/assertions/aString/register';
 ```
+
+When using the library on server-side, the bundle size is typically of no
+concern. For those situations, the library supports loading all assertions at
+once.
+
+```js
+import 'offensive/assertions/register';
+import { check } from 'offensive';
+
+// or even shorter
+import { check } from 'offensive/all';
+```
+
+###
 
 ## Usage Examples
 
