@@ -1,20 +1,13 @@
 [travis-url]: http://travis-ci.org/mchalapuk/offensive.js
 [travis-image]: https://travis-ci.org/mchalapuk/offensive.js.svg?branch=master
 
-[david-url]: https://david-dm.org/mchalapuk/offensive.js
-[david-image]: https://david-dm.org/mchalapuk/offensive.js.svg
-
-[david-url-dev]: https://david-dm.org/mchalapuk/offensive.js?type=dev
-
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
 
 # offensive :facepunch: js
 
 [![Build Status][travis-image]][travis-url]
-[![Dependency Status][david-image]][david-url]
 [![NPM version][npm-image]][npm-url]
-[<img align=right alt="devDependency Status" src="https://david-dm.org/mchalapuk/offensive.js/dev-status.svg">][david-url-dev]
 
 > A human-readable, fast and boilerplate-free contract programming library
 for JavaScript.
