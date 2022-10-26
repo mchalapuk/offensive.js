@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction } from '../../model';
+import { Assertion, ContractFunction } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../greaterThanOrEqualTo';
@@ -17,8 +17,8 @@ export class InRangeAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, check : CheckFunction) {
-    return check(testedValue, varName)
+  assert(testedValue : any, varName : string, contract : ContractFunction) {
+    return contract(testedValue, varName)
       .is.greaterThanOrEqualTo(this.lowerBounds)
       .and.lessThan(this.upperBounds)
     ;

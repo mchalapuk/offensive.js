@@ -22,7 +22,7 @@ declare module "../../Builder" {
    *
    * ```
    * // Checks if arg is an object and contains only boolean values.
-   * check(arg, 'arg')
+   * contract(arg, 'arg')
    *   .has.allFieldsThat(elem => elem.is.aBoolean)
    * ;
    * ```

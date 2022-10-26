@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { InnerExpression } from '../../Builder';
@@ -16,23 +16,23 @@ export class ElementThatAssertion implements Assertion {
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(testedValue : any, varName : string, contract : ContractFunction) {
     const { elementIndex, innerAssert } = this;
 
-    if (!check(testedValue, varName).is.anArray.success) {
+    if (!contract(testedValue, varName).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}[${elementIndex}]`);
+          const newBuilder = contract(wrapper.cast(), `${varName}[${elementIndex}]`);
           return innerAssert(newBuilder).message;
         },
       };
     }
 
-    const newBuilder = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
+    const newBuilder = contract(testedValue[elementIndex], `${varName}[${elementIndex}]`);
     return innerAssert(newBuilder);
   }
 }

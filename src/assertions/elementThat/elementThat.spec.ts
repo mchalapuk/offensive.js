@@ -45,7 +45,7 @@ namespace fancy {
   }
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     elementThat.registerIn(registry);

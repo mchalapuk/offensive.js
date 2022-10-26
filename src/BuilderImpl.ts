@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, UnaryOperator, BinaryOperator, Result, Message } from './model';
+import { Assertion, ContractFunction, UnaryOperator, BinaryOperator, Result, Message } from './model';
 import { AssertionBuilder, OperatorBuilder, RuntimeBuilder } from './Builder';
 import { NoDsl } from './NoDsl';
 
@@ -25,7 +25,7 @@ export class BuilderImpl implements RuntimeBuilder {
     public _testedValue : any,
     public _varName : string,
     private _operatorBuilder : OperatorBuilder<any>,
-    private _check : CheckFunction,
+    private _contract : ContractFunction,
   ) {
     const pushBinaryOperator = this.__pushBinaryOperator.bind(this);
 
@@ -49,7 +49,7 @@ export class BuilderImpl implements RuntimeBuilder {
   }
 
   __pushAssertion(assertion : Assertion) {
-      this.__setResult(assertion.assert(this._testedValue, this._varName, this._check));
+      this.__setResult(assertion.assert(this._testedValue, this._varName, this._contract));
       return this._operatorBuilder;
   }
 

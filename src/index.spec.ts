@@ -22,7 +22,7 @@ function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   describe('.is.Undefined.or.Null()', () => {
     const message0 = 'arg must be undefined or null (got';
 

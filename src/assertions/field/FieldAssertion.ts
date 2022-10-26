@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
 
@@ -14,22 +14,22 @@ export class FieldAssertion implements Assertion {
     private fieldName : string,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(testedValue : any, varName : string, contract : ContractFunction) {
     const { fieldName } = this;
 
-    if (!check(testedValue, varName).is.not.Empty.success) {
+    if (!contract(testedValue, varName).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject<any>(testedValue);
-          return check(wrapper, `${varName}.${fieldName}`).is.not.Undefined.message;
+          return contract(wrapper, `${varName}.${fieldName}`).is.not.Undefined.message;
         },
       };
     }
 
-    return check(testedValue[fieldName], `${varName}.${fieldName}`).is.not.Undefined;
+    return contract(testedValue[fieldName], `${varName}.${fieldName}`).is.not.Undefined;
   }
 }
 

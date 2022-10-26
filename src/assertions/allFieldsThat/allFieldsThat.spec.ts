@@ -46,7 +46,7 @@ namespace well {
   }
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     allFieldsThat.registerIn(registry);

@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, StandardMessage } from '../../model';
 
 import '../Null';
 import '../Undefined';
@@ -10,8 +10,8 @@ import '../../operators/or';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class EmptyAssertion implements Assertion {
-  assert(testedValue : any, varName : string, check : CheckFunction) {
-    return check(testedValue, varName).is.Null.or.Undefined;
+  assert(testedValue : any, varName : string, contract : ContractFunction) {
+    return contract(testedValue, varName).is.Null.or.Undefined;
   }
 }
 

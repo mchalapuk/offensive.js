@@ -4,7 +4,7 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as greaterThanOrEqualTo from '.';
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     greaterThanOrEqualTo.registerIn(registry);

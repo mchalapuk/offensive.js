@@ -1,5 +1,5 @@
 
-import { CheckFunction } from './model';
+import { ContractFunction } from './model';
 import { AssertionBuilder, RuntimeBuilder } from './Builder';
 import BuilderImpl from './BuilderImpl';
 import ObjectSerializer from './ObjectSerializer';

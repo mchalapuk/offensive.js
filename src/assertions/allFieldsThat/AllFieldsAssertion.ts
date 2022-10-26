@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, Message, StandardMessage, BinaryOperator } from '../../model';
+import { Assertion, ContractFunction, Result, Message, StandardMessage, BinaryOperator } from '../../model';
 import { NoObject } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { InnerExpression } from '../../Builder';
@@ -19,17 +19,17 @@ export class AllFieldsAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, check : CheckFunction) : Result {
+  assert(testedValue : any, varName : string, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
-    if (!check(testedValue, varName).is.not.Empty.success) {
+    if (!contract(testedValue, varName).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}.<all-fields>`);
+          const newBuilder = contract(wrapper.cast(), `${varName}.<all-fields>`);
           return innerAssert(newBuilder).message;
         },
       };
@@ -47,7 +47,7 @@ export class AllFieldsAssertion implements Assertion {
       }
       results = [];
       for (const key in testedValue) {
-        results.push(innerAssert(check(testedValue[key], `${varName}.${key}`)));
+        results.push(innerAssert(contract(testedValue[key], `${varName}.${key}`)));
       }
       return results;
     }

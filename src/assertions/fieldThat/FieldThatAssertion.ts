@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
 import { InnerExpression } from '../../Builder';
@@ -17,23 +17,23 @@ export class FieldThatAssertion implements Assertion {
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(testedValue : any, varName : string, contract : ContractFunction) {
     const { fieldName, innerAssert } = this;
 
-    if (!check(testedValue, varName).is.not.Empty.success) {
+    if (!contract(testedValue, varName).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject<any>(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}.${fieldName}`);
+          const newBuilder = contract(wrapper.cast(), `${varName}.${fieldName}`);
           return innerAssert(newBuilder).message;
         },
       };
     }
 
-    const newBuilder = check(testedValue[fieldName], `${varName}.${fieldName}`);
+    const newBuilder = contract(testedValue[fieldName], `${varName}.${fieldName}`);
     return innerAssert(newBuilder);
   }
 }
