@@ -8,10 +8,10 @@ import '../../connectors';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class DateAssertion implements Assertion {
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
     return {
       get success() {
-        return contract(testedValue, varName).is.anInstanceOf(Date).success;
+        return contract(varName, testedValue).is.anInstanceOf(Date).success;
       },
       get message() {
         return new StandardMessage(varName, 'be a date', testedValue);

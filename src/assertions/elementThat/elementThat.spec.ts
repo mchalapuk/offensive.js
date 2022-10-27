@@ -23,7 +23,7 @@ namespace fancy {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   class FancyAssertion implements Assertion {
-    assert(testedValue : any, varName : string) {
+    assert(varName : string, testedValue : any) {
       return {
         get success() {
           return testedValue === Fancy;

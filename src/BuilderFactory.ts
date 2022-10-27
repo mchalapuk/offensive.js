@@ -7,7 +7,7 @@ import ObjectSerializer from './ObjectSerializer';
 const serializer = new ObjectSerializer();
 
 export interface BuilderConstructor {
-  new (testedValue : any, varName : string) : RuntimeBuilder;
+  new (varName : string, testedValue : any) : RuntimeBuilder;
   prototype : any;
 }
 
@@ -34,8 +34,8 @@ export class BuilderFactory {
     // to different object in each instance of the factory.
     this.Constructor = function BuilderConstructor(
       this : RuntimeBuilder,
-      testedValue : any,
       varName : string,
+      testedValue : any,
     ) {
       const self = this;
 
@@ -70,7 +70,7 @@ export class BuilderFactory {
       Object.setPrototypeOf(operatorBuilder, evaluationMethods);
       Object.setPrototypeOf(evaluationMethods, operators);
 
-      BuilderImpl.call(self, testedValue, varName, operatorBuilder, innerContract);
+      BuilderImpl.call(self, varName, testedValue, operatorBuilder, innerContract);
     } as any;
 
     this.Constructor.prototype = { ...BuilderImpl.prototype };
@@ -79,20 +79,20 @@ export class BuilderFactory {
     // Different constructor for inner checks in order to forbid invoking call operator.
     this.InnerConstructor = function InnerBuilderConstructor(
       this : RuntimeBuilder,
-      testedValue : any,
       varName : string,
+      testedValue : any,
     ) {
       function innerOperatorBuilder<T>() : T {
         throw new Error(`invoking call operator inside inner check is forbidden (${varName})`);
       }
       Object.setPrototypeOf(innerOperatorBuilder, operators);
-      BuilderImpl.call(this, testedValue, varName, innerOperatorBuilder, innerContract);
+      BuilderImpl.call(this, varName, testedValue, innerOperatorBuilder, innerContract);
     } as any;
 
     this.InnerConstructor.prototype = this.Constructor.prototype;
   }
 
-  create<T>(testedValue : T, varName : string) : AssertionBuilder<T> {
+  create<T>(varName : string, testedValue : T) : AssertionBuilder<T> {
     if (this.currentBuilder !== null) {
       throw new Error(
         `Previous top-level assertion builder not finished (varName='${
@@ -103,15 +103,15 @@ export class BuilderFactory {
       );
     }
 
-    this.currentBuilder = new this.Constructor(testedValue, varName);
+    this.currentBuilder = new this.Constructor(varName, testedValue);
     if (process.env.NODE_ENV !== 'production') {
       this.currentStack = extractStackTrace(new Error());
     }
     return this.currentBuilder as any;
   }
 
-  private createInner<T>(testedValue : T, varName : string) : AssertionBuilder<T> {
-    const context = new this.InnerConstructor(testedValue, varName);
+  private createInner<T>(varName : string, testedValue : T) : AssertionBuilder<T> {
+    const context = new this.InnerConstructor(varName, testedValue);
     return context as any;
   }
 }

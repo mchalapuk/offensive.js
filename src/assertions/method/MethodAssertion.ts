@@ -14,8 +14,8 @@ export class MethodAssertion implements Assertion {
     private methodName : string,
   ) {
   }
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
-    return contract(testedValue, varName)
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
+    return contract(varName, testedValue)
       .has.fieldThat(this.methodName, field => field.is.aFunction);
   }
 }

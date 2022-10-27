@@ -19,17 +19,17 @@ export class AllFieldsAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, contract : ContractFunction) : Result {
+  assert(varName : string, testedValue : any, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
-    if (!contract(testedValue, varName).is.not.Empty.success) {
+    if (!contract(varName, testedValue).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject(testedValue);
-          const newBuilder = contract(wrapper.cast(), `${varName}.<all-fields>`);
+          const newBuilder = contract(`${varName}.<all-fields>`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       };
@@ -47,7 +47,7 @@ export class AllFieldsAssertion implements Assertion {
       }
       results = [];
       for (const key in testedValue) {
-        results.push(innerAssert(contract(testedValue[key], `${varName}.${key}`)));
+        results.push(innerAssert(contract(`${varName}.${key}`, testedValue[key])));
       }
       return results;
     }

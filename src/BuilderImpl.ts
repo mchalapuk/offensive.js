@@ -22,8 +22,8 @@ export class BuilderImpl implements RuntimeBuilder {
   private __binary : BinaryOperator | null = null;
 
   constructor(
-    public _testedValue : any,
     public _varName : string,
+    public _testedValue : any,
     private _operatorBuilder : OperatorBuilder<any>,
     private _contract : ContractFunction,
   ) {
@@ -49,7 +49,7 @@ export class BuilderImpl implements RuntimeBuilder {
   }
 
   __pushAssertion(assertion : Assertion) {
-      this.__setResult(assertion.assert(this._testedValue, this._varName, this._contract));
+      this.__setResult(assertion.assert(this._varName, this._testedValue, this._contract));
       return this._operatorBuilder;
   }
 

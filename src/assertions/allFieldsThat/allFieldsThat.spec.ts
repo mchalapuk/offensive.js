@@ -24,7 +24,7 @@ namespace well {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   class WellAssertion implements Assertion {
-    assert(testedValue : any, varName : string) {
+    assert(varName : string, testedValue : any) {
       return {
         get success() {
           return testedValue === Well;

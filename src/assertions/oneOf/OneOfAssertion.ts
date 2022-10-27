@@ -14,7 +14,7 @@ export class OneOfAssertion<E> implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     const { searchedSet, requirement, serializer } = this;
 
     return {

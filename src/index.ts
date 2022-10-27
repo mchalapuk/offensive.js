@@ -11,7 +11,9 @@ export const contract = createContractFunction();
 export default contract;
 
 // for backwards compatibility with versions <3
-export const check = contract;
+export function check<T>(testedValue : T, varName : string) {
+  return contract(varName, testedValue);
+}
 
 /**
  * This might come in handy in a multi-threaded environment.
@@ -22,8 +24,8 @@ export function createContractFunction() : ContractFunction {
   const { assertions, operators } = Registry.instance.contextProto;
   const factory = new BuilderFactory(assertions, operators);
 
-  return function contract<T>(testedValue : T, varName : string) {
-    return factory.create<T>(testedValue, varName);
+  return function contract<T>(varName : string, testedValue : T) {
+    return factory.create<T>(varName, testedValue);
   }
 }
 

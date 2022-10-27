@@ -5,7 +5,7 @@ import { Assertion, StandardMessage } from '../../model';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class ArrayAssertion implements Assertion {
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     return {
       get success() {
         return Array.isArray(testedValue);

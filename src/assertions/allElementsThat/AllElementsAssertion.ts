@@ -18,18 +18,18 @@ export class AllElementsAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, contract : ContractFunction) : Result {
+  assert(varName : string, testedValue : any, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
     // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.
-    if (!contract(testedValue, varName).is.anArray.success) {
+    if (!contract(varName, testedValue).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
-          const newBuilder = contract(wrapper.cast(), `${varName}[0]`);
+          const newBuilder = contract(`${varName}[0]`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       }
@@ -46,7 +46,7 @@ export class AllElementsAssertion implements Assertion {
         return results;
       }
       return results = (testedValue as any[])
-        .map((elem, i) => innerAssert(contract(elem, `${varName}[${i}]`)))
+        .map((elem, i) => innerAssert(contract(`${varName}[${i}]`, elem)))
       ;
     }
 

@@ -7,10 +7,10 @@ import '../matches';
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class IntegerStringAssertion implements Assertion {
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
     return {
       get success() {
-        return contract(testedValue, varName).matches(/^-?(0|([1-9][0-9]*))$/).success;
+        return contract(varName, testedValue).matches(/^-?(0|([1-9][0-9]*))$/).success;
       },
       get message() {
         return new StandardMessage(varName, 'be an integer string', testedValue);

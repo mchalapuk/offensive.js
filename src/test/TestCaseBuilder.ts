@@ -29,7 +29,7 @@ export class TestCaseBuilder<T> {
     function throws(expectedMessage : string) {
       it(`should throw Error('${expectedMessage}')`, () => {
         try {
-          const context = builder.factory.create(arg, 'arg');
+          const context = builder.factory.create('arg', arg);
           runTestCase(context);
 
         } catch (e) {
@@ -55,7 +55,7 @@ export class TestCaseBuilder<T> {
 
     function returns(expectedMessage : string | null) {
       it(`should return '${expectedMessage}'`, () => {
-        const context = builder.factory.create(arg, 'arg');
+        const context = builder.factory.create('arg', arg);
         const error = runTestCase(context);
 
         if (error !== expectedMessage) {
@@ -70,7 +70,7 @@ export class TestCaseBuilder<T> {
 
     function doesntThrow() {
       it(`should not throw when called on ${got}`, () => {
-        const context = builder.factory.create(arg, 'arg');
+        const context = builder.factory.create('arg', arg);
         const retVal = runTestCase(context);
 
         if (retVal !== arg) {

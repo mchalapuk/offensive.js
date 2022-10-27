@@ -18,7 +18,7 @@ export class AfterAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
     const { comparedDate, comparedVarName } = this;
 
     const comparedString = comparedVarName
@@ -26,7 +26,7 @@ export class AfterAssertion implements Assertion {
       : serializer.serializeDate(comparedDate)
     ;
 
-    if (!contract(testedValue, varName).is.aDate.success) {
+    if (!contract(varName, testedValue).is.aDate.success) {
       const wrapper = new NoDate(testedValue);
 
       return {

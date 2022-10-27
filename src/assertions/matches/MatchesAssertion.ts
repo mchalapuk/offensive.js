@@ -11,7 +11,7 @@ export class MatchesAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     const { regexp } = this;
 
     function flags() {

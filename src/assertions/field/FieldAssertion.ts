@@ -14,22 +14,22 @@ export class FieldAssertion implements Assertion {
     private fieldName : string,
   ) {
   }
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
     const { fieldName } = this;
 
-    if (!contract(testedValue, varName).is.not.Empty.success) {
+    if (!contract(varName, testedValue).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject<any>(testedValue);
-          return contract(wrapper, `${varName}.${fieldName}`).is.not.Undefined.message;
+          return contract(`${varName}.${fieldName}`, wrapper).is.not.Undefined.message;
         },
       };
     }
 
-    return contract(testedValue[fieldName], `${varName}.${fieldName}`).is.not.Undefined;
+    return contract(`${varName}.${fieldName}`, testedValue[fieldName]).is.not.Undefined;
   }
 }
 

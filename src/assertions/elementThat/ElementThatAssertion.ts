@@ -16,23 +16,23 @@ export class ElementThatAssertion implements Assertion {
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
     const { elementIndex, innerAssert } = this;
 
-    if (!contract(testedValue, varName).is.anArray.success) {
+    if (!contract(varName, testedValue).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
-          const newBuilder = contract(wrapper.cast(), `${varName}[${elementIndex}]`);
+          const newBuilder = contract(`${varName}[${elementIndex}]`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       };
     }
 
-    const newBuilder = contract(testedValue[elementIndex], `${varName}[${elementIndex}]`);
+    const newBuilder = contract(`${varName}[${elementIndex}]`, testedValue[elementIndex]);
     return innerAssert(newBuilder);
   }
 }

@@ -9,7 +9,7 @@ export class ConvertsToBooleanAssertion implements Assertion {
     private expectedValue : boolean,
   ) {
   }
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     const { expectedValue } = this;
 
     return {

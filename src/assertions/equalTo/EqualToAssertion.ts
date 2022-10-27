@@ -14,7 +14,7 @@ export class EqualToAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     const { comparedValue } = this;
 
     return {

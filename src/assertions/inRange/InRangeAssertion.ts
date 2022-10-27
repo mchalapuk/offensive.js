@@ -17,8 +17,8 @@ export class InRangeAssertion implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
-    return contract(testedValue, varName)
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
+    return contract(varName, testedValue)
       .is.greaterThanOrEqualTo(this.lowerBounds)
       .and.lessThan(this.upperBounds)
     ;

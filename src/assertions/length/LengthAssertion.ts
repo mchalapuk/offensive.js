@@ -13,8 +13,8 @@ export class LengthAssertion implements Assertion {
     private requiredLength : number,
   ) {
   }
-  assert(testedValue : any, varName : string, contract : ContractFunction) {
-    return contract(testedValue, varName)
+  assert(varName : string, testedValue : any, contract : ContractFunction) {
+    return contract(varName, testedValue)
       .has.fieldThat('length', len => len.is.exactly(this.requiredLength));
   }
 }

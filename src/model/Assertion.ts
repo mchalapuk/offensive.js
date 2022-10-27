@@ -2,13 +2,13 @@
 import { Result } from './Result';
 import { AssertionBuilder } from '../Builder';
 
-export type ContractFunction = <T>(testedValue : T, varName : string) => AssertionBuilder<T>;
+export type ContractFunction = <T>(varName : string, testedValue : T) => AssertionBuilder<T>;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface Assertion {
-  assert(value : any, name : string, contract : ContractFunction) : Result;
+  assert(varName : string, testedValue : any, contract : ContractFunction) : Result;
 }
 
 export namespace Assertion {

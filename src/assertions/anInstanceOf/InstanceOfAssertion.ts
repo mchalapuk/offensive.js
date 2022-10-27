@@ -11,7 +11,7 @@ export class InstanceOfAssertion<R> implements Assertion {
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : any) {
     const { requiredType } = this;
 
     return {
