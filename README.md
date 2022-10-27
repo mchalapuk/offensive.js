@@ -117,7 +117,7 @@ the error would only contain information about first failed check.
 ```js
 contract('init', init).is.anObject.throwIfUnmet();
 contract('init.x', init.x).is.aNumber.throwIfUnmet();
-contract('init.y', init.y).is.aNumber.throwIdUnmet();
+contract('init.y', init.y).is.aNumber.throwIfUnmet();
 ```
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
