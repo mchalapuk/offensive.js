@@ -7,31 +7,23 @@ import { ContractFunction } from './model';
 import './operators/register'
 import './connectors/register'
 
-export interface ContractFactory {
-  contract: ContractFunction;
-  check: ContractFunction;
-}
-
-const factories : { [_ : string] : ContractFactory } = {};
-
-export const contract = withError('ContractError').contract;
+export const contract = createContractFunction();
 export default contract;
 
 // for backwards compatibility with versions <3
 export const check = contract;
 
 /**
+ * This might come in handy in a multi-threaded environment.
+ *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function withError(errorName : string) : ContractFactory {
-  return factories[errorName] || (() => {
-    const { assertions, operators } = Registry.instance.contextProto;
-    const factory = new BuilderFactory(assertions, operators, errorName);
+export function createContractFunction() : ContractFunction {
+  const { assertions, operators } = Registry.instance.contextProto;
+  const factory = new BuilderFactory(assertions, operators);
 
-    function contract<T>(testedValue : T, varName : string) {
-      return factory.create<T>(testedValue, varName);
-    }
-    return factories[errorName] = { contract, check: contract };
-  })()
+  return function contract<T>(testedValue : T, varName : string) {
+    return factory.create<T>(testedValue, varName);
+  }
 }
 

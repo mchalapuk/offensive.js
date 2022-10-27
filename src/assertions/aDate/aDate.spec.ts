@@ -12,13 +12,15 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.aDate()', () => {
-    const message0 = `arg must be a date (got`;
+    describe('.throwIfUnmet()', () => {
+      const message0 = `arg must be a date (got`;
 
-    assertion(arg => arg.aDate())
-      .withArg(Date).throws(`${message0} function Date)`)
-      .withArg(0).throws(`${message0} 0)`)
-      .withArg(new Date()).doesntThrow()
-    ;
+      assertion(arg => arg.aDate.throwIfUnmet())
+        .withArg(Date).throws(`${message0} function Date)`)
+        .withArg(0).throws(`${message0} 0)`)
+        .withArg(new Date()).doesntThrow()
+      ;
+    });
   });
 });
 

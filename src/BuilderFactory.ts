@@ -12,6 +12,8 @@ export interface BuilderConstructor {
 }
 
 /**
+ * Beware! Here be dragons.
+ *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export class BuilderFactory {
@@ -24,9 +26,8 @@ export class BuilderFactory {
   constructor(
     private readonly assertions : object,
     private readonly operators : object,
-    private readonly errorName : string = 'ContractError',
   ) {
-    const innerCheck = this.createInner.bind(this);
+    const innerContract = this.createInner.bind(this);
     const factory = this;
 
     // Copy the BuilderImpl class in order to be able to set its prototype
@@ -38,21 +39,38 @@ export class BuilderFactory {
     ) {
       const self = this;
 
-      // In order to have a call operator (() : T) on the `OperatorBuilder`,
-      // we need to create a function and set its prototype to `OperatorBuilder.prototype`.
-      function operatorBuilder<T>() : T {
+      function throwIfUnmet<T>(errorName = 'ContractError') : T {
         factory.currentBuilder = null;
         const result = self.__evaluate();
+
         if (!result.success) {
           const error = new Error(result.message.toString());
-          error.name = factory.errorName;
+          error.name = errorName;
           throw error;
         }
         return testedValue;
       }
-      Object.setPrototypeOf(operatorBuilder, operators);
+      function getError(errorName = 'ContractError') : string | null {
+        factory.currentBuilder = null;
+        const result = self.__evaluate();
 
-      BuilderImpl.call(self, testedValue, varName, operatorBuilder, innerCheck);
+        if (result.success) {
+          return null;
+        }
+        return `${errorName}: ${result.message.toString()}`;
+      }
+
+      // Call operator left for backwards compatibility with versions <3
+      // In order to have a call operator (() : T) on the `OperatorBuilder`,
+      // we need to create a function and set its prototype to `OperatorBuilder.prototype`.
+      function operatorBuilder<T>(errorName = 'ContractError') : T {
+        return throwIfUnmet<T>(errorName);
+      }
+      const evaluationMethods = { throwIfUnmet, getError };
+      Object.setPrototypeOf(operatorBuilder, evaluationMethods);
+      Object.setPrototypeOf(evaluationMethods, operators);
+
+      BuilderImpl.call(self, testedValue, varName, operatorBuilder, innerContract);
     } as any;
 
     this.Constructor.prototype = { ...BuilderImpl.prototype };
@@ -68,7 +86,7 @@ export class BuilderFactory {
         throw new Error(`invoking call operator inside inner check is forbidden (${varName})`);
       }
       Object.setPrototypeOf(innerOperatorBuilder, operators);
-      BuilderImpl.call(this, testedValue, varName, innerOperatorBuilder, innerCheck);
+      BuilderImpl.call(this, testedValue, varName, innerOperatorBuilder, innerContract);
     } as any;
 
     this.InnerConstructor.prototype = this.Constructor.prototype;

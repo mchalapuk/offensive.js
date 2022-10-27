@@ -12,16 +12,18 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.Empty()', () => {
-    const message0 = 'arg must be null or undefined (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg must be null or undefined (got';
 
-    assertion(arg => arg.Empty())
-      .withArg(null).doesntThrow()
-      .withArg(undefined).doesntThrow()
-      .withArg(true).throws(`${message0} true)`)
-      .withArg(false).throws(`${message0} false)`)
-      .withArg({}).throws(`${message0} {})`)
-      .withArg([]).throws(`${message0} [])`)
-    ;
+      assertion(arg => arg.Empty.throwIfUnmet())
+        .withArg(null).doesntThrow()
+        .withArg(undefined).doesntThrow()
+        .withArg(true).throws(`${message0} true)`)
+        .withArg(false).throws(`${message0} false)`)
+        .withArg({}).throws(`${message0} {})`)
+        .withArg([]).throws(`${message0} [])`)
+      ;
+    });
   });
 });
 

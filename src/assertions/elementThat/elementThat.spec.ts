@@ -54,16 +54,18 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.elementThat(1, elem => elem.fancy)', () => {
-    const message0 = 'arg[1] must be fancy (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg[1] must be fancy (got';
 
-    assertion(arg => arg.elementThat(1, elem => elem.fancy)())
-      .withArg(null).throws(`${message0} no array operator (null))`)
-      .withArg(true).throws(`${message0} no array operator (true))`)
-      .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([]).throws(`${message0} undefined)`)
-      .withArg([0, 1]).throws(`${message0} 1)`)
-      .withArg([0, Fancy]).doesntThrow()
-    ;
+      assertion(arg => arg.elementThat(1, elem => elem.fancy).throwIfUnmet())
+        .withArg(null).throws(`${message0} no array operator (null))`)
+        .withArg(true).throws(`${message0} no array operator (true))`)
+        .withArg({}).throws(`${message0} no array operator ({}))`)
+        .withArg([]).throws(`${message0} undefined)`)
+        .withArg([0, 1]).throws(`${message0} 1)`)
+        .withArg([0, Fancy]).doesntThrow()
+      ;
+    });
   });
 });
 

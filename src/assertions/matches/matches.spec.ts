@@ -12,15 +12,17 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.matches(/^\\w+$/gim)', () => {
-    const message0 = 'arg must match /^\\w+$/gim (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg must match /^\\w+$/gim (got';
 
-    assertion(arg => arg.matches(/^\w+$/gim)())
-      .withArg(-1).throws(`${message0} -1)`)
-      .withArg({}).throws(`${message0} {})`)
-      .withArg('').throws(`${message0} '')`)
-      .withArg('π').throws(`${message0} 'π')`)
-      .withArg('piano').doesntThrow()
-    ;
+      assertion(arg => arg.matches(/^\w+$/gim).throwIfUnmet())
+        .withArg(-1).throws(`${message0} -1)`)
+        .withArg({}).throws(`${message0} {})`)
+        .withArg('').throws(`${message0} '')`)
+        .withArg('π').throws(`${message0} 'π')`)
+        .withArg('piano').doesntThrow()
+      ;
+    });
   });
 });
 

@@ -11,7 +11,9 @@ export interface AssertionBuilder<T> extends ConnectorBuilder {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface OperatorBuilder<T> extends Result, ConnectorBuilder {
-  () : T;
+  (errorName ?: string) : T;
+  throwIfUnmet(errorName ?: string) : T;
+  getError(errorName ?: string) : string | null;
 }
 
 /**

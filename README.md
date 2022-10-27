@@ -93,7 +93,7 @@ class Point2D {
     contract(init, 'init')
       .has.fieldThat('x', x => x.is.aNumber)
       .and.fieldThat('y', y => y.is.aNumber)
-      ();
+      .throwIfUnmet();
     this.x = init.x;
     this.y = init.y;
   }
@@ -115,9 +115,9 @@ Alternatively, above contract could be implemented using multiple checks, but
 the error would only contain information about first failed check.
 
 ```js
-contract(init, 'init').is.anObject();
-contract(init.x, 'init.x').is.aNumber();
-contract(init.y, 'init.y').is.aNumber();
+contract(init, 'init').is.anObject.throwIfUnmet();
+contract(init.x, 'init.x').is.aNumber.throwIfUnmet();
+contract(init.y, 'init.y').is.aNumber.throwIdUnmet();
 ```
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
@@ -155,49 +155,18 @@ app.use(bodyParser.json());
 
 // A simple ping service which reflects messages sent to it.
 app.post('/ping', function (req, res, next) {
-  try {
-    // Contract is satisfied if body has a message which is a string
-    // (.propertyThat is an alias of .fieldThat assertion)
-    contract(req.body, 'req.body')
-      .contains.propertyThat('message', message => message.is.aString)
-      ();
-
-    const { message } = body;
-    res.json({ message });
-
-  } catch (e) {
-    // In case contract is not satisfied, an instance
-    // of ContractError will be passed to next middleware.
-    next(e);
+  // Contract is satisfied if body has a message which is a string
+  // (.propertyThat is an alias of .fieldThat assertion)
+  const error = contract(req.body, 'req.body')
+    .contains.propertyThat('message', message => message.is.aString)
+    .getError();
+  if (error) {
+    res.status(400).json({ error });
+    return;
   }
-});
 
-// Error handling middleware.
-app.use(function (err, req, res, next) {
-
-  // Failed offensive.js assertions can be easily differentiated
-  // from other errors by checking error name.
-  switch (err.name) {
-    case 'ContractError':
-      // In case its an assertion from offensive.js
-      // HTTP status which indicates a client error is apropriate.
-      res.status(400);
-      // Could also be HTTP 412 Precondition Failed
-      // in case there's a need of being more specific.
-
-      // It's safe to reveil error message in response
-      // as it doesn't contain information about the contract
-      // and not about the implementation.
-      const { name, message } = err;
-      res.json({ error: `${name}: ${message}` });
-
-      break;
-    default:
-      // Any other error will result in HTTP 500 Internal Server Error.
-      res.status(500);
-      res.json({ 'error': 'InternalServerError: ${err.name}' });
-      break;
-  }
+  const { message } = body;
+  res.json({ message });
 });
 ```
 
@@ -211,7 +180,8 @@ from the server.
 **Table of Contents**
 
 1. [Contract Function][contract-function]
-1. [Call Operator][call-operator]
+1. [.throwIfUnmet()][throw-if-unmet]
+1. [.getError()][get-error]
 1. [Assertions][assertions]
 1. [Boolean Operators][operators]
 
@@ -233,25 +203,48 @@ import contract from 'offensive';
 contract(arg, 'arg')...
 ```
 
-[call-operator]: #call-operator
-### Call Operator
+[throw-if-unmet]: #throw-if-unmet
+<a id=throw-if-unmet></a>
+### .throwIfUnmet()
 ```js
 interface AssertionBuilder<T> {
-  () : T;
+  throwIfUnmet(errorName?: string = 'ContractError') : T;
 }
 ```
 Executes built assert expression. Returns **testedValue** if assertion succeeds.
-Throws `ContractError` in case it fails.
+Throws `ContractError` in case it fails. intended for offensive programming.
 ```js
 import 'offensive/assertions/length';
 import contract from 'offensive';
 
 contract(arg, 'arg')
   .has.length(10)
-  (); // <- executes built assert expression
+  .throwIfUnmet(); // <- executes built assert expression
 ```
-**NOTE: Assertion will not be run unless call operator is invoked.**
+**NOTE: Assertion will not be run unless this method or `.getError()` is invoked.**
 
+[get-error]: #get-error
+<a id=get-error></a>
+### .getError()
+```js
+interface AssertionBuilder<T> {
+  getError(errorName?: string = 'ContractError') : string | null;
+}
+```
+Executes built assert expression. Returns error message if assertion fails.
+Returns `null` in case it succeeds. Intended for defensive programming.
+
+**NOTE: Assertion will not be run unless this method or `.throwIfUnmet()` is invoked.**
+
+```js
+import 'offensive/assertions/length';
+import contract from 'offensive';
+
+const error = contract(arg, 'arg')
+  .has.length(10)
+  .getError(); // <- executes built assert expression
+```
+**NOTE: Assertion will not be run unless this method or `.getError()` is invoked.**
 [assertions]: #assertions
 ### Assertions
 

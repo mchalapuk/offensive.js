@@ -12,13 +12,15 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.method(\'toString\')', () => {
-    const message0 = 'arg.toString must be a function (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg.toString must be a function (got';
 
-    assertion(arg => arg.method('toString')())
-      .withArg(undefined).throws(`${message0} no object (undefined))`)
-      .withArg(null).throws(`${message0} no object (null))`)
-      .withArg({ toString() {} }).doesntThrow()
-    ;
+      assertion(arg => arg.method('toString').throwIfUnmet())
+        .withArg(undefined).throws(`${message0} no object (undefined))`)
+        .withArg(null).throws(`${message0} no object (null))`)
+        .withArg({ toString() {} }).doesntThrow()
+      ;
+    });
   });
 });
 

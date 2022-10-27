@@ -12,16 +12,18 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.oneOf([0, \'a\', true])', () => {
-    const message0 = 'arg must be one of [0, \'a\', true] (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg must be one of [0, \'a\', true] (got';
 
-    assertion(arg => arg.oneOf([0, 'a', true])())
-      .withArg(false).throws(`${message0} false)`)
-      .withArg(-1).throws(`${message0} -1)`)
-      .withArg('b').throws(`${message0} 'b')`)
-      .withArg(true).doesntThrow()
-      .withArg('a').doesntThrow()
-      .withArg(0).doesntThrow()
-    ;
+      assertion(arg => arg.oneOf([0, 'a', true]).throwIfUnmet())
+        .withArg(false).throws(`${message0} false)`)
+        .withArg(-1).throws(`${message0} -1)`)
+        .withArg('b').throws(`${message0} 'b')`)
+        .withArg(true).doesntThrow()
+        .withArg('a').doesntThrow()
+        .withArg(0).doesntThrow()
+      ;
+    });
   });
 });
 

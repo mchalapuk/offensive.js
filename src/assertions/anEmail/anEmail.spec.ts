@@ -12,17 +12,19 @@ describe('contract(arg, \'arg\')', () => {
   }
 
   describe('.anEmail()', () => {
-    const message0 = 'arg must be an email (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg must be an email (got';
 
-    assertion(arg => arg.anEmail())
-      .withArg(null).throws(`${message0} null)`)
-      .withArg(true).throws(`${message0} true)`)
-      .withArg({}).throws(`${message0} {})`)
-      .withArg('').throws(`${message0} '')`)
-      .withArg('a@b.c').throws(`${message0} 'a@b.c')`)
-      .withArg('spam@quedex.net').doesntThrow()
-      .withArg('satoshi@quedex.exchange').doesntThrow()
-    ;
+      assertion(arg => arg.anEmail.throwIfUnmet())
+        .withArg(null).throws(`${message0} null)`)
+        .withArg(true).throws(`${message0} true)`)
+        .withArg({}).throws(`${message0} {})`)
+        .withArg('').throws(`${message0} '')`)
+        .withArg('a@b.c').throws(`${message0} 'a@b.c')`)
+        .withArg('spam@quedex.net').doesntThrow()
+        .withArg('satoshi@quedex.exchange').doesntThrow()
+      ;
+    });
   });
 });
 
