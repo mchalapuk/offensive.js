@@ -684,9 +684,9 @@ contract('arg', arg).is.aString(); // <- the same but with a call operator
 ```
 
 The call operator was the only way to execute an offensive expression until
-version 2. It initially was seen as elegant API with the least amount of
-boilerplate possible which is true for all assertions without arguments.
-Assertions with arguments have their own call operator which led to situations
+version 2. Initially, it was seen as an elegant API with the least amount of
+boilerplate possible. While this is true for all assertions without arguments,
+assertions with arguments have their own call operator. This led to situations
 where two consecutive call operators were needed in order to execute
 the expression.
 
@@ -694,7 +694,7 @@ the expression.
 import 'offensive/assertions/length';
 import contract from 'offensive';
 
-contract('arg', arg).has.length(3)(); // <- two call operators weirdness
+contract('arg', arg).has.length(3)(); // <- double call operators weirdness
 contract('arg', arg).has.length(3).throwIfUnmet(); // <- this looks much better
 ```
 
