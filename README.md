@@ -679,7 +679,7 @@ Alias for [`.throwIfUnmet()`][throw-if-unmet].
 import 'offensive/assertions/aString';
 import contract from 'offensive';
 
-contract('arg', arg).is.aString.throwIf(); // <- executes the expression
+contract('arg', arg).is.aString.throwIfUnmet(); // <- executes the expression
 contract('arg', arg).is.aString(); // <- the same but with a call operator
 ```
 
@@ -688,9 +688,7 @@ version 2. It initially was seen as elegant API with the least amount of
 boilerplate possible which is true for all assertions without arguments.
 Assertions with arguments have their own call operator which led to situations
 where two consecutive call operators were needed in order to execute
-the expression. [`.throwIfUnmet()`][throw-if-unmet] solves the problem of
-readability and adds a bit of explicitness at the cost of a little bit more
-code.
+the expression.
 
 ```js
 import 'offensive/assertions/length';
@@ -699,6 +697,10 @@ import contract from 'offensive';
 contract('arg', arg).has.length(3)(); // <- two call operators weirdness
 contract('arg', arg).has.length(3).throwIfUnmet(); // <- this looks much better
 ```
+
+[`.throwIfUnmet()`][throw-if-unmet] (introduced in version 3) solves the problem
+of readability and adds a bit of explicitness at the cost of a little bit more
+code. The call operator is still supported for backwards compatilibity.
 
 ## Extension API
 
