@@ -184,6 +184,7 @@ from the server.
 1. [.getError()][get-error]
 1. [Assertions][assertions]
 1. [Boolean Operators][operators]
+1. [Legacy Call Operator][legacy-call-operator]
 
 [contract-function]: #contract-function
 <a id=contract-function></a>
@@ -245,6 +246,7 @@ const error = contract('arg', arg)
   .getError(); // <- executes built assert expression
 ```
 **NOTE: Assertion will not be run unless this method or `.getError()` is invoked.**
+
 [assertions]: #assertions
 ### Assertions
 
@@ -661,6 +663,41 @@ contract('arg', arg).is.anObject.or.aFunction();
 Logical negation of an assertion after `.not` operator.
 ```js
 contract('arg', arg).is.not.Undefined();
+```
+
+[legacy-call-operator]: #legacy-call-operator
+<a id=legacy-call-operator></a>
+### Legacy Call Operator
+```js
+interface AssertionBuilder<T> {
+  () : T;
+}
+```
+Alias for [`.throwIfUnmet()`][throw-if-unmet].
+
+```js
+import 'offensive/assertions/aString';
+import contract from 'offensive';
+
+contract('arg', arg).is.aString.throwIf(); // <- executes the expression
+contract('arg', arg).is.aString(); // <- the same but with a call operator
+```
+
+The call operator was the only way to execute a offensive expression until
+version 2. It initially was seen as elegant API with the least amount of
+boilerplate possible which is true for all assertions without arguments.
+Assertions with arguments have their own call operator which led to situations
+where two consecutive call operators were needed in order to execute
+the expression. [`.throwIfUnmet()`][throw-if-unmet] solves the problem of
+readability and adds a bit of explicitness at the cost of a little bit more
+code.
+
+```js
+import 'offensive/assertions/length';
+import contract from 'offensive';
+
+contract('arg', arg).has.length(3)(); // <- two call operators weirdness
+contract('arg', arg).has.length(3).throwIfUnmet(); // <- this looks much better
 ```
 
 ## Extension API
