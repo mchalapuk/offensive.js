@@ -10,13 +10,13 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ElementThatAssertion implements Assertion {
+export class ElementThatAssertion<T> implements Assertion<T> {
   constructor(
     private elementIndex : number,
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { elementIndex, innerAssert } = this;
 
     if (!contract(varName, testedValue).is.anArray.success) {
@@ -32,7 +32,9 @@ export class ElementThatAssertion implements Assertion {
       };
     }
 
-    const newBuilder = contract(`${varName}[${elementIndex}]`, testedValue[elementIndex]);
+    const testedArray = testedValue as any[];
+
+    const newBuilder = contract(`${varName}[${elementIndex}]`, testedArray[elementIndex]);
     return innerAssert(newBuilder);
   }
 }

@@ -5,6 +5,7 @@ import {
   BinaryOperator,
   Result,
   Message,
+  ContractFunction,
 } from './model';
 
 import {
@@ -44,13 +45,13 @@ export class Registry {
     this.entities['success'] = this.entities['message'] = {};
   }
 
-  addAssertion(assertions : HashMap<Assertion>) {
+  addAssertion(assertions : HashMap<AssertionLike>) {
     const newAssertions = this.filterAlreadyRegistered(assertions);
 
     this.extendPrototype(
       this.contextProto.assertions,
       newAssertions,
-      function getAssertion(this : RuntimeBuilder, assertion : Assertion) {
+      function getAssertion<T>(this : RuntimeBuilder, assertion : Assertion<T>) {
         return this.__pushAssertion(assertion);
       },
     );
@@ -163,6 +164,13 @@ export class Registry {
 }
 
 export default Registry;
+
+/**
+ * @author Maciej Chałapuk (maciej@chalapuk.pl)
+ */
+export interface AssertionLike {
+  assert(varName: string, testedValue: any, contract: ContractFunction) : Result;
+}
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)

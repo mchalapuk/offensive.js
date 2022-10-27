@@ -6,8 +6,8 @@ import '../matches';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class IntegerStringAssertion implements Assertion {
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+export class IntegerStringAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
         return contract(varName, testedValue).matches(/^-?(0|([1-9][0-9]*))$/).success;

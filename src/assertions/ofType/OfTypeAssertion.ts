@@ -8,13 +8,13 @@ export type Type = 'function' | 'object' | 'string' | 'number' | 'boolean' | 'un
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class OfTypeAssertion implements Assertion {
+export class OfTypeAssertion<T> implements Assertion<T> {
   constructor(
-    private requiredType : Type,
+    private requiredType : string,
   ) {
   }
 
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { requiredType } = this;
 
     return {
@@ -30,7 +30,7 @@ export class OfTypeAssertion implements Assertion {
             return new StandardMessage(varName, `be a ${requiredType}`, testedValue);
           case 'object':
             return new StandardMessage(varName, `be an ${requiredType}`, testedValue);
-          case 'undefined':
+          default:
             return new StandardMessage(varName, `be ${requiredType}`, testedValue);
         }
       },

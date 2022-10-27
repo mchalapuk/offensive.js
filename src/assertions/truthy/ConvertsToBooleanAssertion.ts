@@ -4,12 +4,12 @@ import { Assertion, StandardMessage } from '../../model';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ConvertsToBooleanAssertion implements Assertion {
+export class ConvertsToBooleanAssertion<T> implements Assertion<T> {
   constructor(
     private expectedValue : boolean,
   ) {
   }
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { expectedValue } = this;
 
     return {

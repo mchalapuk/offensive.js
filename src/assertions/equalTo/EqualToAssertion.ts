@@ -8,13 +8,13 @@ const serializer = new ObjectSerializer();
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class EqualToAssertion implements Assertion {
+export class EqualToAssertion<T> implements Assertion<T> {
   constructor(
     private comparedValue : any,
   ) {
   }
 
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { comparedValue } = this;
 
     return {

@@ -11,13 +11,13 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class FieldThatAssertion implements Assertion {
+export class FieldThatAssertion<T> implements Assertion<T> {
   constructor(
     private fieldName : string,
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { fieldName, innerAssert } = this;
 
     if (!contract(varName, testedValue).is.not.Empty.success) {
@@ -33,7 +33,8 @@ export class FieldThatAssertion implements Assertion {
       };
     }
 
-    const newBuilder = contract(`${varName}.${fieldName}`, testedValue[fieldName]);
+    const testedObject = testedValue as { [_ : string] : any };
+    const newBuilder = contract(`${varName}.${fieldName}`, testedObject[fieldName]);
     return innerAssert(newBuilder);
   }
 }

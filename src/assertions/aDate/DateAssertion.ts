@@ -7,8 +7,8 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class DateAssertion implements Assertion {
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+export class DateAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
         return contract(varName, testedValue).is.anInstanceOf(Date).success;

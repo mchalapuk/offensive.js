@@ -6,7 +6,7 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class OneOfAssertion<E> implements Assertion {
+export class OneOfAssertion<T, E> implements Assertion<T> {
   constructor(
     private serializer : ObjectSerializer,
     private searchedSet : E[],
@@ -14,12 +14,12 @@ export class OneOfAssertion<E> implements Assertion {
   ) {
   }
 
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { searchedSet, requirement, serializer } = this;
 
     return {
       get success() {
-        return searchedSet.indexOf(testedValue) !== -1;
+        return searchedSet.indexOf(testedValue as any) !== -1;
       },
       get message() {
         const message = requirement !== undefined

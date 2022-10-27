@@ -9,12 +9,12 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class MethodAssertion implements Assertion {
+export class MethodAssertion<T> implements Assertion<T> {
   constructor(
     private methodName : string,
   ) {
   }
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return contract(varName, testedValue)
       .has.fieldThat(this.methodName, field => field.is.aFunction);
   }

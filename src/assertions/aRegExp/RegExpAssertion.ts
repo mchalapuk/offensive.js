@@ -7,8 +7,8 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class RegExpAssertion implements Assertion {
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+export class RegExpAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
         return contract(varName, testedValue).is.anInstanceOf(RegExp as any).success;

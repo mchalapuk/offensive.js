@@ -13,13 +13,13 @@ let objectNumber = 0;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AllFieldsAssertion implements Assertion {
+export class AllFieldsAssertion<T> implements Assertion<T> {
   constructor(
     private innerAssert : InnerExpression,
   ) {
   }
 
-  assert(varName : string, testedValue : any, contract : ContractFunction) : Result {
+  assert(varName : string, testedValue : T, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
     if (!contract(varName, testedValue).is.not.Empty.success) {

@@ -8,8 +8,8 @@ const EMAIL_REGEXP = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class EmailAssertion implements Assertion {
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+export class EmailAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
         return contract(varName, testedValue).matches(EMAIL_REGEXP).success;

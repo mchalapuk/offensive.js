@@ -4,8 +4,8 @@ import { Assertion, StandardMessage } from '../../model';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class IntegerAssertion implements Assertion {
-  assert(varName : string, testedValue : any) {
+export class IntegerAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T) {
     return {
       get success() {
         return Number.isInteger(testedValue);

@@ -12,13 +12,13 @@ let objectNumber = 0;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AllElementsAssertion implements Assertion {
+export class AllElementsAssertion<T> implements Assertion<T> {
   constructor(
     private innerAssert : InnerExpression,
   ) {
   }
 
-  assert(varName : string, testedValue : any, contract : ContractFunction) : Result {
+  assert(varName : string, testedValue : T, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
     // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.

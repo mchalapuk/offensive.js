@@ -7,15 +7,15 @@ export type ContractFunction = <T>(varName : string, testedValue : T) => Asserti
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export interface Assertion {
-  assert(varName : string, testedValue : any, contract : ContractFunction) : Result;
+export interface Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) : Result;
 }
 
 export namespace Assertion {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  export type Factory = (args : any[]) => Assertion;
+  export type Factory = <T>(args : any[]) => Assertion<T>;
 }
 
 export default Assertion;

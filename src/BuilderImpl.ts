@@ -48,7 +48,7 @@ export class BuilderImpl implements RuntimeBuilder {
     return this.__pushAssertion(factory(args));
   }
 
-  __pushAssertion(assertion : Assertion) {
+  __pushAssertion(assertion : Assertion<any>) {
       this.__setResult(assertion.assert(this._varName, this._testedValue, this._contract));
       return this._operatorBuilder;
   }

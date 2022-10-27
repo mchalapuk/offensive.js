@@ -9,12 +9,12 @@ import '../Undefined';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class FieldAssertion implements Assertion {
+export class FieldAssertion<T> implements Assertion<T> {
   constructor(
     private fieldName : string,
   ) {
   }
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { fieldName } = this;
 
     if (!contract(varName, testedValue).is.not.Empty.success) {
@@ -29,7 +29,8 @@ export class FieldAssertion implements Assertion {
       };
     }
 
-    return contract(`${varName}.${fieldName}`, testedValue[fieldName]).is.not.Undefined;
+    const testedObject = testedValue as { [_ : string] : any };
+    return contract(`${varName}.${fieldName}`, testedObject[fieldName]).is.not.Undefined;
   }
 }
 

@@ -5,13 +5,13 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class InstanceOfAssertion<R> implements Assertion {
+export class InstanceOfAssertion<T, R> implements Assertion<T> {
   constructor(
     private requiredType : { new(...args : any[]) : R },
   ) {
   }
 
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { requiredType } = this;
 
     return {

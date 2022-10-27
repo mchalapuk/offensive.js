@@ -23,8 +23,8 @@ namespace good {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  class GoodAssertion implements Assertion {
-    assert(varName : string, testedValue : any) {
+  class GoodAssertion<T> implements Assertion<T> {
+    assert(varName : string, testedValue : T) {
       return {
         get success() {
           return testedValue === Good;

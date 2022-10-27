@@ -11,14 +11,14 @@ const serializer = new ObjectSerializer();
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AfterAssertion implements Assertion {
+export class AfterAssertion<T> implements Assertion<T> {
   constructor(
     private comparedDate : Date,
     private comparedVarName ?: string,
   ) {
   }
 
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { comparedDate, comparedVarName } = this;
 
     const comparedString = comparedVarName

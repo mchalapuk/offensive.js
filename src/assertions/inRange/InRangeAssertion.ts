@@ -10,14 +10,14 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class InRangeAssertion implements Assertion {
+export class InRangeAssertion<T> implements Assertion<T> {
   constructor(
     private lowerBounds : number,
     private upperBounds : number,
   ) {
   }
 
-  assert(varName : string, testedValue : any, contract : ContractFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return contract(varName, testedValue)
       .is.greaterThanOrEqualTo(this.lowerBounds)
       .and.lessThan(this.upperBounds)

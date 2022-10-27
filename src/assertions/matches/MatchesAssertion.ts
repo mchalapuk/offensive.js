@@ -5,13 +5,13 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class MatchesAssertion implements Assertion {
+export class MatchesAssertion<T> implements Assertion<T> {
   constructor(
     private regexp : RegExp,
   ) {
   }
 
-  assert(varName : string, testedValue : any) {
+  assert(varName : string, testedValue : T) {
     const { regexp } = this;
 
     function flags() {
