@@ -683,7 +683,7 @@ contract('arg', arg).is.aString.throwIfUnmet(); // <- executes the expression
 contract('arg', arg).is.aString(); // <- the same but with a call operator
 ```
 
-The call operator was the only way to execute a offensive expression until
+The call operator was the only way to execute an offensive expression until
 version 2. It initially was seen as elegant API with the least amount of
 boilerplate possible which is true for all assertions without arguments.
 Assertions with arguments have their own call operator which led to situations
