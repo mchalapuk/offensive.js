@@ -23,8 +23,8 @@ namespace well {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  class WellAssertion implements Assertion {
-    assert(testedValue : any, varName : string) {
+  class WellAssertion<T> implements Assertion<T> {
+    assert(varName : string, testedValue : T) {
       return {
         get success() {
           return testedValue === Well;
@@ -46,7 +46,7 @@ namespace well {
   }
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     allFieldsThat.registerIn(registry);
@@ -55,20 +55,22 @@ describe('check(arg, \'arg\')', () => {
   }
 
   describe('.allFieldsThat(elem => elem.well)', () => {
-    const message0 = 'arg.<all-fields> must be well (got no object (';
-    const message1a = 'arg.a must be well (got';
-    const message1b = 'and arg.b be well (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg.<all-fields> must be well (got no object (';
+      const message1a = 'arg.a must be well (got';
+      const message1b = 'and arg.b be well (got';
 
-    assertion(arg => arg.allFieldsThat(value => value.well)())
-      .withArg(null).throws(`${message0}null))`)
-      .withArg(undefined).throws(`${message0}undefined))`)
-      .withArg({ a: Ill, b: Well }).throws(`${message1a} 'ill')`)
-      .withArg({ a: Ill, b: Ill }).throws(`${message1a} 'ill') ${message1b} 'ill')`)
-      .withArg({ a: Well, b: Well }).doesntThrow()
-      .withArg({}).doesntThrow()
-      .withArg([Well, Well]).doesntThrow()
-      .withArg(true).doesntThrow()
-    ;
+      assertion(arg => arg.allFieldsThat(value => value.well).throwIfUnmet())
+        .withArg(null).throws(`${message0}null))`)
+        .withArg(undefined).throws(`${message0}undefined))`)
+        .withArg({ a: Ill, b: Well }).throws(`${message1a} 'ill')`)
+        .withArg({ a: Ill, b: Ill }).throws(`${message1a} 'ill') ${message1b} 'ill')`)
+        .withArg({ a: Well, b: Well }).doesntThrow()
+        .withArg({}).doesntThrow()
+        .withArg([Well, Well]).doesntThrow()
+        .withArg(true).doesntThrow()
+      ;
+    });
   });
 });
 

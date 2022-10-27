@@ -5,13 +5,13 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class LessThanAssertion implements Assertion {
+export class LessThanAssertion<T> implements Assertion<T> {
   constructor(
     private comparedNumber : number,
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : T) {
     const { comparedNumber } = this;
 
     return {

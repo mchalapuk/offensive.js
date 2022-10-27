@@ -21,7 +21,7 @@ declare module "../../Builder" {
    *
    * ```
    * // Checks if arg is an array and contains only boolean values.
-   * check(arg, 'arg')
+   * contract(arg, 'arg')
    *   .has.allElementsThat(elem => elem.is.aBoolean)
    * ;
    * ```

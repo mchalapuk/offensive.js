@@ -6,13 +6,13 @@ import { nodslArguments as nodsl } from '../../NoDsl';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class GreaterThanOrEqualToAssertion implements Assertion {
+export class GreaterThanOrEqualToAssertion<T> implements Assertion<T> {
   constructor(
     private comparedNumber : number,
   ) {
   }
 
-  assert(testedValue : any, varName : string) {
+  assert(varName : string, testedValue : T) {
     const { comparedNumber } = this;
 
     return {

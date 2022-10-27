@@ -4,7 +4,7 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as anObject from '.';
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     anObject.registerIn(registry);
@@ -12,15 +12,17 @@ describe('check(arg, \'arg\')', () => {
   }
 
   describe('.anObject()', () => {
-    const message0 = 'arg must be an object (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg must be an object (got';
 
-    assertion(arg => arg.anObject())
-      .withArg(undefined).throws(`${message0} undefined)`)
-      .withArg(RegExp).throws(`${message0} function RegExp)`)
-      .withArg(null).doesntThrow()
-      .withArg({}).doesntThrow()
-      .withArg(new RegExp('a')).doesntThrow()
-    ;
+      assertion(arg => arg.anObject.throwIfUnmet())
+        .withArg(undefined).throws(`${message0} undefined)`)
+        .withArg(RegExp).throws(`${message0} function RegExp)`)
+        .withArg(null).doesntThrow()
+        .withArg({}).doesntThrow()
+        .withArg(new RegExp('a')).doesntThrow()
+      ;
+    });
   });
 });
 

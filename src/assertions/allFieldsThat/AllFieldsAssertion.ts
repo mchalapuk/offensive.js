@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, Message, StandardMessage, BinaryOperator } from '../../model';
+import { Assertion, ContractFunction, Result, Message, StandardMessage, BinaryOperator } from '../../model';
 import { NoObject } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { InnerExpression } from '../../Builder';
@@ -13,23 +13,23 @@ let objectNumber = 0;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AllFieldsAssertion implements Assertion {
+export class AllFieldsAssertion<T> implements Assertion<T> {
   constructor(
     private innerAssert : InnerExpression,
   ) {
   }
 
-  assert(testedValue : any, varName : string, check : CheckFunction) : Result {
+  assert(varName : string, testedValue : T, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
-    if (!check(testedValue, varName).is.not.Empty.success) {
+    if (!contract(varName, testedValue).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}.<all-fields>`);
+          const newBuilder = contract(`${varName}.<all-fields>`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       };
@@ -47,7 +47,7 @@ export class AllFieldsAssertion implements Assertion {
       }
       results = [];
       for (const key in testedValue) {
-        results.push(innerAssert(check(testedValue[key], `${varName}.${key}`)));
+        results.push(innerAssert(contract(`${varName}.${key}`, testedValue[key])));
       }
       return results;
     }

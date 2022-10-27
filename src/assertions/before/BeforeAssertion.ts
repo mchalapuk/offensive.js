@@ -1,5 +1,5 @@
 
-import { Assertion, StandardMessage, CheckFunction } from '../../model';
+import { Assertion, StandardMessage, ContractFunction } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { ObjectSerializer, NoDate } from '../../ObjectSerializer';
 
@@ -11,14 +11,14 @@ const serializer = new ObjectSerializer();
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class BeforeAssertion implements Assertion {
+export class BeforeAssertion<T> implements Assertion<T> {
   constructor(
     private comparedDate : Date,
     private comparedVarName ?: string,
   ) {
   }
 
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { comparedDate, comparedVarName } = this;
 
     const comparedString = comparedVarName
@@ -26,7 +26,7 @@ export class BeforeAssertion implements Assertion {
       : serializer.serializeDate(comparedDate)
     ;
 
-    if (!check(testedValue, varName).is.aDate.success) {
+    if (!contract(varName, testedValue).is.aDate.success) {
       const wrapper = new NoDate(testedValue);
 
       return {

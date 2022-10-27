@@ -29,7 +29,7 @@ export class TestCaseBuilder<T> {
     function throws(expectedMessage : string) {
       it(`should throw Error('${expectedMessage}')`, () => {
         try {
-          const context = builder.factory.create(arg, 'arg');
+          const context = builder.factory.create('arg', arg);
           runTestCase(context);
 
         } catch (e) {
@@ -53,9 +53,24 @@ export class TestCaseBuilder<T> {
       return builder;
     }
 
+    function returns(expectedMessage : string | null) {
+      it(`should return '${expectedMessage}'`, () => {
+        const context = builder.factory.create('arg', arg);
+        const error = runTestCase(context);
+
+        if (error !== expectedMessage) {
+          throw new Error(
+            `Expected error message:\n    '${expectedMessage}'\n  Returned:\n${error}\n`
+          );
+        }
+      });
+
+      return builder;
+    }
+
     function doesntThrow() {
       it(`should not throw when called on ${got}`, () => {
-        const context = builder.factory.create(arg, 'arg');
+        const context = builder.factory.create('arg', arg);
         const retVal = runTestCase(context);
 
         if (retVal !== arg) {
@@ -80,6 +95,7 @@ export class TestCaseBuilder<T> {
 
     return {
       throws,
+      returns,
       doesntThrow,
     };
   }
@@ -92,6 +108,7 @@ export default TestCaseBuilder;
  */
 export interface ExpectationBuilder<T> {
   throws(expectedMessage : string) : TestCaseBuilder<T>;
+  returns(expectedMessage : string | null) : TestCaseBuilder<T>;
   doesntThrow() : TestCaseBuilder<T>;
 }
 

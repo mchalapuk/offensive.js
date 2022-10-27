@@ -23,8 +23,8 @@ namespace good {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  class GoodAssertion implements Assertion {
-    assert(testedValue : any, varName : string) {
+  class GoodAssertion<T> implements Assertion<T> {
+    assert(varName : string, testedValue : T) {
       return {
         get success() {
           return testedValue === Good;
@@ -46,7 +46,7 @@ namespace good {
   }
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     allElementsThat.registerIn(registry);
@@ -55,19 +55,21 @@ describe('check(arg, \'arg\')', () => {
   }
 
   describe('.allElementsThat(elem => elem.good)', () => {
-    const message0 = 'arg[0] must be good (got';
-    const message1a = 'arg[1] must be good (got';
-    const message1b = 'and arg[1] be good (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg[0] must be good (got';
+      const message1a = 'arg[1] must be good (got';
+      const message1b = 'and arg[1] be good (got';
 
-    assertion(arg => arg.allElementsThat(elem => elem.good)())
-      .withArg(null).throws(`${message0} no array operator (null))`)
-      .withArg(true).throws(`${message0} no array operator (true))`)
-      .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([Bad, Bad]).throws(`${message0} 'bad') ${message1b} 'bad')`)
-      .withArg([Good, Bad]).throws(`${message1a} 'bad')`)
-      .withArg([Good, Good]).doesntThrow()
-      .withArg([]).doesntThrow()
-    ;
+      assertion(arg => arg.allElementsThat(elem => elem.good).throwIfUnmet())
+        .withArg(null).throws(`${message0} no array operator (null))`)
+        .withArg(true).throws(`${message0} no array operator (true))`)
+        .withArg({}).throws(`${message0} no array operator ({}))`)
+        .withArg([Bad, Bad]).throws(`${message0} 'bad') ${message1b} 'bad')`)
+        .withArg([Good, Bad]).throws(`${message1a} 'bad')`)
+        .withArg([Good, Good]).doesntThrow()
+        .withArg([]).doesntThrow()
+      ;
+    });
   });
 });
 

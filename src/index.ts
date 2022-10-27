@@ -2,29 +2,30 @@
 import { AssertionBuilder } from './Builder';
 import { BuilderFactory } from './BuilderFactory';
 import { Registry } from './Registry';
-import { CheckFunction } from './model';
+import { ContractFunction } from './model';
 
 import './operators/register'
 import './connectors/register'
 
-const factories : { [_ : string] : { check: CheckFunction } } = {};
+export const contract = createContractFunction();
+export default contract;
 
-export const check = withError('ContractError').check;
-export default check;
+// for backwards compatibility with versions <3
+export function check<T>(testedValue : T, varName : string) {
+  return contract(varName, testedValue);
+}
 
 /**
+ * This might come in handy in a multi-threaded environment.
+ *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export function withError(errorName : string) : { check: CheckFunction } {
-  return factories[errorName] || (() => {
-    const { assertions, operators } = Registry.instance.contextProto;
-    const factory = new BuilderFactory(assertions, operators, errorName);
+export function createContractFunction() : ContractFunction {
+  const { assertions, operators } = Registry.instance.contextProto;
+  const factory = new BuilderFactory(assertions, operators);
 
-    return factories[errorName] = {
-      check: function check<T>(testedValue : T, varName : string) {
-        return factory.create<T>(testedValue, varName);
-      },
-    };
-  })()
+  return function contract<T>(varName : string, testedValue : T) {
+    return factory.create<T>(varName, testedValue);
+  }
 }
 

@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { InnerExpression } from '../../Builder';
@@ -10,29 +10,31 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class ElementThatAssertion implements Assertion {
+export class ElementThatAssertion<T> implements Assertion<T> {
   constructor(
     private elementIndex : number,
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { elementIndex, innerAssert } = this;
 
-    if (!check(testedValue, varName).is.anArray.success) {
+    if (!contract(varName, testedValue).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}[${elementIndex}]`);
+          const newBuilder = contract(`${varName}[${elementIndex}]`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       };
     }
 
-    const newBuilder = check(testedValue[elementIndex], `${varName}[${elementIndex}]`);
+    const testedArray = testedValue as any[];
+
+    const newBuilder = contract(`${varName}[${elementIndex}]`, testedArray[elementIndex]);
     return innerAssert(newBuilder);
   }
 }

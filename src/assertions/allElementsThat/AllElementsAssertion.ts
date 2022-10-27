@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, Message, BinaryOperator } from '../../model';
+import { Assertion, ContractFunction, Result, Message, BinaryOperator } from '../../model';
 import { NoArrayOperator } from '../../ObjectSerializer';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { InnerExpression } from '../../Builder';
@@ -12,24 +12,24 @@ let objectNumber = 0;
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class AllElementsAssertion implements Assertion {
+export class AllElementsAssertion<T> implements Assertion<T> {
   constructor(
     private innerAssert : InnerExpression,
   ) {
   }
 
-  assert(testedValue : any, varName : string, check : CheckFunction) : Result {
+  assert(varName : string, testedValue : T, contract : ContractFunction) : Result {
     const { innerAssert } = this;
 
     // If `testedValue` is not an array, let's just return message about `testedValue[0]` element.
-    if (!check(testedValue, varName).is.anArray.success) {
+    if (!contract(varName, testedValue).is.anArray.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoArrayOperator<any>(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}[0]`);
+          const newBuilder = contract(`${varName}[0]`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       }
@@ -46,7 +46,7 @@ export class AllElementsAssertion implements Assertion {
         return results;
       }
       return results = (testedValue as any[])
-        .map((elem, i) => innerAssert(check(elem, `${varName}[${i}]`)))
+        .map((elem, i) => innerAssert(contract(`${varName}[${i}]`, elem)))
       ;
     }
 

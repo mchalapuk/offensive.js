@@ -22,11 +22,11 @@ function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
   return new TestCaseBuilder<ReturnType>(runTestCase);
 }
 
-describe('check(arg, \'arg\')', () => {
-  describe('.is.Undefined.or.Null()', () => {
+describe('contract(arg, \'arg\')', () => {
+  describe('.is.Undefined.or.Null.throwIfUnmet()', () => {
     const message0 = 'arg must be undefined or null (got';
 
-    assertion(arg => arg.is.Undefined.or.Null())
+    assertion(arg => arg.is.Undefined.or.Null.throwIfUnmet())
       .withArg({}).throws(`${message0} {})`)
       .withArg(false).throws(`${message0} false)`)
       .withArg('a').throws(`${message0} 'a')`)
@@ -36,12 +36,12 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.anArray.with.length(2)', () => {
+  describe('.is.anArray.with.length(2).throwIfUnmet()', () => {
     const message0 = 'arg must be an array (got';
     const message1a = 'arg.length must be 2 (got';
     const message1b = 'arg.length be 2 (got';
 
-    assertion(arg => arg.is.anArray.with.length(2)())
+    assertion(arg => arg.is.anArray.with.length(2).throwIfUnmet())
       .withArg(null).throws(`${message0} null) and ${message1b} no object (null))`)
       .withArg(undefined).throws(`${message0} undefined) and ${message1b} no object (undefined))`)
       .withArg('invalid').throws(`${message0} 'invalid') and ${message1b} 7)`)
@@ -53,10 +53,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.has.length(2).or.length(4)', () => {
+  describe('.has.length(2).or.length(4).throwIfUnmet()', () => {
     const message0 = 'arg.length must be 2 or 4 (got';
 
-    assertion(arg => arg.has.length(2).or.length(4)())
+    assertion(arg => arg.has.length(2).or.length(4).throwIfUnmet())
       .withArg([]).throws(`${message0} 0)`)
       .withArg([1]).throws(`${message0} 1)`)
       .withArg([3, 3, 3]).throws(`${message0} 3)`)
@@ -65,8 +65,8 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.has.length(2).and.length(4)', () => {
-    assertion(arg => arg.has.length(2).and.length(4)())
+  describe('.has.length(2).and.length(4).throwIfUnmet()', () => {
+    assertion(arg => arg.has.length(2).and.length(4).throwIfUnmet())
       .withArg([4, 4, 4, 4]).throws('arg.length must be 2 (got 4)')
       .withArg([2, 2]).throws('arg.length must be 4 (got 2)')
     ;
@@ -85,10 +85,10 @@ describe('check(arg, \'arg\')', () => {
     ;
   });
 
-  describe('.is.aNumber.or.aString.or.aFunction()', () => {
+  describe('.is.aNumber.or.aString.or.aFunction().throwIfUnmet()', () => {
     const message0 = 'arg must be a number or a string or a function (got';
 
-    assertion(arg => arg.is.aNumber.or.aString.or.aFunction())
+    assertion(arg => arg.is.aNumber.or.aString.or.aFunction.throwIfUnmet())
       .withArg([]).throws(`${message0} [])`)
       .withArg({}).throws(`${message0} {})`)
       .withArg(null).throws(`${message0} null)`)
@@ -101,7 +101,7 @@ describe('check(arg, \'arg\')', () => {
   });
 
   describe(
-    '.has.length(2).or.property(\'hi\').or.fieldThat(\'there\', field => field.exactly(\'Jane\')',
+    '.has.length(2).or.property(\'hi\').or.fieldThat(\'there\', field => field.exactly(\'Jane\').throwIfUnmet()',
     () => {
       const message0 = 'arg.length must be 2 (got';
       const message1 = 'or arg.hi not be undefined (got';
@@ -110,7 +110,8 @@ describe('check(arg, \'arg\')', () => {
       assertion(arg => {
         return arg.has.length(2)
           .or.property('hi')
-          .or.fieldThat('there', field => field.is.exactly('Jane'))()
+          .or.fieldThat('there', field => field.is.exactly('Jane'))
+          .throwIfUnmet()
         ;
       })
         .withArg([]).throws(`${message0} 0) ${message1} undefined) ${message2} undefined)`)
@@ -123,13 +124,14 @@ describe('check(arg, \'arg\')', () => {
     },
   );
 
-  describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined', () => {
+  describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined.throwIfUnmet()', () => {
     const message0 = 'arg[0] must be a string (got'
     const message1 = 'or arg be undefined (got'
 
     assertion(arg => {
       return arg.contains.allElementsWhich(elem => elem.is.aString)
-        .or.is.Undefined()
+        .or.is.Undefined
+        .throwIfUnmet()
       ;
     })
       .withArg({}).throws(`${message0} no array operator ({})) ${message1} {})`)

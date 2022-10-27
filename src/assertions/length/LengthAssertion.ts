@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../fieldThat';
@@ -8,13 +8,13 @@ import '../exactly';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class LengthAssertion implements Assertion {
+export class LengthAssertion<T> implements Assertion<T> {
   constructor(
     private requiredLength : number,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
-    return check(testedValue, varName)
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
+    return contract(varName, testedValue)
       .has.fieldThat('length', len => len.is.exactly(this.requiredLength));
   }
 }

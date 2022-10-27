@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 
 import '../fieldThat';
@@ -9,13 +9,13 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class MethodAssertion implements Assertion {
+export class MethodAssertion<T> implements Assertion<T> {
   constructor(
     private methodName : string,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
-    return check(testedValue, varName)
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
+    return contract(varName, testedValue)
       .has.fieldThat(this.methodName, field => field.is.aFunction);
   }
 }

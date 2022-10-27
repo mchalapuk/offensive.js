@@ -22,8 +22,8 @@ namespace fancy {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
-  class FancyAssertion implements Assertion {
-    assert(testedValue : any, varName : string) {
+  class FancyAssertion<T> implements Assertion<T> {
+    assert(varName : string, testedValue : T) {
       return {
         get success() {
           return testedValue === Fancy;
@@ -45,7 +45,7 @@ namespace fancy {
   }
 }
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     elementThat.registerIn(registry);
@@ -54,16 +54,18 @@ describe('check(arg, \'arg\')', () => {
   }
 
   describe('.elementThat(1, elem => elem.fancy)', () => {
-    const message0 = 'arg[1] must be fancy (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg[1] must be fancy (got';
 
-    assertion(arg => arg.elementThat(1, elem => elem.fancy)())
-      .withArg(null).throws(`${message0} no array operator (null))`)
-      .withArg(true).throws(`${message0} no array operator (true))`)
-      .withArg({}).throws(`${message0} no array operator ({}))`)
-      .withArg([]).throws(`${message0} undefined)`)
-      .withArg([0, 1]).throws(`${message0} 1)`)
-      .withArg([0, Fancy]).doesntThrow()
-    ;
+      assertion(arg => arg.elementThat(1, elem => elem.fancy).throwIfUnmet())
+        .withArg(null).throws(`${message0} no array operator (null))`)
+        .withArg(true).throws(`${message0} no array operator (true))`)
+        .withArg({}).throws(`${message0} no array operator ({}))`)
+        .withArg([]).throws(`${message0} undefined)`)
+        .withArg([0, 1]).throws(`${message0} 1)`)
+        .withArg([0, Fancy]).doesntThrow()
+      ;
+    });
   });
 });
 

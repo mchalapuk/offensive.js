@@ -1,5 +1,5 @@
 
-import { Assertion, CheckFunction, Result, StandardMessage } from '../../model';
+import { Assertion, ContractFunction, Result, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
 import { NoObject } from '../../ObjectSerializer';
 import { InnerExpression } from '../../Builder';
@@ -11,29 +11,30 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class FieldThatAssertion implements Assertion {
+export class FieldThatAssertion<T> implements Assertion<T> {
   constructor(
     private fieldName : string,
     private innerAssert : InnerExpression,
   ) {
   }
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     const { fieldName, innerAssert } = this;
 
-    if (!check(testedValue, varName).is.not.Empty.success) {
+    if (!contract(varName, testedValue).is.not.Empty.success) {
       return {
         get success() {
           return false;
         },
         get message() {
           const wrapper = new NoObject<any>(testedValue);
-          const newBuilder = check(wrapper.cast(), `${varName}.${fieldName}`);
+          const newBuilder = contract(`${varName}.${fieldName}`, wrapper.cast());
           return innerAssert(newBuilder).message;
         },
       };
     }
 
-    const newBuilder = check(testedValue[fieldName], `${varName}.${fieldName}`);
+    const testedObject = testedValue as { [_ : string] : any };
+    const newBuilder = contract(`${varName}.${fieldName}`, testedObject[fieldName]);
     return innerAssert(newBuilder);
   }
 }

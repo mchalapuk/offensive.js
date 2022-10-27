@@ -4,7 +4,7 @@ import { TestCaseBuilder, RunFunction } from '../../test/TestCaseBuilder';
 
 import * as method from '.';
 
-describe('check(arg, \'arg\')', () => {
+describe('contract(arg, \'arg\')', () => {
   function assertion<ReturnType>(runTestCase : RunFunction<ReturnType>) {
     const registry = new Registry();
     method.registerIn(registry);
@@ -12,13 +12,15 @@ describe('check(arg, \'arg\')', () => {
   }
 
   describe('.method(\'toString\')', () => {
-    const message0 = 'arg.toString must be a function (got';
+    describe('.throwIfUnmet()', () => {
+      const message0 = 'arg.toString must be a function (got';
 
-    assertion(arg => arg.method('toString')())
-      .withArg(undefined).throws(`${message0} no object (undefined))`)
-      .withArg(null).throws(`${message0} no object (null))`)
-      .withArg({ toString() {} }).doesntThrow()
-    ;
+      assertion(arg => arg.method('toString').throwIfUnmet())
+        .withArg(undefined).throws(`${message0} no object (undefined))`)
+        .withArg(null).throws(`${message0} no object (null))`)
+        .withArg({ toString() {} }).doesntThrow()
+      ;
+    });
   });
 });
 

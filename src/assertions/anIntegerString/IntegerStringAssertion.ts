@@ -1,16 +1,16 @@
 
-import { Assertion, StandardMessage, CheckFunction } from '../../model';
+import { Assertion, StandardMessage, ContractFunction } from '../../model';
 
 import '../matches';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class IntegerStringAssertion implements Assertion {
-  assert(testedValue : any, varName : string, check : CheckFunction) {
+export class IntegerStringAssertion<T> implements Assertion<T> {
+  assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
-        return check(testedValue, varName).matches(/^-?(0|([1-9][0-9]*))$/).success;
+        return contract(varName, testedValue).matches(/^-?(0|([1-9][0-9]*))$/).success;
       },
       get message() {
         return new StandardMessage(varName, 'be an integer string', testedValue);

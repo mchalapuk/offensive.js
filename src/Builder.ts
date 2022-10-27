@@ -11,7 +11,9 @@ export interface AssertionBuilder<T> extends ConnectorBuilder {
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
 export interface OperatorBuilder<T> extends Result, ConnectorBuilder {
-  () : T;
+  (errorName ?: string) : T;
+  throwIfUnmet(errorName ?: string) : T;
+  getError(errorName ?: string) : string | null;
 }
 
 /**
@@ -26,7 +28,7 @@ export interface ConnectorBuilder {
 export interface RuntimeBuilder {
   _testedValue : any;
   _varName : string;
-  __pushAssertion(assertion : Assertion) : OperatorBuilder<any>;
+  __pushAssertion(assertion : Assertion<any>) : OperatorBuilder<any>;
   __pushAssertionFactory(factory : Assertion.Factory, args : any[]) : OperatorBuilder<any>;
   __pushUnaryOperator(operator : UnaryOperator) : this;
   __pushBinaryOperator(operator : BinaryOperator) : this;
