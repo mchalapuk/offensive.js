@@ -35,5 +35,4 @@ import "./matches/register";
 import "./method/register";
 import "./ofType/register";
 import "./oneOf/register";
-import "./register.ts/register";
 import "./truthy/register";
