@@ -6,7 +6,7 @@
   "scripts": {
     "all": "npm run clean-build && npm run all-tests",
     "clean": "rm -rf ./lib",
-    "generate": "ls -1 src/assertions | sed -E 's/^(.*)$/import \".\\/\\1\\/register\";/' > src/assertions/register.ts",
+    "generate": "ls -1 src/assertions | grep -v register | sed -E 's/^(.*)$/import \".\\/\\1\\/register\";/' > src/assertions/register.ts",
     "build": "npm run generate && cd src && tsc",
     "copy-config": "cp package* ./lib && cp *.md ./lib && cd lib && npm shrinkwrap --production",
     "clean-build": "npm run clean && npm run build && npm run copy-config",
