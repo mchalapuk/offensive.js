@@ -231,8 +231,6 @@ interface AssertionBuilder<T> {
 Executes built assert expression. Returns error message if assertion fails.
 Returns `null` in case it succeeds. Intended for defensive programming.
 
-**NOTE: Assertion will not be run unless this method or `.throwIfUnmet()` is invoked.**
-
 ```js
 import 'offensive/assertions/length';
 import contract from 'offensive';
@@ -241,7 +239,7 @@ const error = contract('arg', arg)
   .has.length(10)
   .getError(); // <- executes built assert expression
 ```
-**NOTE: Assertion will not be run unless this method or `.getError()` is invoked.**
+**NOTE: Assertion will not be run unless this method or `.throwIfUnmet()` is invoked.**
 
 [assertions]: #assertions
 ### Assertions
