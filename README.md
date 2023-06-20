@@ -1,12 +1,8 @@
-[travis-url]: http://travis-ci.org/mchalapuk/offensive.js
-[travis-image]: https://travis-ci.org/mchalapuk/offensive.js.svg?branch=master
-
 [npm-url]: https://npmjs.org/package/offensive
 [npm-image]: https://badge.fury.io/js/offensive.svg
 
 # offensive :facepunch: js
 
-[![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
 
 > A human-readable, fast and boilerplate-free contract programming library
