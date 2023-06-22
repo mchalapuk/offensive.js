@@ -7,7 +7,10 @@ import { ContractFunction } from './model';
 import './operators/register'
 import './connectors/register'
 
-export const contract = createContractFunction();
+const contractFunction = createContractFunction();
+export function contract<T>(varName: string, testedValue: T) {
+  return contractFunction(varName, testedValue);
+}
 export default contract;
 
 // for backwards compatibility with versions <3
