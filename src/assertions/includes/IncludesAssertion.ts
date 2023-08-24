@@ -1,9 +1,12 @@
 
 import { Assertion, ContractFunction, StandardMessage } from '../../model';
 import { nodslArguments as nodsl } from '../../NoDsl';
+import ObjectSerializer from '../../ObjectSerializer';
 
 import '../anArray';
 import '../../connectors';
+
+const serializer = new ObjectSerializer();
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -28,7 +31,8 @@ export class IncludesAssertion<T> implements Assertion<T> {
         return array.includes(searchElement);
       },
       get message() {
-        return new StandardMessage(varName, `include ${searchElement}`, testedValue);
+        const elem = serializer.serializeAny(searchElement);
+        return new StandardMessage(varName, `include ${elem}`, testedValue);
       },
     };
   }

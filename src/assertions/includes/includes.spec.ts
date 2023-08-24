@@ -15,7 +15,7 @@ describe('contract(arg, \'arg\')', () => {
   describe('.includes(\'test\')', () => {
     describe('.throwIfUnmet()', () => {
       const message0 = 'arg must be an array (got';
-      const message1 = 'arg must include test (got';
+      const message1 = 'arg must include \'test\' (got';
 
       assertion(arg => arg.includes('test').throwIfUnmet())
         .withArg(null).throws(`${message0} null)`)
