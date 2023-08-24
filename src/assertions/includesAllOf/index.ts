@@ -1,23 +1,23 @@
 
 import Registry from '../../Registry';
 import { Result } from '../../model';
-import { IncludesAssertion } from './IncludesAssertion';
+import { IncludesAllOfAssertion } from './IncludesAllOfAssertion';
 
 import * as anArray from '../anArray';
 import * as connectors from '../../connectors';
 
 declare module "../../Builder" {
   /**
-   * @assertion .includes(element : any);
+   * @assertion .includesAllOf(elements : any[]);
    *
-   * Checks if an array includes provided `element`.
+   * Checks if an array includes all of provided `elements`.
    *
    * ## Example
    *
    * ```
-   * // Checks if categories is an array and includes value 'functional.
+   * // Checks if categories is an array and includes value 'functional' and 'performance'.
    * contract('categories', categories)
-   *   .includes('functional')
+   *   .includesAllOf(['functional', 'performance'])
    *   .throwIfUnment()
    * ;
    * ```
@@ -25,13 +25,13 @@ declare module "../../Builder" {
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   interface AssertionBuilder<T> {
-    includes(element : any) : OperatorBuilder<T>;
-    contains(element : any) : OperatorBuilder<T>;
+    includesAllOf(elements : any[]) : OperatorBuilder<T>;
+    includesAll(elements : any[]) : OperatorBuilder<T>;
   }
 }
 
-export { IncludesAssertion };
-export default IncludesAssertion;
+export { IncludesAllOfAssertion };
+export default IncludesAllOfAssertion;
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
@@ -41,8 +41,8 @@ export function registerIn(registry : Registry) {
   connectors.registerIn(registry);
 
   registry.addAssertionFactory({
-    includes: IncludesAssertion.factory,
-    contains: IncludesAssertion.factory,
+    includesAllOf: IncludesAllOfAssertion.factory,
+    includesAll: IncludesAllOfAssertion.factory,
   });
 }
 

@@ -16,6 +16,8 @@ export class ObjectSerializer {
         return this.serializeFunction(arg as Function);
       case 'object':
         return this.serializeObject(arg);
+      case 'undefined':
+        return 'undefined';
     }
   }
 
@@ -62,6 +64,8 @@ export class ObjectSerializer {
         return this.serializeFunction(arg as Function);
       case 'object':
         return this.serializeObjectField(arg);
+      case 'undefined':
+        return 'undefined';
     }
   }
 
