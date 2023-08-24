@@ -94,10 +94,10 @@ export class BuilderFactory {
 
   create<T>(varName : string, testedValue : T) : AssertionBuilder<T> {
     if (this.currentBuilder !== null) {
-      throw new Error(
-        `Previous top-level assertion builder not finished (varName='${
+      console.error(
+        `Assertion not evaluated (varName='${
           this.currentBuilder._varName
-        }'). Did you forget to invoke call operator?${
+        }'). Did you forget to invoke .throwIfUnmet() or .getError()?${
           this.currentStack
         }`
       );
