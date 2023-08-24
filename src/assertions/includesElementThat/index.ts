@@ -29,9 +29,6 @@ declare module "../../Builder" {
     includesElement(assert : InnerExpression) : OperatorBuilder<T>;
     containsElementThat(assert : InnerExpression) : OperatorBuilder<T>;
     containsElement(assert : InnerExpression) : OperatorBuilder<T>;
-    hasElementThat(assert : InnerExpression) : OperatorBuilder<T>;
-    hasElement(assert : InnerExpression) : OperatorBuilder<T>;
-    elementThat(assert : InnerExpression) : OperatorBuilder<T>;
     oneElementThat(assert : InnerExpression) : OperatorBuilder<T>;
   }
 }
@@ -51,9 +48,6 @@ export function registerIn(registry : Registry) {
     includesElement: IncludesElementAssertion.factory,
     containsElementThat: IncludesElementAssertion.factory,
     containsElement: IncludesElementAssertion.factory,
-    hasElementThat: IncludesElementAssertion.factory,
-    hasElement: IncludesElementAssertion.factory,
-    elementThat: IncludesElementAssertion.factory,
     oneElementThat: IncludesElementAssertion.factory,
   });
 }

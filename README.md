@@ -279,7 +279,7 @@ offensive.js contains following built-in assertions.
  1. [`.before(rightBounds, boundsVarName?)`][before]
  1. [`.after(leftBounds, boundsVarName?)`][after]
  1. [`.field(fieldName)`][field]
- 1. [`.fieldThat(fieldName)`][field-that]
+ 1. [`.fieldThat(fieldName, condition)`][field-that]
  1. [`.allFieldsThat(condition)`][all-fields-that]
  1. [`.method(methodName)`][method]
  1. [`.length(requiredLength)`][length]
@@ -288,6 +288,7 @@ offensive.js contains following built-in assertions.
  1. [`.allElementsThat(assertName, condition)`][all-elements-that]
  1. [`.includes(element)`][includes]
  1. [`.includesAllOf(element)`][includes-all-of]
+ 1. [`.includesElementThat(condition)`][includes-element-that]
 
 [null]: #null-assertion
 <a id=null-assertion></a>
@@ -647,7 +648,7 @@ contract('arg', arg)
 ```
 
 [includes-all-of]: #includes-all-of-assertion
-<a id=includes-al-of-assertion></a>
+<a id=includes-all-of-assertion></a>
 #### `.includesAllOf(elements : any[])` aliases: `.includesAll`
 Asserts that:
  1. Checked value is an array,
@@ -656,6 +657,20 @@ Asserts that:
 ```js
 contract('categories', categories)
   .has.includesAlOf(['functional', 'performance'])
+  .throwIfUnmet();
+```
+
+[includes-element-that]: #includes-element-that-assertion
+<a id=includes-element-that-assertion></a>
+#### `.includesElementThat(builder: ElemAssertionBuilder)` aliases: `.includesElement`
+Asserts that:
+ 1. Checked value is an array,
+ 2. The array contains at least one element that satisfies assertion created by
+    given **builder**.
+
+```js
+contract('arg', arg)
+  .includesElementThat(elem => elem.is.anInteger)
   .throwIfUnmet();
 ```
 
