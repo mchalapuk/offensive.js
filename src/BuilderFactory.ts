@@ -7,6 +7,10 @@ import ObjectSerializer from './ObjectSerializer';
 const serializer = new ObjectSerializer();
 
 export interface BuilderConstructor {
+  new (varName : string, testedValue : any, stackTrace: string) : RuntimeBuilder;
+  prototype : any;
+}
+export interface InnerConstructor {
   new (varName : string, testedValue : any) : RuntimeBuilder;
   prototype : any;
 }
@@ -18,10 +22,7 @@ export interface BuilderConstructor {
  */
 export class BuilderFactory {
   private readonly Constructor : BuilderConstructor;
-  private readonly InnerConstructor : BuilderConstructor;
-
-  private currentBuilder : RuntimeBuilder | null = null;
-  private currentStack : string = '';
+  private readonly InnerConstructor : InnerConstructor;
 
   constructor(
     private readonly assertions : object,
@@ -36,11 +37,14 @@ export class BuilderFactory {
       this : RuntimeBuilder,
       varName : string,
       testedValue : any,
+      stackTrace: string,
     ) {
       const self = this;
+      // throw if the assertion was not evaluated synchronously
+      const timer = setTimeout(throwNotEvaluatedError(varName, stackTrace), 0);
 
       function throwIfUnmet<T>(errorName = 'ContractError') : T {
-        factory.currentBuilder = null;
+        clearTimeout(timer)
         const result = self.__evaluate();
 
         if (!result.success) {
@@ -51,7 +55,7 @@ export class BuilderFactory {
         return testedValue;
       }
       function getError(errorName = 'ContractError') : string | null {
-        factory.currentBuilder = null;
+        clearTimeout(timer)
         const result = self.__evaluate();
 
         if (result.success) {
@@ -93,21 +97,9 @@ export class BuilderFactory {
   }
 
   create<T>(varName : string, testedValue : T) : AssertionBuilder<T> {
-    if (this.currentBuilder !== null) {
-      console.error(
-        `Assertion not evaluated (varName='${
-          this.currentBuilder._varName
-        }'). Did you forget to invoke .throwIfUnmet() or .getError()?${
-          this.currentStack
-        }`
-      );
-    }
-
-    this.currentBuilder = new this.Constructor(varName, testedValue);
-    if (process.env.NODE_ENV !== 'production') {
-      this.currentStack = extractStackTrace(new Error());
-    }
-    return this.currentBuilder as any;
+    const callStack = extractStackTrace(new Error());
+    const builder = new this.Constructor(varName, testedValue, callStack);
+    return builder as any;
   }
 
   private createInner<T>(varName : string, testedValue : T) : AssertionBuilder<T> {
@@ -118,10 +110,25 @@ export class BuilderFactory {
 
 export default BuilderFactory;
 
+function throwNotEvaluatedError(varName: string, stackTrace: string) {
+  return () => {
+    throw new Error(
+      `Assertion not evaluated (varName='${
+        varName
+      }'). Did you forget to invoke .throwIfUnmet() or .getError()?${
+        stackTrace
+      }`
+    );
+  }
+}
+
 function extractStackTrace(error : Error) {
+  if (process.env.NODE_ENV !== 'production') {
+    return ""
+  }
   const stack = (error.stack as string);
 
-  return '\n  TRACE OF PREVIOUS CALL:\n'+ stack.split('\n')
+  return stack.split('\n')
     .slice(3, 8)
     .concat([ '  ...' ])
     .map(row => `  ${row}`)
