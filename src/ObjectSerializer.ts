@@ -39,6 +39,9 @@ export class ObjectSerializer {
     if (Array.isArray(arg)) {
       return `[${arg.map(this.serializeField.bind(this)).join(', ')}]`;
     }
+    if (arg.toString !== Object.prototype.toString) {
+      return arg.toString();
+    }
 
     const keys = Object.keys(arg);
     if (keys.length === 0) {
@@ -68,6 +71,9 @@ export class ObjectSerializer {
     }
     if (arg instanceof Array) {
       return '[ ... ]';
+    }
+    if (arg.toString !== Object.prototype.toString) {
+      return arg.toString();
     }
     return '{ ... }';
   }
