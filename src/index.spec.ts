@@ -124,12 +124,12 @@ describe('contract(arg, \'arg\')', () => {
     },
   );
 
-  describe('.contains.allElementsWhich(elem => elem.is.aString).or.is.Undefined.throwIfUnmet()', () => {
+  describe('.has.allElementsWhich(elem => elem.is.aString).or.is.Undefined.throwIfUnmet()', () => {
     const message0 = 'arg[0] must be a string (got'
     const message1 = 'or arg be undefined (got'
 
     assertion(arg => {
-      return arg.contains.allElementsWhich(elem => elem.is.aString)
+      return arg.has.allElementsWhich(elem => elem.is.aString)
         .or.is.Undefined
         .throwIfUnmet()
       ;

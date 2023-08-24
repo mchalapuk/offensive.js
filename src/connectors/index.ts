@@ -15,10 +15,6 @@ declare module "../Builder" {
     over : this;
     has : this;
     have : this;
-    defines : this;
-    define : this;
-    contains : this;
-    contain : this;
     precondition : this;
     postcondition : this;
     invariant : this;
@@ -37,10 +33,6 @@ export const connectors = {
   over: noop,
   has: noop,
   have: noop,
-  defines: noop,
-  define: noop,
-  contains: noop,
-  contain: noop,
   precondition: noop,
   postcondition: noop,
   invariant: noop,
