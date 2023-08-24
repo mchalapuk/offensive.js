@@ -1,12 +1,12 @@
 
 import Registry from '../../Registry';
 import * as includesElementThat from '.';
-export const _ = includesElementsThat;
+export const _ = includesElementThat;
 
 /**
- * Registers `.includesElementsThat` assertion in default registry.
+ * Registers `.includesElementThat` assertion in default registry.
  *
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-includesElementsThat.registerIn(Registry.instance);
+includesElementThat.registerIn(Registry.instance);
 
