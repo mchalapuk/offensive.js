@@ -41,6 +41,7 @@ export function registerIn(registry : Registry) {
 
   registry.addAssertionFactory({
     includes: IncludesAssertion.factory,
+    contains: IncludesAssertion.factory,
   });
 }
 

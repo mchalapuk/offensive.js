@@ -286,6 +286,7 @@ offensive.js contains following built-in assertions.
  1. [`.oneOf(set, name)`][one-of]
  1. [`.elementThat(index, assertName, condition)`][element-that]
  1. [`.allElementsThat(assertName, condition)`][all-elements-that]
+ 1. [`.includes(element)`][includes]
 
 [null]: #null-assertion
 <a id=null-assertion></a>
@@ -620,14 +621,27 @@ contract('arg', arg)
 
 [all-elements-that]: #all-elements-that-assertion
 <a id=all-elements-that-assertion></a>
-#### `.allElementThat(builder : ElemAssertionBuilder)` aliases: `.allElementsWhich`
+#### `.allElementsThat(builder : ElemAssertionBuilder)` aliases: `.allElementsWhich`
 Asserts that:
  1. Checked value is an array,
- 2. Each element of this array satisfies assertuin created by given **builder**.
+ 2. Each element of this array satisfies assertion created by given **builder**.
 
 ```js
 contract('arg', arg)
   .has.allElementsThat(elem => elem.is.anInteger)
+  .throwIfUnmet();
+```
+
+[includes]: #includes-assertion
+<a id=includes-assertion></a>
+#### `.includes(element : any)` aliases: `.contains`
+Asserts that:
+ 1. Checked value is an array,
+ 2. The array contains given **element**.
+
+```js
+contract('arg', arg)
+  .has.includes(elem)
   .throwIfUnmet();
 ```
 
