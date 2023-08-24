@@ -30,5 +30,33 @@ describe('contract(arg, \'arg\')', () => {
       ;
     });
   });
+
+  describe('.includes(null)', () => {
+    describe('.throwIfUnmet()', () => {
+      const message1 = 'arg must include null (got';
+
+      assertion(arg => arg.includes(null).throwIfUnmet())
+        .withArg([]).throws(`${message1} [])`)
+        .withArg([1, 2, 3]).throws(`${message1} [1, 2, 3])`)
+        .withArg([undefined]).throws(`${message1} [undefined])`)
+        .withArg([null]).doesntThrow()
+        .withArg([1, 'test', null, false]).doesntThrow()
+      ;
+    });
+  });
+
+  describe('.includes(undefined)', () => {
+    describe('.throwIfUnmet()', () => {
+      const message1 = 'arg must include undefined (got';
+
+      assertion(arg => arg.includes(undefined).throwIfUnmet())
+        .withArg([]).throws(`${message1} [])`)
+        .withArg([1, 2, 3]).throws(`${message1} [1, 2, 3])`)
+        .withArg([null]).throws(`${message1} [null])`)
+        .withArg([undefined]).doesntThrow()
+        .withArg([1, , 'test', null, false]).doesntThrow()
+      ;
+    });
+  });
 });
 
