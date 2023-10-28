@@ -14,6 +14,7 @@ import "./allElementsThat/register";
 import "./allFieldsThat/register";
 import "./anArray/register";
 import "./anEmail/register";
+import "./anEmptyString/register";
 import "./anInstanceOf/register";
 import "./anInteger/register";
 import "./anIntegerString/register";
