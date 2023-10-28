@@ -6,6 +6,7 @@ import "./Undefined/register";
 import "./aBoolean/register";
 import "./aDate/register";
 import "./aFunction/register";
+import "./aNonEmptyString/register";
 import "./aNumber/register";
 import "./aRegExp/register";
 import "./aString/register";

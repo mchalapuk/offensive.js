@@ -5,22 +5,23 @@ import '../aString';
 import '../length';
 import '../../connectors';
 import '../../operators/and';
+import '../../operators/not';
 
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class EmptyStringAssertion<T> implements Assertion<T> {
+export class NonEmptyStringAssertion<T> implements Assertion<T> {
   assert(varName : string, testedValue : T, contract : ContractFunction) {
     return {
       get success() {
-        return contract(varName, testedValue).is.aString.and.has.length(0).success;
+        return contract(varName, testedValue).is.aString.and.doesnt.have.length(0).success;
       },
       get message() {
-        return new StandardMessage(varName, 'be an empty string', testedValue);
+        return new StandardMessage(varName, 'be a non-empty string', testedValue);
       },
     };
   }
 }
 
-export default EmptyStringAssertion;
+export default NonEmptyStringAssertion;
 

@@ -269,6 +269,7 @@ offensive.js contains following built-in assertions.
  1. [`.matches(regexp)`][matches]
  1. [`.anEmail`][email]
  1. [`.anEmptyString`][empty-string]
+ 1. [`.aNonEmptyString`][non-empty-string]
  1. [`.anIntegerString`][integer-string]
  1. [`.equalTo`][equal-to]
  1. [`.exactly`][exactly]
@@ -462,10 +463,18 @@ contract('arg', arg).is.anEmail();
 
 [empty-string]: #empty-string-assertion
 <a id=empty-string-assertion></a>
-#### `.anEmptyString` aliases: `.anEmptyString`, `.emptyString`
+#### `.anEmptyString` aliases: `.emptyString`
 Asserts that checked value is an empty string (string of length 0).
 ```js
 contract('arg', arg).is.anEmptyString.throwIfUnmet();
+```
+
+[non-empty-string]: #non-empty-string-assertion
+<a id=non-empty-string-assertion></a>
+#### `.aNonEmptyString` aliases: `.nonEmptyString`
+Asserts that checked value is an non-empty string (string of length > 0).
+```js
+contract('arg', arg).is.aNonEmptyString.throwIfUnmet();
 ```
 
 [integer-string]: #integer-string-assertion
