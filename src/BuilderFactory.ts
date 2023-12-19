@@ -43,7 +43,7 @@ export class BuilderFactory {
       // throw if the assertion was not evaluated synchronously
       const timer = setTimeout(throwNotEvaluatedError(varName, stackTrace), 0);
 
-      function throwIfUnmet<T>(errorName = 'ContractError') : T {
+      function check<T>(errorName = 'ContractError') : T {
         clearTimeout(timer)
         const result = self.__evaluate();
 
@@ -54,6 +54,8 @@ export class BuilderFactory {
         }
         return testedValue;
       }
+      const throwIfUnmet = check
+
       function getError(errorName = 'ContractError') : string | null {
         clearTimeout(timer)
         const result = self.__evaluate();
@@ -68,9 +70,9 @@ export class BuilderFactory {
       // In order to have a call operator (() : T) on the `OperatorBuilder`,
       // we need to create a function and set its prototype to `OperatorBuilder.prototype`.
       function operatorBuilder<T>(errorName = 'ContractError') : T {
-        return throwIfUnmet<T>(errorName);
+        return check<T>(errorName);
       }
-      const evaluationMethods = { throwIfUnmet, getError };
+      const evaluationMethods = { check, throwIfUnmet, getError };
       Object.setPrototypeOf(operatorBuilder, evaluationMethods);
       Object.setPrototypeOf(evaluationMethods, operators);
 

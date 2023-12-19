@@ -89,7 +89,7 @@ class Point2D {
     contract('init', init)
       .has.fieldThat('x', x => x.is.aNumber)
       .and.fieldThat('y', y => y.is.aNumber)
-      .throwIfUnmet();
+      .check();
     this.x = init.x;
     this.y = init.y;
   }
@@ -111,9 +111,9 @@ Alternatively, above contract could be implemented using multiple checks, but
 the error would only contain information about first failed check.
 
 ```js
-contract('init', init).is.anObject.throwIfUnmet();
-contract('init.x', init.x).is.aNumber.throwIfUnmet();
-contract('init.y', init.y).is.aNumber.throwIfUnmet();
+contract('init', init).is.anObject.check();
+contract('init.x', init.x).is.aNumber.check();
+contract('init.y', init.y).is.aNumber.check();
 ```
 
 Above examples use only [`.anObject`][object], [`.aNumber`][number]
@@ -176,7 +176,7 @@ from the server.
 **Table of Contents**
 
 1. [Contract Function][contract-function]
-1. [.throwIfUnmet()][throw-if-unmet]
+1. [.check()][check]
 1. [.getError()][get-error]
 1. [Assertions][assertions]
 1. [Boolean Operators][operators]
@@ -200,12 +200,12 @@ import contract from 'offensive';
 contract('arg', arg)...
 ```
 
-[throw-if-unmet]: #throw-if-unmet
-<a id=throw-if-unmet></a>
-### .throwIfUnmet()
+[check]: #check
+<a id=check></a>
+### `.check()` aliases: `throwIfUnmet()`
 ```js
 interface AssertionBuilder<T> {
-  throwIfUnmet(errorName?: string = 'ContractError') : T;
+  check(errorName?: string = 'ContractError') : T;
 }
 ```
 Executes built assert expression. Returns **testedValue** if assertion succeeds.
@@ -216,7 +216,7 @@ import contract from 'offensive';
 
 contract('arg', arg)
   .has.length(10)
-  .throwIfUnmet(); // <- executes built assert expression
+  .check(); // <- executes built assert expression
 ```
 **NOTE: Assertion will not be run unless this method or `.getError()` is invoked.**
 
@@ -239,7 +239,7 @@ const error = contract('arg', arg)
   .has.length(10)
   .getError(); // <- executes built assert expression
 ```
-**NOTE: Assertion will not be run unless this method or `.throwIfUnmet()` is invoked.**
+**NOTE: Assertion will not be run unless this method or `.check()` is invoked.**
 
 [assertions]: #assertions
 ### Assertions
@@ -298,7 +298,7 @@ offensive.js contains following built-in assertions.
 Asserts that checked value is `null` using `===`.
 Typically used in combination with [`.not`][not] operator.
 ```js
-contract('arg', arg).is.not.Null.throwIfUnmet();
+contract('arg', arg).is.not.Null.check();
 ```
 
 [undefined]: #undefined-assertion
@@ -307,7 +307,7 @@ contract('arg', arg).is.not.Null.throwIfUnmet();
 Asserts that checked value is `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
-contract('arg', arg).is.not.Undefined.throwIfUnmet();
+contract('arg', arg).is.not.Undefined.check();
 ```
 
 [empty]: #empty-assertion
@@ -316,7 +316,7 @@ contract('arg', arg).is.not.Undefined.throwIfUnmet();
 Asserts that checked value is `null` or `undefined`.
 Typically used in combination with [`.not`][not] operator.
 ```js
-contract('arg', arg).is.not.Empty.throwIfUnmet();
+contract('arg', arg).is.not.Empty.check();
 ```
 
 [of-type]: #of-type-assertion
@@ -324,7 +324,7 @@ contract('arg', arg).is.not.Empty.throwIfUnmet();
 #### `.ofType(requiredType : string)` aliases: `.type`
 Asserts that checked value is of **requiredType** by ivoking `typeof` operator.
 ```js
-contract('arg', arg).is.ofType('boolean').throwIfUnmet();
+contract('arg', arg).is.ofType('boolean').check();
 ```
 
 [boolean]: #boolean-assertion
@@ -332,7 +332,7 @@ contract('arg', arg).is.ofType('boolean').throwIfUnmet();
 #### `.aBoolean` aliases: `.Boolean`, `.boolean`
 Asserts that checked value is a boolean by ivoking `typeof` operator.
 ```js
-contract('arg', arg).is.aBoolean.throwIfUnmet();
+contract('arg', arg).is.aBoolean.check();
 ```
 
 [number]: #number-assertion
@@ -340,7 +340,7 @@ contract('arg', arg).is.aBoolean.throwIfUnmet();
 #### `.aNumber` aliases: `.Number`, `.number`
 Asserts that checked value is a number by ivoking `typeof` operator.
 ```js
-contract('arg', arg).is.aNumber.throwIfUnmet();
+contract('arg', arg).is.aNumber.check();
 ```
 
 [integer]: #integer-assertion
@@ -348,7 +348,7 @@ contract('arg', arg).is.aNumber.throwIfUnmet();
 #### `.anInteger` aliases: `.Integer`, `.anInt`, `.int`
 Asserts that checked value is an integer by ivoking `Number.isInteger`.
 ```js
-contract('arg', arg).is.anInteger.throwIfUnmet();
+contract('arg', arg).is.anInteger.check();
 ```
 
 [string]: #string-assertion
@@ -356,7 +356,7 @@ contract('arg', arg).is.anInteger.throwIfUnmet();
 #### `.aString` aliases: `.String`, `.string`
 Asserts that checked value is a string by ivoking `typeof` operator.
 ```js
-contract('arg', arg).is.aString.throwIfUnmet();
+contract('arg', arg).is.aString.check();
 ```
 
 [object]: #object-assertion
@@ -367,7 +367,7 @@ Be wary that this will be true also for array instances and `null`.
 Use [`.anArray`][array] and [`.Null`][null] in order to test for these
 specific cases.
 ```js
-contract('arg', arg).is.anObject.throwIfUnmet();
+contract('arg', arg).is.anObject.check();
 ```
 
 [function]: #function-assertion
@@ -375,7 +375,7 @@ contract('arg', arg).is.anObject.throwIfUnmet();
 #### `.aFunction` aliases: `.Function`, `.function`
 Asserts that checked value is a function by ivoking `typeof` operator.
 ```js
-contract('arg', arg).is.aFunction.throwIfUnmet();
+contract('arg', arg).is.aFunction.check();
 ```
 
 [array]: #array-assertion
@@ -383,7 +383,7 @@ contract('arg', arg).is.aFunction.throwIfUnmet();
 #### `.anArray` aliases: `.Array`, `.array`
 Asserts that checked value is an array by invoking `Array.isArray`.
 ```js
-contract('arg', arg).is.anArray.throwIfUnmet();
+contract('arg', arg).is.anArray.check();
 ```
 
 [instance-of]: #instanceof-assertion
@@ -392,7 +392,7 @@ contract('arg', arg).is.anArray.throwIfUnmet();
 Asserts that checked value is a instance of **RequiredClass**, by
 using `instanceof` operator.
 ```js
-contract('arg', arg).is.anInstanceOf(RegExp).throwIfUnmet();
+contract('arg', arg).is.anInstanceOf(RegExp).check();
 ```
 
 [date]: #date-assertion
@@ -401,7 +401,7 @@ contract('arg', arg).is.anInstanceOf(RegExp).throwIfUnmet();
 Asserts that checked value is a instance of `Date`, by
 using `instanceof` operator.
 ```js
-contract('arg', arg).is.aDate.throwIfUnmet();
+contract('arg', arg).is.aDate.check();
 ```
 
 [regexp]: #regexp-assertion
@@ -410,7 +410,7 @@ contract('arg', arg).is.aDate.throwIfUnmet();
 Asserts that checked value is a instance of `RegExp`, by
 using `instanceof` operator.
 ```js
-contract('arg', arg).is.aRegExp.throwIfUnmet();
+contract('arg', arg).is.aRegExp.check();
 ```
 
 [true]: #true-assertion
@@ -418,7 +418,7 @@ contract('arg', arg).is.aRegExp.throwIfUnmet();
 #### `.True` aliases: `.true`
 Asserts that checked value is a boolean of value `true`.
 ```js
-contract('arg', arg).is.True.throwIfUnmet();
+contract('arg', arg).is.True.check();
 ```
 
 [false]: #false-assertion
@@ -426,7 +426,7 @@ contract('arg', arg).is.True.throwIfUnmet();
 #### `.False` aliases: `.false`
 Asserts that checked value is a boolean of value `false`.
 ```js
-contract('arg', arg).is.False.throwIfUnmet();
+contract('arg', arg).is.False.check();
 ```
 
 [truthy]: #truthy-assertion
@@ -434,7 +434,7 @@ contract('arg', arg).is.False.throwIfUnmet();
 #### `.truthy` aliases: `.Truthy`, `.truethy`, `.Truethy`
 Asserts that checked value is truthy (converts to `true`).
 ```js
-contract('arg', arg).is.truthy.throwIfUnmet();
+contract('arg', arg).is.truthy.check();
 ```
 
 [falsy]: #falsy-assertion
@@ -442,7 +442,7 @@ contract('arg', arg).is.truthy.throwIfUnmet();
 #### `.falsy` aliases: `.Falsy`, `.falsey`, `.Falsey`
 Asserts that checked value is falsy (converts to `false`).
 ```js
-contract('arg', arg).is.falsy.throwIfUnmet();
+contract('arg', arg).is.falsy.check();
 ```
 
 [matches]: #matches-assertion
@@ -450,7 +450,7 @@ contract('arg', arg).is.falsy.throwIfUnmet();
 #### `.matches(regexp : RegExp)` aliases: `.matchesRegexp`, `.matchesRegExp`
 Asserts that checked value fully matches given **regexp**.
 ```js
-contract('arg', arg).matches(/[a-z]+/).throwIfUnmet();
+contract('arg', arg).matches(/[a-z]+/).check();
 ```
 
 [email]: #email-assertion
@@ -466,7 +466,7 @@ contract('arg', arg).is.anEmail();
 #### `.anEmptyString` aliases: `.emptyString`
 Asserts that checked value is an empty string (string of length 0).
 ```js
-contract('arg', arg).is.anEmptyString.throwIfUnmet();
+contract('arg', arg).is.anEmptyString.check();
 ```
 
 [non-empty-string]: #non-empty-string-assertion
@@ -474,7 +474,7 @@ contract('arg', arg).is.anEmptyString.throwIfUnmet();
 #### `.aNonEmptyString` aliases: `.nonEmptyString`
 Asserts that checked value is an non-empty string (string of length > 0).
 ```js
-contract('arg', arg).is.aNonEmptyString.throwIfUnmet();
+contract('arg', arg).is.aNonEmptyString.check();
 ```
 
 [integer-string]: #integer-string-assertion
@@ -482,7 +482,7 @@ contract('arg', arg).is.aNonEmptyString.throwIfUnmet();
 #### `.anIntegerString` aliases: `.IntegerString`, `.intString`
 Asserts that checked value is a valid string form of an integer.
 ```js
-contract('arg', arg).is.anIntegerString.throwIfUnmet();
+contract('arg', arg).is.anIntegerString.check();
 ```
 
 [equal-to]: #equal-to-assertion
@@ -491,7 +491,7 @@ contract('arg', arg).is.anIntegerString.throwIfUnmet();
 Asserts that checked value is equal to **another**.
 Comparison is made with `==` (double equals) operator.
 ```js
-contract('arg', arg).is.equalTo(100).throwIfUnmet();
+contract('arg', arg).is.equalTo(100).check();
 ```
 
 [exactly]: #exactly-assertion
@@ -500,7 +500,7 @@ contract('arg', arg).is.equalTo(100).throwIfUnmet();
 Asserts that checked value is exactly the same as **another**.
 Comparison is made with `===` (triple equals) operator.
 ```js
-contract('arg', arg).is.exactly(instance).throwIfUnmet();
+contract('arg', arg).is.exactly(instance).check();
 ```
 
 [less-than]: #less-than-assertion
@@ -508,7 +508,7 @@ contract('arg', arg).is.exactly(instance).throwIfUnmet();
 #### `.lessThan(rightBounds : number)` aliases: `.lt`, `.less`
 Asserts that checked value is less than **rightBounds**.
 ```js
-contract('arg', arg).is.lessThan(100).throwIfUnmet();
+contract('arg', arg).is.lessThan(100).check();
 ```
 
 [less-than-or-equal-to]: #less-than-or-equal-to-assertion
@@ -516,7 +516,7 @@ contract('arg', arg).is.lessThan(100).throwIfUnmet();
 #### `.lessThanOrEqualTo(rightBounds : number)` aliases: `.lte`, `.lessThanEqual`
 Asserts that checked value is less than or equal to **rightBounds**.
 ```js
-contract('arg', arg).is.lessThanOrEqualTo(100).throwIfUnmet();
+contract('arg', arg).is.lessThanOrEqualTo(100).check();
 ```
 
 [greater-than]: #greater-than-assertion
@@ -524,7 +524,7 @@ contract('arg', arg).is.lessThanOrEqualTo(100).throwIfUnmet();
 #### `.greaterThan(leftBounds : number)` aliases: `.gt`, `.greater`
 Asserts that checked value is greater than **leftBounds**.
 ```js
-contract('arg', arg).is.greaterThan(0).throwIfUnmet();
+contract('arg', arg).is.greaterThan(0).check();
 ```
 
 [greater-than-or-equal-to]: #greater-than-or-equal-to-assertion
@@ -532,7 +532,7 @@ contract('arg', arg).is.greaterThan(0).throwIfUnmet();
 #### `.greaterThanOrEqualTo(leftBounds : number)` aliases: `.gte`, `.greaterThanEqual`
 Asserts that checked value is greater than or equal to **leftBounds**.
 ```js
-contract('arg', arg).is.greaterThanOrEqualTo(0).throwIfUnmet();
+contract('arg', arg).is.greaterThanOrEqualTo(0).check();
 ```
 
 [in-range]: #in-range-assertion
@@ -541,7 +541,7 @@ contract('arg', arg).is.greaterThanOrEqualTo(0).throwIfUnmet();
 Asserts that checked value is grater than or equal to **leftBounds**
 and less than **rightBounds**.
 ```js
-contract('arg', arg).is.inRange(0, 100).throwIfUnmet();
+contract('arg', arg).is.inRange(0, 100).check();
 ```
 
 [before]: #before
@@ -549,7 +549,7 @@ contract('arg', arg).is.inRange(0, 100).throwIfUnmet();
 #### `.before(rightBounds : Date, boundsVarName ?: string)`
 Asserts that checked value a Date chronologically before **rightBounds**.
 ```js
-contract('arg', arg).is.before(new Date(0), 'Epoch').throwIfUnmet();
+contract('arg', arg).is.before(new Date(0), 'Epoch').check();
 ```
 
 [after]: #after
@@ -557,7 +557,7 @@ contract('arg', arg).is.before(new Date(0), 'Epoch').throwIfUnmet();
 #### `.after(leftBounds : Date, boundsVarName ?: string)`
 Asserts that checked value a Date chronologically after **leftBounds**.
 ```js
-contract('arg', arg).is.after(new Date(0), 'Epoch').throwIfUnmet();
+contract('arg', arg).is.after(new Date(0), 'Epoch').check();
 ```
 
 [field]: #field-assertion
@@ -565,7 +565,7 @@ contract('arg', arg).is.after(new Date(0), 'Epoch').throwIfUnmet();
 #### `.field(fieldName : string)` aliases: `.property`
 Asserts that checked value has field of name **propertyName**.
 ```js
-contract('arg', arg).has.property('length').throwIfUnmet();
+contract('arg', arg).has.property('length').check();
 ```
 
 [field-that]: #field-that-assertion
@@ -577,7 +577,7 @@ assertion created in gived **builder**.
 ```js
 contract('arg', arg)
   .has.propertyThat('x', x => x.is.aNumber)
-  .throwIfUnmet();
+  .check();
 ```
 
 [all-fields-that]: #all-fields-that-assertion
@@ -591,7 +591,7 @@ Asserts that:
 ```js
 contract('arg', arg)
   .has.allFieldsThat(field => field.is.aNumber)
-  .throwIfUnmet();
+  .check();
 ```
 
 [method]: #method-assertion
@@ -599,7 +599,7 @@ contract('arg', arg)
 #### `.method(methodName : string)`
 Asserts that checked value has field of name **methodName** which is a function.
 ```js
-contract('arg', arg).has.method('toString').throwIfUnmet();
+contract('arg', arg).has.method('toString').check();
 ```
 
 [length]: #length-assertion
@@ -608,7 +608,7 @@ contract('arg', arg).has.method('toString').throwIfUnmet();
 Asserts that checked value has property of name "length" and value
 of **requiredLength**.
 ```js
-contract('arg', arg).has.length(0).throwIfUnmet();
+contract('arg', arg).has.length(0).check();
 ```
 
 [one-of]: #one-of-assertion
@@ -619,12 +619,12 @@ present) is used as a name of set in produced error message.
 ```js
 contract('arg', arg)
   .is.oneOf([ 'started', 'running', 'finished' ])
-  .throwIfUnmet();
+  .check();
 
 // or (with set name used in the error message)
 contract('arg', arg)
   .is.oneOf([ 'started', 'running', 'finished' ], 'valid status')
-  .throwIfUnmet();
+  .check();
 ```
 
 [element-that]: #element-that-assertion
@@ -636,7 +636,7 @@ Asserts that:
 ```js
 contract('arg', arg)
   .has.elementThat(0, elem => elem.is.anInteger)
-  .throwIfUnmet();
+  .check();
 ```
 
 [all-elements-that]: #all-elements-that-assertion
@@ -649,7 +649,7 @@ Asserts that:
 ```js
 contract('arg', arg)
   .has.allElementsThat(elem => elem.is.anInteger)
-  .throwIfUnmet();
+  .check();
 ```
 
 [includes]: #includes-assertion
@@ -662,7 +662,7 @@ Asserts that:
 ```js
 contract('arg', arg)
   .has.includes(elem)
-  .throwIfUnmet();
+  .check();
 ```
 
 [includes-all-of]: #includes-all-of-assertion
@@ -675,7 +675,7 @@ Asserts that:
 ```js
 contract('categories', categories)
   .has.includesAlOf(['functional', 'performance'])
-  .throwIfUnmet();
+  .check();
 ```
 
 [includes-element-that]: #includes-element-that-assertion
@@ -689,7 +689,7 @@ Asserts that:
 ```js
 contract('arg', arg)
   .includesElementThat(elem => elem.is.anInteger)
-  .throwIfUnmet();
+  .check();
 ```
 
 [operators]: #boolean-operators
@@ -712,7 +712,7 @@ operator.
 contract('arg', arg)
   .has.length(2)
   .and.allElementsThat(elem => elem.is.aNumber)
-  .throwIfUnmet();
+  .check();
 ```
 
 [or]: #or-operator
@@ -723,7 +723,7 @@ operator.
 ```js
 contract('arg', arg)
   .is.anObject.or.aFunction
-  .throwIfUnmet();
+  .check();
 ```
 
 [not]: #not-operator
@@ -731,7 +731,7 @@ contract('arg', arg)
 #### `.not` aliases: `.no`, `.dont`, `.doesnt`
 Logical negation of an assertion after `.not` operator.
 ```js
-contract('arg', arg).is.not.Undefined.throwIfUnmet();
+contract('arg', arg).is.not.Undefined.check();
 ```
 
 [legacy-call-operator]: #legacy-call-operator
@@ -742,13 +742,13 @@ interface AssertionBuilder<T> {
   () : T;
 }
 ```
-Alias for [`.throwIfUnmet()`][throw-if-unmet].
+Alias for [`.check()`][check].
 
 ```js
 import 'offensive/assertions/aString';
 import contract from 'offensive';
 
-contract('arg', arg).is.aString.throwIfUnmet(); // <- executes the expression
+contract('arg', arg).is.aString.check(); // <- executes the expression
 contract('arg', arg).is.aString(); // <- the same but with a call operator
 ```
 
@@ -764,10 +764,10 @@ import 'offensive/assertions/length';
 import contract from 'offensive';
 
 contract('arg', arg).has.length(3)(); // <- double call operators weirdness
-contract('arg', arg).has.length(3).throwIfUnmet(); // <- this looks much better
+contract('arg', arg).has.length(3).check(); // <- this looks much better
 ```
 
-[`.throwIfUnmet()`][throw-if-unmet] (introduced in version 3) solves the problem
+[`.check()`][check] (introduced in version 3) solves the problem
 of readability and adds a bit of explicitness at the cost of a little bit more
 code. The call operator is still supported for backwards compatilibity.
 
@@ -784,6 +784,5 @@ and also at the interface of [`Registry`][registry-code] class.
 
 ## License
 
-Copyright &copy; 2016 - 2022 Maciej Chałapuk.
 Released under [MIT license](LICENSE).
 
