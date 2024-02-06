@@ -22,6 +22,7 @@ import "./anIntegerString/register";
 import "./anObject/register";
 import "./before/register";
 import "./elementThat/register";
+import "./endsWith/register";
 import "./equalTo/register";
 import "./exactly/register";
 import "./falsy/register";

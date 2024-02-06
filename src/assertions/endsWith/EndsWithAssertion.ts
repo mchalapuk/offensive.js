@@ -8,7 +8,7 @@ import '../../connectors';
 /**
  * @author Maciej Chałapuk (maciej@chalapuk.pl)
  */
-export class StartsWithAssertion<T> implements Assertion<T> {
+export class EndsWithAssertion<T> implements Assertion<T> {
   constructor(
     private substring: string,
   ) {
@@ -23,32 +23,32 @@ export class StartsWithAssertion<T> implements Assertion<T> {
     }
     return {
       get success() {
-        return (<string> testedValue).startsWith(substring)
+        return (<string> testedValue).endsWith(substring)
       },
       get message() {
-        return new StandardMessage(varName, `start with '${substring}'`, testedValue);
+        return new StandardMessage(varName, `end with '${substring}'`, testedValue);
       },
     };
   }
 }
 
-export default StartsWithAssertion;
+export default EndsWithAssertion;
 
-export namespace StartsWithAssertion {
+export namespace EndsWithAssertion {
   /**
    * @author Maciej Chałapuk (maciej@chalapuk.pl)
    */
   export function factory(args : any[]) {
     nodsl.check(
       args.length === 1,
-      '.startsWith requires single argument (got ', args.length, ')',
+      '.endsWith requires single argument (got ', args.length, ')',
     );
     nodsl.check(
       typeof args[0] === 'string',
       'substring must be a string (got ', (typeof args[0]), ')',
     );
 
-    return new StartsWithAssertion(args[0]);
+    return new EndsWithAssertion(args[0]);
   }
 }
 
