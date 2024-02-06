@@ -271,6 +271,7 @@ offensive.js contains following built-in assertions.
  1. [`.anEmptyString`][empty-string]
  1. [`.aNonEmptyString`][non-empty-string]
  1. [`.anIntegerString`][integer-string]
+ 1. [`.startsWith`][starts-with]
  1. [`.equalTo`][equal-to]
  1. [`.exactly`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
@@ -483,6 +484,14 @@ contract('arg', arg).is.aNonEmptyString.check();
 Asserts that checked value is a valid string form of an integer.
 ```js
 contract('arg', arg).is.anIntegerString.check();
+```
+
+[starts-with]: #starts-with-assertion
+<a id=starts-with-assertion></a>
+#### `.startsWith(substring : string)`
+Asserts that checked value is a string that starts with given **substring**.
+```js
+contract('arg', arg).is.startsWith('abc').check();
 ```
 
 [equal-to]: #equal-to-assertion
