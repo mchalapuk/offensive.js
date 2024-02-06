@@ -40,4 +40,5 @@ import "./matches/register";
 import "./method/register";
 import "./ofType/register";
 import "./oneOf/register";
+import "./startsWith/register";
 import "./truthy/register";
