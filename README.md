@@ -272,7 +272,8 @@ offensive.js contains following built-in assertions.
  1. [`.aNonEmptyString`][non-empty-string]
  1. [`.anIntegerString`][integer-string]
  1. [`.startsWith(substring)`][starts-with]
- 1. [`.endsWith(substring)`][starts-with]
+ 1. [`.endsWith(substring)`][ends-with]
+ 1. [`.substring(substring)`][substring]
  1. [`.equalTo`][equal-to]
  1. [`.exactly`][exactly]
  1. [`.lessThan(rightBounds)`][less-than]
@@ -501,6 +502,14 @@ contract('arg', arg).is.startsWith('abc').check();
 Asserts that checked value is a string that ends with given **substring**.
 ```js
 contract('arg', arg).is.endsWith('xyz').check();
+```
+
+[substring]: #substring
+<a id=substring-assertion></a>
+#### `.substring(substring : string)` aliases: `.substr`
+Asserts that checked value is a string that is contains given **substring**.
+```js
+contract('arg', arg).has.substring('xyz').check();
 ```
 
 [equal-to]: #equal-to-assertion
