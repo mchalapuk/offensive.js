@@ -11,6 +11,8 @@ declare module "../../Builder" {
    */
   interface AssertionBuilder<T> {
     endsWith(substring: string) : OperatorBuilder<T>;
+    endWith(substring: string) : OperatorBuilder<T>;
+    endingWith(substring: string) : OperatorBuilder<T>;
   }
 }
 
@@ -26,6 +28,8 @@ export function registerIn(registry : Registry) {
 
   registry.addAssertionFactory({
     endsWith: EndsWithAssertion.factory,
+    endWith: EndsWithAssertion.factory,
+    endingWith: EndsWithAssertion.factory,
   });
 }
 

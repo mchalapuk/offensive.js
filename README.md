@@ -489,7 +489,7 @@ contract('arg', arg).is.anIntegerString.check();
 
 [starts-with]: #starts-with-assertion
 <a id=starts-with-assertion></a>
-#### `.startsWith(substring : string)`
+#### `.startsWith(substring : string)` aliases: `.startWith`, `.startingWith`
 Asserts that checked value is a string that starts with given **substring**.
 ```js
 contract('arg', arg).is.startsWith('abc').check();
@@ -497,7 +497,7 @@ contract('arg', arg).is.startsWith('abc').check();
 
 [ends-with]: #ends-with-assertion
 <a id=ends-with-assertion></a>
-#### `.endsWith(substring : string)`
+#### `.endsWith(substring : string)` aliases: `.endWith`, `.endingWith`
 Asserts that checked value is a string that ends with given **substring**.
 ```js
 contract('arg', arg).is.endsWith('xyz').check();
