@@ -31,9 +31,9 @@ const { contract } = require('offensive');
 const { contract } = require('offensive/all');
 
 // es6-style default import
-import contract from 'offensive';
+import { contract } from 'offensive';
 // or (with all assertions pre-loaded)
-import contract from 'offensive/all';
+import { contract } from 'offensive/all';
 ```
 
 ### Loading Assertions
@@ -77,7 +77,7 @@ bugs at&nbsp;their cause.
 import 'offensive/assertions/fieldThat/register';
 import 'offensive/assertions/aNumber/register';
 
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 class Point2D {
   /**
@@ -144,7 +144,7 @@ import * as bodyParser from 'body-parser';
 
 import 'offensive/assertions/aString/register';
 import 'offensive/assertions/fieldThat/register';
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 const app = express();
 app.use(bodyParser.json());
@@ -194,7 +194,7 @@ will be checked against given **testedValue** after [executing assertion
 expression][call-operator]. In case some assertions fail, given **name**
 will be used as part of error message.
 ```js
-import contract from 'offensive';
+import { contract } from 'offensive';
 ...
 
 contract('arg', arg)...
@@ -212,7 +212,7 @@ Executes built assert expression. Returns **testedValue** if assertion succeeds.
 Throws `ContractError` in case it fails. intended for offensive programming.
 ```js
 import 'offensive/assertions/length';
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 contract('arg', arg)
   .has.length(10)
@@ -233,7 +233,7 @@ Returns `null` in case it succeeds. Intended for defensive programming.
 
 ```js
 import 'offensive/assertions/length';
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 const error = contract('arg', arg)
   .has.length(10)
@@ -773,7 +773,7 @@ Alias for [`.check()`][check].
 
 ```js
 import 'offensive/assertions/aString';
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 contract('arg', arg).is.aString.check(); // <- executes the expression
 contract('arg', arg).is.aString(); // <- the same but with a call operator
@@ -788,7 +788,7 @@ the expression.
 
 ```js
 import 'offensive/assertions/length';
-import contract from 'offensive';
+import { contract } from 'offensive';
 
 contract('arg', arg).has.length(3)(); // <- double call operators weirdness
 contract('arg', arg).has.length(3).check(); // <- this looks much better
