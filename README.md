@@ -268,6 +268,7 @@ offensive.js contains following built-in assertions.
  1. [`.falsy`][falsy]
  1. [`.matches(regexp)`][matches]
  1. [`.anEmail`][email]
+ 1. [`.aUUID`][uuid]
  1. [`.anEmptyString`][empty-string]
  1. [`.aNonEmptyString`][non-empty-string]
  1. [`.anIntegerString`][integer-string]
@@ -462,6 +463,14 @@ contract('arg', arg).matches(/[a-z]+/).check();
 Asserts that checked value is a valid email.
 ```js
 contract('arg', arg).is.anEmail();
+```
+
+[uuid]: #uuid-assertion
+<a id=uuid-assertion></a>
+#### `.aUUID` aliases: `.UUID`
+Asserts that checked value is a valid UUID.
+```js
+contract('arg', arg).is.aUUID();
 ```
 
 [empty-string]: #empty-string-assertion
